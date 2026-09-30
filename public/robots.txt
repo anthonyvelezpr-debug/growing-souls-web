@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /agenda/gracias/
+
+Sitemap: https://growingsoulspr.com/sitemap-index.xml

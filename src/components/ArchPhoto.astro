@@ -18,6 +18,8 @@ interface Props {
   frame?: boolean;
   /** Acercamiento del recorte (1 = sin zoom). Se ancla en el punto de enfoque. */
   zoom?: number;
+  /** Media query en la que la foto está oculta por CSS: evita descargarla (p. ej. "(max-width: 639px)"). */
+  hideMedia?: string;
   class?: string;
 }
 const {
@@ -31,26 +33,32 @@ const {
   caption,
   frame = true,
   zoom = 1,
+  hideMedia,
   class: className = '',
 } = Astro.props;
 
 const img = await getImage({ src, widths, format: 'webp', quality: 82 });
+/* Píxel transparente: cuando la media query coincide, el navegador elige esta fuente y no descarga la foto. */
+const BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 const captionLines = caption ? caption.split(' · ') : [];
 ---
 
 <figure class:list={['arch', { 'arch--frame': frame }, className]} style={`--focus: ${focus}; --ratio: ${ratio}; --zoom: ${zoom}`} data-reveal>
   <div class="arch__mask">
-    <img
-      src={img.src}
-      srcset={img.srcSet.attribute}
-      sizes={sizes}
-      width={src.width}
-      height={src.height}
-      alt={alt}
-      loading={loading}
-      fetchpriority={loading === 'eager' ? 'high' : undefined}
-      decoding="async"
-    />
+    <picture>
+      {hideMedia && <source media={hideMedia} srcset={BLANK} />}
+      <img
+        src={img.src}
+        srcset={img.srcSet.attribute}
+        sizes={sizes}
+        width={src.width}
+        height={src.height}
+        alt={alt}
+        loading={loading}
+        fetchpriority={loading === 'eager' ? 'high' : undefined}
+        decoding="async"
+      />
+    </picture>
   </div>
   {
     caption && (
@@ -78,6 +86,11 @@ const captionLines = caption ? caption.split(' · ') : [];
     border-radius: 999px 999px var(--radius) var(--radius);
     overflow: hidden;
     isolation: isolate;
+  }
+  .arch__mask picture {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
   .arch__mask img {
     width: 100%;

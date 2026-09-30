@@ -34,6 +34,7 @@ const {
 
 const mobileSrc = imageMobile ?? imageDesktop;
 const mobile = await getImage({ src: mobileSrc, widths: [480, 720, 960], format: 'webp', quality: 80 });
+const BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 ---
 
 <section class="hero">
@@ -70,17 +71,21 @@ const mobile = await getImage({ src: mobileSrc, widths: [480, 720, 960], format:
 
   <!-- Móvil: la foto entra por debajo del texto solo por su pared vacía. -->
   <figure class="hero__mobile">
-    <img
-      src={mobile.src}
-      srcset={mobile.srcSet.attribute}
-      sizes="100vw"
-      width={mobileSrc.width}
-      height={mobileSrc.height}
-      alt={alt}
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-    />
+    <picture>
+      <!-- En tablet y desktop esta figura está oculta: el píxel transparente evita descargar la foto. -->
+      <source media="(min-width: 640px)" srcset={BLANK} />
+      <img
+        src={mobile.src}
+        srcset={mobile.srcSet.attribute}
+        sizes="100vw"
+        width={mobileSrc.width}
+        height={mobileSrc.height}
+        alt={alt}
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </picture>
   </figure>
 
   <!-- Tablet y desktop: arco centrado en su mitad. -->
@@ -92,6 +97,7 @@ const mobile = await getImage({ src: mobileSrc, widths: [480, 720, 960], format:
       focus={focusDesktop}
       caption={caption}
       sizes="(min-width: 960px) 40vw, 100vw"
+      hideMedia="(max-width: 639px)"
     />
   </div>
 </section>
@@ -154,6 +160,9 @@ const mobile = await getImage({ src: mobileSrc, widths: [480, 720, 960], format:
   .hero__mobile {
     position: relative;
     margin: -55vw 0 0;
+  }
+  .hero__mobile picture {
+    display: block;
   }
   .hero__mobile img {
     display: block;

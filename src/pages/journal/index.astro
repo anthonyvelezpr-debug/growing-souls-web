@@ -1,0 +1,101 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import JournalCard from '../../components/JournalCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getCollection } from 'astro:content';
+import { temas, isPreview } from '../../data/site';
+
+const posts = (await getCollection('journal', ({ data }) => isPreview || !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const temasUsados = [...new Set(posts.map((p) => p.data.tema))];
+---
+
+<Base
+  title="Growing Journal · Relaciones, emociones y narrativas"
+  description="Reflexiones de la Dra. Melanie Acevedo sobre relaciones, culpa, límites y vulnerabilidad. Sin diagnósticos por Instagram."
+>
+  <PageHero
+    eyebrow="Growing Journal"
+    title="Para sentir y pensar."
+    subtitle="Reflexiones sobre relaciones, emociones y las historias que nos contamos. Sin diagnósticos por Instagram, sin promesas y sin prisa."
+  />
+
+  <section class="section section--tight">
+    <div class="container">
+      {
+        temasUsados.length > 0 && (
+          <nav class="temas" aria-label="Temas">
+            <ul role="list">
+              {temasUsados.map((t) => (
+                <li>
+                  <a href={`/journal/tema/${t}/`}>{temas[t]}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )
+      }
+
+      {
+        posts.length > 0 ? (
+          <div class="journal-grid">
+            {posts.map((post, i) => (
+              <JournalCard
+                href={`/journal/${post.id}/`}
+                title={post.data.title}
+                description={post.data.description}
+                tema={post.data.tema}
+                readingTime={post.data.readingTime}
+                draft={post.data.draft}
+                index={i}
+              />
+            ))}
+          </div>
+        ) : (
+          <div class="container--narrow prose center" data-reveal>
+            <p class="lead serif-italic">Los primeros artículos están en camino.</p>
+            <p>
+              Mientras tanto, puedes conocer <a href="/como-trabajo/">cómo trabajo</a> o leer sobre la{' '}
+              <a href="/oficina-virtual/">oficina virtual</a>.
+            </p>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <CtaBand title="Si algo de esto te habla, no tienes que resolverlo hoy." subtitle="Cuando sientas que es el momento, aquí hay un espacio." tone="sand" />
+</Base>
+
+<style>
+  .temas ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    margin-bottom: var(--space-6);
+  }
+  .temas a {
+    display: inline-block;
+    font-size: var(--step-small);
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--stone);
+    border-radius: 999px;
+    text-decoration: none;
+  }
+  .temas a:hover {
+    border-color: var(--olive);
+  }
+  .journal-grid {
+    display: grid;
+    gap: var(--space-3);
+  }
+  @media (min-width: 960px) {
+    .journal-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+  }
+</style>

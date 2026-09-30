@@ -1,0 +1,156 @@
+---
+import Base from '../../layouts/Base.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import JournalCard from '../../components/JournalCard.astro';
+import { getCollection, render } from 'astro:content';
+import { temas, isPreview, site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const { isPreview } = await import('../../data/site');
+  const posts = await getCollection('journal', ({ data }) => isPreview || !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const words = post.body?.split(/\s+/).length ?? 0;
+const readingTime = post.data.readingTime ?? Math.max(1, Math.round(words / 200));
+const fecha = post.data.date.toLocaleDateString('es-PR', { year: 'numeric', month: 'long', day: 'numeric' });
+
+const related = (await getCollection('journal', ({ data, id }) => (isPreview || !data.draft) && id !== post.id))
+  .filter((p) => p.data.tema === post.data.tema)
+  .slice(0, 3);
+
+const articleJsonLd = {
+  '@type': 'Article',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.date.toISOString(),
+  inLanguage: 'es-PR',
+  author: { '@id': `${site.url}/#person` },
+  publisher: { '@id': `${site.url}/#org` },
+  mainEntityOfPage: `${site.url}/journal/${post.id}/`,
+};
+---
+
+<Base
+  title={`${post.data.title} · Growing Journal`}
+  description={post.data.description}
+  ogType="article"
+  jsonLd={[articleJsonLd]}
+  noindex={post.data.draft}
+>
+  <article class="article">
+    <header class="article__head container--narrow">
+      <p class="article__meta">
+        <a href={`/journal/tema/${post.data.tema}/`}>{temas[post.data.tema]}</a> · {readingTime} min de lectura
+        {post.data.draft && <span class="article__draft"> · Borrador</span>}
+      </p>
+      <h1 class="article__title" data-reveal>{post.data.title}</h1>
+      <p class="article__desc" data-reveal style="--reveal-index: 1">{post.data.description}</p>
+      <p class="article__date small muted">{fecha}</p>
+    </header>
+
+    <div class="article__body container--narrow prose">
+      <Content />
+    </div>
+
+    <footer class="article__close container--narrow">
+      <hr class="hairline" />
+      <p class="serif-italic article__closing">
+        Si algo de esto te habla, no tienes que resolverlo hoy. Cuando sientas que es el momento, aquí hay un espacio.
+      </p>
+      <a class="article__cta" href={post.data.cta.href}>{post.data.cta.label} →</a>
+    </footer>
+  </article>
+
+  {
+    related.length > 0 && (
+      <section class="section section--sand">
+        <div class="container">
+          <p class="eyebrow">También sobre {temas[post.data.tema]}</p>
+          <div class="journal-grid">
+            {related.map((p, i) => (
+              <JournalCard
+                href={`/journal/${p.id}/`}
+                title={p.data.title}
+                description={p.data.description}
+                tema={p.data.tema}
+                readingTime={p.data.readingTime}
+                draft={p.data.draft}
+                index={i}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBand title="Tal vez llevas algún tiempo pensando en comenzar." subtitle="Cuando sientas que es el momento de hablar, aquí hay un espacio para escucharte." />
+</Base>
+
+<style>
+  .article {
+    padding-block: clamp(3rem, 2rem + 5vw, 6rem) var(--space-8);
+  }
+  .article__head {
+    display: grid;
+    gap: var(--space-3);
+    margin-bottom: var(--space-8);
+  }
+  .article__meta {
+    font-size: var(--step-small);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--olive-deep);
+  }
+  .article__meta a {
+    text-decoration: none;
+  }
+  .article__draft {
+    color: var(--rose-deep);
+  }
+  .article__title {
+    max-width: 18ch;
+  }
+  .article__desc {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: calc(var(--step-h3) * 0.9);
+    max-width: 36ch;
+  }
+  .article__body {
+    font-size: calc(var(--step-body) * 1.03);
+  }
+  .article__body :global(h2) {
+    font-size: var(--step-h3);
+  }
+  .article__close {
+    margin-top: var(--space-8);
+    display: grid;
+    gap: var(--space-3);
+  }
+  .article__closing {
+    font-size: calc(var(--step-h3) * 0.9);
+    max-width: 34ch;
+  }
+  .article__cta {
+    justify-self: start;
+    color: var(--olive-deep);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+  }
+  .journal-grid {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+  }
+  @media (min-width: 960px) {
+    .journal-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+  }
+</style>

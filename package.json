@@ -1,0 +1,20 @@
+{
+  "name": "growing-souls",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "build:strict": "astro build && node scripts/check-verify.mjs",
+    "build:preview": "PUBLIC_PREVIEW=1 astro build && node scripts/make-relative.mjs",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.2.1",
+    "@fontsource/cormorant-garamond": "^5.2.5",
+    "astro": "^5.13.0",
+    "sharp": "^0.34.3"
+  }
+}

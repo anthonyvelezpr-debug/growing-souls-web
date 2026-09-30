@@ -17,13 +17,18 @@ import CtaBand from '../components/CtaBand.astro';
 import Button from '../components/Button.astro';
 import Verify from '../components/Verify.astro';
 import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
 import { isPreview } from '../data/site';
 
-import fotoHeroDesktop from '../assets/melanie/05-mirada-abajo.jpg';
-import fotoHeroMobile from '../assets/melanie/02-piso-notas.jpg';
+import fotoHero from '../assets/melanie/05-mirada-abajo.jpg';
+import fotoNotas from '../assets/melanie/02-piso-notas.jpg';
 import fotoBanquillo from '../assets/melanie/06-banquillo-retrato.jpg';
 import fotoLaptop from '../assets/melanie/04-banquillo-laptop.jpg';
 import fotoOlivo from '../assets/melanie/03-olivo.jpg';
+
+/* La foto del hero es el elemento más grande de la primera pantalla: se anuncia en el head para que cargue primero. */
+const heroImg = await getImage({ src: fotoHero, widths: [480, 720, 960, 1200], format: 'webp', quality: 82 });
+const heroSizes = '(min-width: 960px) 40vw, (min-width: 640px) 416px, 336px';
 
 const posts = (await getCollection('journal', ({ data }) => isPreview || !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -34,17 +39,17 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
   title="Growing Souls · Dra. Melanie Acevedo Vélez, Psicóloga Clínica"
   description="Un espacio seguro para sentir, comprender y crecer. Psicoterapia individual y de pareja en Puerto Rico, presencial y en línea."
 >
+  <link slot="head" rel="preload" as="image" imagesrcset={heroImg.srcSet.attribute} imagesizes={heroSizes} fetchpriority="high" />
   <Hero
     title="Un espacio seguro para sentir, comprender y crecer."
     subtitle="Psicoterapia desde la evidencia, la empatía y nuestra humanidad."
     signature="Dra. Melanie Acevedo Vélez, PsyD · Psicóloga Clínica · Puerto Rico"
     primary={{ label: 'Comienza tu proceso', href: '/agenda/' }}
     secondary={{ label: 'Conoce a Melanie', href: '/melanie/' }}
-    imageDesktop={fotoHeroDesktop}
-    imageMobile={fotoHeroMobile}
+    image={fotoHero}
     alt="Melanie sonríe mirando hacia abajo, sentada en el piso entre hojas de olivo, con las manos sobre un modelo de cerebro"
     caption="Dra. Melanie Acevedo Vélez · Psicóloga Clínica"
-    focusDesktop="50% 22%"
+    focus="50% 22%"
   />
 
   <Statement
@@ -203,7 +208,7 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
     <div class="container talleres__grid">
       <div class="talleres__figure">
         <ArchPhoto
-          src={fotoHeroMobile}
+          src={fotoNotas}
           alt="Melanie sostiene un tablero con notas mientras explica, sentada frente a la cámara"
           focus="50% 84%"
           zoom={1.35}

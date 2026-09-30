@@ -102,6 +102,30 @@ const {
     text-transform: uppercase;
     color: var(--fg-soft);
   }
+  /* Móvil: pareja simétrica, dos retratos iguales lado a lado (misma proporción, mismo tamaño). */
+  @media (max-width: 639px) {
+    .duo {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+      gap: 0.75rem;
+      align-items: stretch;
+    }
+    .duo__main,
+    .duo--left .duo__main {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .duo__secondary,
+    .duo--left .duo__secondary {
+      grid-column: 2;
+      grid-row: 1;
+      outline: 0;
+      background: none;
+    }
+    .duo__secondary :global(img) {
+      aspect-ratio: 4 / 5;
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
     .duo :global(img) {
       transform: none;

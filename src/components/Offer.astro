@@ -53,9 +53,28 @@ const { items, columns = 4 } = Astro.props;
     font-size: var(--step-small);
     max-width: 28ch;
   }
-  @media (min-width: 480px) {
-    .offer {
+  /* Cuatro pilares en retícula 2×2 desde 360 px: geometría clara y menos scroll. */
+  @media (min-width: 360px) {
+    .offer--4 {
       grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-5) var(--space-3);
+    }
+  }
+  @media (max-width: 639px) {
+    .offer--4 .offer__title {
+      font-size: calc(var(--step-h3) * 0.72);
+    }
+    .offer--4 .offer__text {
+      font-size: calc(var(--step-small) * 0.95);
+    }
+  }
+  @media (min-width: 640px) {
+    .offer--2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .offer--3 {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-5) var(--space-3);
     }
   }
   @media (min-width: 960px) {

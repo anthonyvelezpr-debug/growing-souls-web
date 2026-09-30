@@ -104,13 +104,18 @@ const captionLines = caption ? caption.split(' · ') : [];
   .arch.is-visible .arch__mask img {
     transform: scale(var(--zoom));
   }
-  /* Marco de línea desfasado: detalle editorial que repite la geometría del arco. */
+  /* Marco de línea desfasado: detalle editorial que repite la geometría del arco.
+     El marco vive dentro de la caja de la figura (padding), así foto + marco se centran como conjunto. */
+  .arch--frame {
+    padding: 0 14px 14px 0;
+  }
   .arch--frame::before {
     content: '';
     position: absolute;
-    inset: 0 0 auto 0;
+    left: 14px;
+    top: 14px;
+    width: calc(100% - 14px);
     aspect-ratio: var(--ratio);
-    transform: translate(14px, 14px);
     border: 1px solid var(--olive);
     border-radius: 999px 999px var(--radius) var(--radius);
     opacity: 0.7;

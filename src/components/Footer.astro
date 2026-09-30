@@ -112,8 +112,17 @@ const phoneHref = site.contact.phone ? `tel:${site.contact.phone.replace(/\D/g, 
   }
   .footer__cols {
     display: grid;
-    gap: var(--space-6);
+    gap: var(--space-6) var(--space-4);
     width: 100%;
+  }
+  /* Móvil: Explorar y Servicios lado a lado; Contacto debajo a todo el ancho. */
+  @media (max-width: 639px) {
+    .footer__cols {
+      grid-template-columns: 1fr 1fr;
+    }
+    .footer__col:last-child {
+      grid-column: 1 / -1;
+    }
   }
   .footer__col ul {
     margin-top: var(--space-2);

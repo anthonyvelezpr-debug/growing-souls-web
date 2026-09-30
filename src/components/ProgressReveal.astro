@@ -142,8 +142,14 @@ const phrases = [
     pointer-events: none;
   }
   .progress.is-staged .progress__phrase {
-    font-size: clamp(1.9rem, 1.3rem + 2.4vw, 3.4rem);
+    font-size: clamp(2.1rem, 1.5rem + 2.4vw, 3.4rem);
     max-width: 20ch;
+  }
+  /* Móvil y tablet: hueco para la barra fija de acción, para que los puntos no queden detrás. */
+  @media (max-width: 959px) {
+    .progress.is-staged .progress__stage {
+      padding-bottom: calc(2rem + 3.75rem + env(safe-area-inset-bottom, 0px));
+    }
   }
   .progress.is-staged .progress__phrase.is-active,
   .progress.is-staged .progress__final.is-active {

@@ -89,6 +89,11 @@ const { image, alt, focus = '50% 25%', quote, quoteCite, eyebrow, title, cta, to
     text-transform: uppercase;
     color: var(--fg-soft);
   }
+  @media (max-width: 959px) {
+    .tri__quote footer {
+      display: none;
+    }
+  }
   .tri__text {
     display: grid;
     gap: var(--space-2);
@@ -96,7 +101,7 @@ const { image, alt, focus = '50% 25%', quote, quoteCite, eyebrow, title, cta, to
   }
   .tri__title {
     font-size: var(--step-h3);
-    max-width: 20ch;
+    max-width: 26ch;
     margin-inline: auto;
   }
   .tri__body :global(p) {
@@ -129,6 +134,9 @@ const { image, alt, focus = '50% 25%', quote, quoteCite, eyebrow, title, cta, to
     .tri__title,
     .tri__body :global(p) {
       margin-inline: 0;
+    }
+    .tri__title {
+      max-width: 20ch;
     }
     .tri__cta {
       justify-self: start;

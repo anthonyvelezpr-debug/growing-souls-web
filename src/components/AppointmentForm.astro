@@ -50,6 +50,7 @@ const mode = endpoint ? 'endpoint' : email ? 'mailto' : 'pending';
         <option value="no-se">No sé todavía</option>
         <option value="individual">Individual</option>
         <option value="pareja">Pareja</option>
+        <option value="taller">Taller o charla para un grupo</option>
       </select>
     </div>
 
@@ -184,6 +185,11 @@ const mode = endpoint ? 'endpoint' : email ? 'mailto' : 'pending';
     const status = form.querySelector<HTMLElement>('[data-status]');
     const mode = form.dataset.mode;
     const email = form.dataset.email;
+
+    /* Enlaces como /agenda/?tipo=taller preseleccionan el tipo de proceso. */
+    const wanted = new URLSearchParams(location.search).get('tipo');
+    const tipo = form.querySelector<HTMLSelectElement>('#tipo');
+    if (wanted && tipo && [...tipo.options].some((o) => o.value === wanted)) tipo.value = wanted;
 
     const showError = (id: string, show: boolean) => {
       const el = form.querySelector<HTMLElement>(`#${id}-error`);

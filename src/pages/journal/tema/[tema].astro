@@ -1,0 +1,65 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PageHero from '../../../components/PageHero.astro';
+import JournalCard from '../../../components/JournalCard.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+import { getCollection } from 'astro:content';
+import { temas } from '../../../data/site';
+
+export async function getStaticPaths() {
+  const { isPreview, temas } = await import('../../../data/site');
+  const posts = await getCollection('journal', ({ data }) => isPreview || !data.draft);
+  const used = [...new Set(posts.map((p) => p.data.tema))];
+  return used.map((tema) => ({
+    params: { tema },
+    props: {
+      posts: posts.filter((p) => p.data.tema === tema).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
+      label: temas[tema] ?? tema,
+    },
+  }));
+}
+
+const { posts, label } = Astro.props;
+---
+
+<Base
+  title={`${label} · Growing Journal`}
+  description={`Artículos del Growing Journal sobre ${label.toLowerCase()}, escritos por la Dra. Melanie Acevedo Vélez.`}
+>
+  <PageHero eyebrow="Growing Journal" title={label} subtitle="Artículos sobre este tema." />
+  <section class="section section--tight">
+    <div class="container">
+      <p class="small"><a href="/journal/">← Todos los temas</a></p>
+      <div class="journal-grid">
+        {
+          posts.map((post, i) => (
+            <JournalCard
+              href={`/journal/${post.id}/`}
+              title={post.data.title}
+              description={post.data.description}
+              tema={post.data.tema}
+              readingTime={post.data.readingTime}
+              draft={post.data.draft}
+              index={i}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  <CtaBand title="Si algo de esto te habla, no tienes que resolverlo hoy." subtitle="Cuando sientas que es el momento, aquí hay un espacio." tone="sand" />
+</Base>
+
+<style>
+  .journal-grid {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+  @media (min-width: 960px) {
+    .journal-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+  }
+</style>

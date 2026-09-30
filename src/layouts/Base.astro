@@ -1,0 +1,167 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { site, isPreview } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown>[];
+  bodyClass?: string;
+}
+
+const {
+  title,
+  description,
+  ogImage = site.ogImage,
+  ogType = 'website',
+  noindex = false,
+  jsonLd = [],
+  bodyClass = '',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const ogImageUrl = new URL(ogImage, site.url).href;
+const isHome = Astro.url.pathname === '/';
+
+const graph: Record<string, unknown>[] = [
+  {
+    '@type': 'WebSite',
+    '@id': `${site.url}/#website`,
+    url: `${site.url}/`,
+    name: site.name,
+    inLanguage: 'es-PR',
+    publisher: { '@id': `${site.url}/#org` },
+  },
+  {
+    '@type': ['MedicalBusiness', 'LocalBusiness'],
+    '@id': `${site.url}/#org`,
+    name: site.name,
+    url: `${site.url}/`,
+    image: ogImageUrl,
+    description: site.description,
+    medicalSpecialty: 'Psychiatric',
+    knowsAbout: ['Psicoterapia', 'Terapia de pareja', 'Telepsicología'],
+    founder: { '@id': `${site.url}/#person` },
+    areaServed: { '@type': 'AdministrativeArea', name: site.location.areaServed },
+    address: {
+      '@type': 'PostalAddress',
+      ...(site.location.locality ? { addressLocality: site.location.locality } : {}),
+      addressRegion: site.location.region,
+      addressCountry: 'PR',
+    },
+    availableService: [
+      { '@type': 'Service', name: 'Terapia individual', url: `${site.url}/terapia-individual/` },
+      { '@type': 'Service', name: 'Terapia de pareja', url: `${site.url}/parejas/` },
+      { '@type': 'Service', name: 'Telepsicología (oficina virtual)', url: `${site.url}/oficina-virtual/` },
+    ],
+  },
+  {
+    '@type': 'Person',
+    '@id': `${site.url}/#person`,
+    name: 'Melanie Acevedo Vélez',
+    honorificPrefix: 'Dra.',
+    honorificSuffix: site.person.degree,
+    jobTitle: site.person.jobTitle,
+    worksFor: { '@id': `${site.url}/#org` },
+    url: `${site.url}/melanie/`,
+    image: ogImageUrl,
+  },
+  ...jsonLd,
+];
+
+if (!isHome) {
+  const segments = Astro.url.pathname.split('/').filter(Boolean);
+  const items = [{ '@type': 'ListItem', position: 1, name: 'Inicio', item: `${site.url}/` }];
+  let path = '';
+  segments.forEach((seg, i) => {
+    path += `/${seg}`;
+    items.push({
+      '@type': 'ListItem',
+      position: i + 2,
+      name: seg.replace(/-/g, ' '),
+      item: `${site.url}${path}/`,
+    });
+  });
+  graph.push({ '@type': 'BreadcrumbList', itemListElement: items });
+}
+
+const structuredData = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+---
+
+<!doctype html>
+<html lang="es-PR" class="no-js" data-show-verify={isPreview ? '' : undefined}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content="#fbfaea" />
+    <meta name="color-scheme" content="light" />
+
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="/favicon-64.png" sizes="64x64" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content={site.locale} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <link
+      rel="preload"
+      href="/fonts/CormorantGaramond-latin-500-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="preload" href="/fonts/ClearSans-Regular.woff2" as="font" type="font/woff2" crossorigin />
+
+    <script is:inline set:html={`document.documentElement.classList.remove('no-js');${isPreview ? "document.documentElement.setAttribute('data-show-verify','');" : ''}`} />
+    <script type="application/ld+json" set:html={structuredData} />
+    <slot name="head" />
+  </head>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <Nav />
+    <main id="contenido">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -6% 0px' },
+        );
+        els.forEach((el) => io.observe(el));
+      } else {
+        els.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>

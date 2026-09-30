@@ -162,6 +162,29 @@ const structuredData = JSON.stringify({ '@context': 'https://schema.org', '@grap
       } else {
         els.forEach((el) => el.classList.add('is-visible'));
       }
+
+      /* Listas corridas con punto medio: el separador no debe quedar al inicio de una línea.
+         Marcamos el primer elemento de cada línea para ocultar su separador. */
+      const dotlists = document.querySelectorAll<HTMLElement>('[data-dotlist]');
+      const markLineStarts = () => {
+        dotlists.forEach((list) => {
+          let prevTop: number | null = null;
+          for (const li of list.querySelectorAll<HTMLElement>(':scope > li')) {
+            const top = li.offsetTop;
+            li.classList.toggle('is-line-start', prevTop === null || top !== prevTop);
+            prevTop = top;
+          }
+        });
+      };
+      if (dotlists.length) {
+        markLineStarts();
+        document.fonts?.ready.then(markLineStarts);
+        let raf = 0;
+        window.addEventListener('resize', () => {
+          cancelAnimationFrame(raf);
+          raf = requestAnimationFrame(markLineStarts);
+        });
+      }
     </script>
   </body>
 </html>

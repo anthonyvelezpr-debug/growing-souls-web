@@ -45,7 +45,7 @@
   --space-6: 3rem;
   --space-8: 4rem;
   --space-10: 5rem;
-  --section-gap: clamp(4.5rem, 3rem + 6vw, 10rem);
+  --section-gap: clamp(3.75rem, 2.25rem + 6vw, 10rem);
   --container: 80rem;
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
 

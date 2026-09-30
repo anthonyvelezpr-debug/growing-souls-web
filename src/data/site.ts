@@ -24,11 +24,11 @@ export const site = {
     areaServed: 'Puerto Rico',
   },
 
-  // Contacto. Vacío hasta confirmar con Melanie.
+  // Contacto (confirmado por Anthony, 30 sep 2026).
   contact: {
-    email: '', // TODO VERIFICAR
-    instagram: '', // TODO VERIFICAR: handle sin @
-    phone: '', // TODO VERIFICAR: solo si se quiere publicar
+    email: 'support@growingsoulspr.com',
+    instagram: 'growingsouls.pr',
+    phone: '787-461-9260',
   },
 
   // Endpoint del formulario de cita (prompt 02). Vacío = modo mailto o aviso.

@@ -25,13 +25,18 @@ import { site } from '../../data/site';
           <li>Recibes la confirmación y, si es virtual, el enlace de la sesión.</li>
         </ol>
         {
-          (site.contact.email || site.contact.instagram) && (
+          (site.contact.email || site.contact.instagram || site.contact.phone) && (
             <div class="agenda__alt">
               <p class="eyebrow">Otras formas de contacto</p>
               <ul role="list">
                 {site.contact.email && (
                   <li>
                     <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+                  </li>
+                )}
+                {site.contact.phone && (
+                  <li>
+                    <a href={`tel:${site.contact.phone.replace(/\D/g, '')}`}>{site.contact.phone}</a>
                   </li>
                 )}
                 {site.contact.instagram && (

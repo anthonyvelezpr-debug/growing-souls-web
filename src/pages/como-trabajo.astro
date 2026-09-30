@@ -1,0 +1,173 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Offer from '../components/Offer.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Verify from '../components/Verify.astro';
+import Button from '../components/Button.astro';
+import ArchPhoto from '../components/ArchPhoto.astro';
+
+import fotoLaptop from '../assets/melanie/04-banquillo-laptop.jpg';
+---
+
+<Base
+  title="Mi manera de hacer terapia · Growing Souls"
+  description="Terapia colaborativa desde la evidencia (ACT, EFT, CBT) y la humanidad. Qué esperar de una primera sesión con la Dra. Melanie Acevedo."
+>
+  <PageHero
+    eyebrow="Mi manera de hacer terapia"
+    title="Aquí no hay nada que reparar. Hay algo que comprender."
+    subtitle="Lo que puedes esperar cuando hablamos."
+  />
+
+  <section class="section section--tight">
+    <div class="container--narrow prose" data-reveal>
+      <h2>Cómo se siente hablar conmigo</h2>
+      <p>
+        Se siente como una conversación con alguien que no te apura, no te juzga y no da por hecho lo que sientes.
+        Habrá silencios, y no pasa nada. Habrá preguntas, y puedes decidir cuáles responder hoy.
+      </p>
+
+      <h2>Qué puedes esperar</h2>
+      <ul>
+        <li>Que te escuche antes de interpretarte.</li>
+        <li>Que validemos lo que sientes antes de intentar cambiarlo.</li>
+        <li>Que entendamos de dónde viene un patrón antes de pedirle a nadie que lo suelte.</li>
+        <li>Que las herramientas que trabajemos tengan evidencia detrás.</li>
+        <li>Que las decisiones sigan siendo tuyas.</li>
+      </ul>
+
+      <h2>La primera sesión</h2>
+      <p>
+        La primera sesión es para conocernos. Me cuentas lo que quieras contar, a tu ritmo, y hablamos de qué te
+        trae y qué esperas del proceso. No hace falta llegar con todo ordenado.
+        <Verify note="Duración, formato y evaluación inicial de la primera sesión" hide>
+          Más adelante aquí se describe la duración y el formato exacto de la primera sesión.
+        </Verify>
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--sand">
+    <div class="container">
+      <SectionHeading eyebrow="Tres ideas que sostienen el proceso" title="Colaboración, validación y vulnerabilidad." />
+      <Offer
+        columns={3}
+        items={[
+          {
+            title: 'Terapia colaborativa',
+            text: 'No trabajo desde "yo tengo todas las respuestas". Trabajo contigo. Mi función es acompañarte mientras comprendes tu historia, identificas patrones, procesas emociones y desarrollas herramientas para tomar tus propias decisiones.',
+          },
+          {
+            title: 'Validación emocional',
+            text: 'Validar no es estar de acuerdo con todo. Es reconocer que lo que sientes tiene sentido dentro de tu historia, y partir de ahí.',
+          },
+          {
+            title: 'Vulnerabilidad',
+            text: 'Aquí ser vulnerable no es debilidad. Permitirte serlo dentro del espacio terapéutico ya puede ser una batalla ganada.',
+          },
+        ]}
+      />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container evidence">
+      <div class="evidence__figure">
+        <ArchPhoto
+          src={fotoLaptop}
+          alt="Melanie trabaja en su laptop, sentada en el piso junto a un banquillo y libros de psicología"
+          focus="50% 40%"
+          caption="Evidencia y calidad humana"
+          sizes="(min-width: 960px) 34vw, (min-width: 640px) 60vw, 100vw"
+        />
+      </div>
+      <div class="evidence__text">
+        <SectionHeading eyebrow="Con qué evidencia trabajo" title="Primero te cuento cómo se vive; después, cómo se llama.">
+          <p class="lead">Tres enfoques con respaldo científico, explicados como se sienten en una sesión.</p>
+        </SectionHeading>
+        <ol class="evidence__list" role="list">
+          <li data-reveal>
+            <p class="evidence__how">Aprender a estar con lo que sientes sin que te gobierne, y actuar según tus valores.</p>
+            <p class="evidence__name">Se llama Terapia de Aceptación y Compromiso (ACT).</p>
+          </li>
+          <li data-reveal style="--reveal-index: 1">
+            <p class="evidence__how">Entender qué pasa entre dos personas cuando la conexión se rompe, y cómo volver a encontrarse.</p>
+            <p class="evidence__name">Se llama Terapia Focalizada en las Emociones (EFT).</p>
+          </li>
+          <li data-reveal style="--reveal-index: 2">
+            <p class="evidence__how">Reconocer cómo lo que piensas afecta lo que sientes y haces, y responder de otra manera.</p>
+            <p class="evidence__name">Se llama Terapia Cognitivo-Conductual (CBT).</p>
+          </li>
+        </ol>
+        <Verify as="div" note="Nivel de formación en cada enfoque; nunca 'certificada' ni 'especialista' sin documento" hide>
+          <p class="muted small">Pendiente: nivel de formación en cada enfoque.</p>
+        </Verify>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sand">
+    <div class="container--narrow prose" data-reveal>
+      <h2>Lo que la terapia no es</h2>
+      <ul>
+        <li>No es un consejo rápido ni una receta.</li>
+        <li>No es alguien diciéndote quién debes ser.</li>
+        <li>No sustituye la atención médica cuando esta hace falta.</li>
+        <li>No es un servicio de emergencias. Si estás en crisis, <a href="/crisis/">aquí tienes recursos</a>.</li>
+      </ul>
+      <div class="evidence__cta">
+        <Button href="/terapia-individual/" variant="link">Conoce la terapia individual</Button>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Tal vez llevas algún tiempo pensando en comenzar." subtitle="Cuando sientas que es el momento de hablar, aquí hay un espacio para escucharte." />
+</Base>
+
+<style>
+  .evidence {
+    display: grid;
+    gap: var(--space-6);
+    align-items: start;
+  }
+  .evidence__figure {
+    width: min(100%, 22rem);
+    margin-inline: auto;
+  }
+  .evidence__list {
+    display: grid;
+    gap: var(--space-4);
+    padding: 0;
+  }
+  .evidence__list li {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--line);
+    display: grid;
+    gap: 0.4rem;
+  }
+  .evidence__how {
+    font-family: var(--font-serif);
+    font-size: calc(var(--step-h3) * 0.92);
+    line-height: 1.25;
+    max-width: 28ch;
+  }
+  .evidence__name {
+    font-size: var(--step-small);
+    color: var(--olive-deep);
+  }
+  .evidence__cta {
+    margin-top: var(--space-4);
+  }
+  @media (min-width: 960px) {
+    .evidence {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-10);
+      align-items: center;
+    }
+    .evidence__figure {
+      width: min(100%, 26rem);
+    }
+  }
+</style>

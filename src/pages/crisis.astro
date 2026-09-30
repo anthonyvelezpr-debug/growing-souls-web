@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../data/site';
+---
+
+<Base
+  title="Recursos en crisis · Growing Souls"
+  description="Si necesitas ayuda ahora: Línea PAS 1-800-981-0023 (24 horas), 988 y 911. Growing Souls no es un servicio de emergencias."
+>
+  <PageHero eyebrow="Recursos en crisis" title="Si necesitas ayuda ahora." subtitle={site.crisis.intro} />
+
+  <section class="section section--tight">
+    <div class="container--narrow">
+      <ul class="crisis" role="list">
+        {
+          site.crisis.lines.map((line) => (
+            <li class="crisis__item">
+              <a class="crisis__number" href={line.href}>
+                {line.number}
+              </a>
+              <p class="crisis__label">{line.label}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="crisis__closing serif-italic">Pedir ayuda ahora también es cuidarte.</p>
+      <p class="small muted">
+        Los números provienen de la <a href={site.crisis.source} rel="noopener">Línea PAS de ASSMCA</a>. Si alguno
+        cambia, avísanos para actualizarlo.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .crisis {
+    display: grid;
+    gap: var(--space-3);
+    padding: 0;
+  }
+  .crisis__item {
+    display: grid;
+    gap: 0.35rem;
+    padding: var(--space-4);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--sand);
+  }
+  .crisis__number {
+    font-family: var(--font-serif);
+    font-size: var(--step-h2);
+    line-height: 1.1;
+    text-decoration: none;
+    color: var(--navy);
+  }
+  .crisis__label {
+    font-size: var(--step-small);
+    color: var(--fg-soft);
+  }
+  .crisis__closing {
+    margin-top: var(--space-6);
+    font-size: calc(var(--step-h3) * 0.9);
+  }
+</style>

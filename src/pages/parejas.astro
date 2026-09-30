@@ -1,0 +1,138 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Triptych from '../components/Triptych.astro';
+import fotoRetrato from '../assets/melanie/06-banquillo-retrato.jpg';
+import CtaBand from '../components/CtaBand.astro';
+import Verify from '../components/Verify.astro';
+
+const situaciones = [
+  'Conversaciones que siempre terminan igual.',
+  'Conflictos que se repiten con distinto nombre.',
+  'Sentir que ya no se encuentran.',
+  'Necesidades que nunca se dijeron en voz alta.',
+  'Límites que nadie puso a tiempo.',
+  'Patrones que vienen de antes de conocerse.',
+  'Resentimientos que se acumulan en silencio.',
+  'Un perdón que no termina de llegar.',
+  'Intimidad emocional que se fue enfriando.',
+  'Miedo a mostrarse vulnerable frente a la otra persona.',
+];
+---
+
+<Base
+  title="Terapia de pareja en Puerto Rico · Growing Souls"
+  description="Comunicación, conflicto, conexión y perdón. Terapia de pareja con la Dra. Melanie Acevedo Vélez, psicóloga clínica."
+>
+  <PageHero
+    eyebrow="Terapia de pareja"
+    title="Amarnos no significa automáticamente saber relacionarnos."
+    subtitle="Querer a alguien y saber comunicarse, discutir y reconectar son cosas distintas. Las segundas se aprenden."
+    tone="sand"
+  />
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="Lo que suele traer a una pareja a terapia" title="Casi nunca es “el problema”. Casi siempre es lo que pasa alrededor." />
+      <ul class="situaciones" role="list">
+        {
+          situaciones.map((s, i) => (
+            <li data-reveal style={`--reveal-index: ${i % 4}`}>
+              {s}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--sand">
+    <div class="container--narrow prose" data-reveal>
+      <h2>Cómo trabajo con parejas</h2>
+      <p>
+        No vengo a decidir quién tiene la razón. Vengo a ayudarles a ver el patrón en el que están atrapados los dos,
+        y a encontrar otra manera de hablarse.
+        <Verify note="Verificar: formación en EFT y Método Gottman (nivel exacto)">
+          Trabajo desde la Terapia Focalizada en las Emociones y desde lo que la investigación sabe sobre las
+          relaciones que funcionan.
+        </Verify>
+      </p>
+      <p>
+        <Verify note="Verificar: título, año e institución de la disertación doctoral" hide>
+          Mi interés por las relaciones no es nuevo: mi investigación doctoral trató sobre comunicación asertiva
+          dentro del matrimonio, y desde entonces sigo estudiando cómo dos personas pueden aprender a decirse lo que
+          importa.
+        </Verify>
+      </p>
+      <p>
+        <Verify note="Aprobación Melanie">
+          Me apasionan las relaciones porque en ellas se juega casi todo lo que importa: cómo pedimos, cómo cuidamos,
+          cómo nos perdonamos y cómo volvemos a acercarnos después de habernos alejado.
+        </Verify>
+      </p>
+
+      <h2>La primera sesión de pareja</h2>
+      <p>
+        Vienen los dos. Hablamos de cómo llegaron hasta aquí, qué quiere cada uno y qué esperan del proceso. No hace
+        falta estar de acuerdo para empezar.
+        <Verify note="Verificar: formato y si hay sesiones individuales dentro del proceso" hide>
+          Aquí se describe después el formato exacto del proceso.
+        </Verify>
+      </p>
+
+      <h2>Cuándo no es terapia de pareja</h2>
+      <p>
+        <Verify note="Revisión clínica">
+          Si hay violencia en la relación, la terapia de pareja no es el primer paso; lo primero es tu seguridad.
+          <a href="/crisis/">Aquí tienes recursos</a>.
+        </Verify>
+      </p>
+    </div>
+  </section>
+
+  <Triptych
+    image={fotoRetrato}
+    alt="Melanie sentada en un banquillo, sonriendo hacia la cámara"
+    focus="50% 18%"
+    quote="Querer a alguien es un punto de partida. Aprender a relacionarnos es el camino."
+    quoteCite="Terapia de pareja"
+    eyebrow="Cómo trabajo con parejas"
+    title="No vengo a decidir quién tiene la razón."
+    cta={{ label: 'Hablemos de relaciones', href: '/agenda/' }}
+    tone="ivory"
+  >
+    <p>
+      Vengo a ayudarles a ver el patrón en el que están atrapados los dos, y a encontrar otra manera de hablarse. No
+      hace falta estar de acuerdo para empezar.
+    </p>
+  </Triptych>
+
+  <CtaBand
+    title="Si algo de esto les suena, podemos explorarlo."
+    subtitle="Sin decidir quién tiene la razón. Sin presión."
+    cta={{ label: 'Hablemos de relaciones', href: '/agenda/' }}
+    tone="sand"
+  />
+</Base>
+
+<style>
+  .situaciones {
+    display: grid;
+    gap: var(--space-2);
+    padding: 0;
+  }
+  .situaciones li {
+    font-family: var(--font-serif);
+    font-size: calc(var(--step-h3) * 0.85);
+    line-height: 1.3;
+    padding: var(--space-3) 0;
+    border-top: 1px solid var(--line);
+  }
+  @media (min-width: 640px) {
+    .situaciones {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0 var(--space-6);
+    }
+  }
+</style>

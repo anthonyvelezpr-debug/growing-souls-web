@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Verify from '../components/Verify.astro';
+---
+
+<Base
+  title="Privacidad · Growing Souls"
+  description="Cómo trata Growing Souls los datos que compartes en esta web."
+>
+  <PageHero eyebrow="Privacidad" title="Lo que compartes aquí, y lo que no." />
+
+  <section class="section section--tight">
+    <div class="container--narrow prose" data-reveal>
+      <p class="lead">
+        Esta web pide lo mínimo para poder responderte, no instala píxeles publicitarios y no guarda información
+        clínica.
+      </p>
+
+      <h2>Qué datos se piden</h2>
+      <p>
+        El formulario de cita solicita tu nombre, tu correo, un teléfono opcional, la modalidad y el tipo de proceso
+        que prefieres, y un mensaje opcional. No pide información clínica ni diagnósticos.
+      </p>
+
+      <h2>Para qué se usan</h2>
+      <p>
+        Solo para responderte y coordinar una cita. La solicitud llega a la Dra. Melanie Acevedo Vélez y no se
+        comparte con terceros.
+      </p>
+
+      <h2>Cookies y analítica</h2>
+      <p>
+        Esta web no usa cookies publicitarias ni píxeles de redes sociales. Las fuentes y las imágenes se sirven desde
+        la propia web.
+      </p>
+
+      <h2>Sesiones</h2>
+      <p>
+        Lo que hablas en terapia se rige por la confidencialidad profesional y no pasa por esta web.
+      </p>
+
+      <Verify as="div" note="Revisión legal de la política de privacidad">
+        <p class="small muted">Este texto es una versión inicial y será revisado antes del lanzamiento definitivo.</p>
+      </Verify>
+    </div>
+  </section>
+</Base>

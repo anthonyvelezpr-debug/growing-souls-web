@@ -1,0 +1,285 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Statement from '../components/Statement.astro';
+import PhotoDuo from '../components/PhotoDuo.astro';
+import Triptych from '../components/Triptych.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Process from '../components/Process.astro';
+import Offer from '../components/Offer.astro';
+import Areas from '../components/Areas.astro';
+import ProgressReveal from '../components/ProgressReveal.astro';
+import Manifesto from '../components/Manifesto.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import JournalCard from '../components/JournalCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Button from '../components/Button.astro';
+import Verify from '../components/Verify.astro';
+import { getCollection } from 'astro:content';
+import { isPreview } from '../data/site';
+
+import fotoHeroDesktop from '../assets/melanie/05-mirada-abajo.jpg';
+import fotoHeroMobile from '../assets/melanie/02-piso-notas.jpg';
+import fotoBanquillo from '../assets/melanie/06-banquillo-retrato.jpg';
+import fotoLaptop from '../assets/melanie/04-banquillo-laptop.jpg';
+import fotoOlivo from '../assets/melanie/03-olivo.jpg';
+
+const posts = (await getCollection('journal', ({ data }) => isPreview || !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+---
+
+<Base
+  title="Growing Souls · Dra. Melanie Acevedo Vélez, Psicóloga Clínica"
+  description="Un espacio seguro para sentir, comprender y crecer. Psicoterapia individual y de pareja en Puerto Rico, presencial y en línea."
+>
+  <Hero
+    title="Un espacio seguro para sentir, comprender y crecer."
+    subtitle="Psicoterapia desde la evidencia, la empatía y nuestra humanidad."
+    signature="Dra. Melanie Acevedo Vélez, PsyD · Psicóloga Clínica · Puerto Rico"
+    primary={{ label: 'Comienza tu proceso', href: '/agenda/' }}
+    secondary={{ label: 'Conoce a Melanie', href: '/melanie/' }}
+    imageDesktop={fotoHeroDesktop}
+    imageMobile={fotoHeroMobile}
+    alt="Melanie sonríe mirando hacia abajo, sentada en el piso entre hojas de olivo, con las manos sobre un modelo de cerebro"
+    caption="Dra. Melanie Acevedo Vélez · Psicóloga Clínica"
+    focusDesktop="50% 22%"
+  />
+
+  <Statement
+    title="No tienes que llegar a terapia teniendo todas las respuestas."
+    subtitle="A veces, llegar es el primer acto de valentía."
+  />
+
+  <section class="section section--sand about">
+    <div class="container about__grid">
+      <div class="about__photos">
+        <PhotoDuo
+          main={fotoBanquillo}
+          mainAlt="Melanie sentada en un banquillo de madera, sonriendo hacia la cámara"
+          mainFocus="50% 18%"
+          secondary={fotoLaptop}
+          secondaryAlt="Melanie trabaja en su laptop, sentada en el piso junto a libros de psicología"
+          secondaryFocus="55% 45%"
+          side="right"
+        />
+      </div>
+      <div class="about__text" data-reveal style="--reveal-index: 1">
+        <p class="eyebrow">Conoce a Melanie</p>
+        <h2>Antes de ser psicóloga, soy persona.</h2>
+        <p>
+          <Verify note="Aprobación Melanie">
+            Mi manera de hacer terapia no salió solo de los libros. Salió también de lo que he vivido: de ser
+            puertorriqueña, de las personas que me han enseñado a escuchar y de mis propias preguntas. La universidad
+            me dio estructura, teoría y evidencia. Lo que pongo en cada sesión, además de eso, es humanidad.
+          </Verify>
+        </p>
+        <div class="about__cta">
+          <Button href="/melanie/" variant="link">Conoce mi historia</Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="Mi manera de entender la psicología" title="Crecer no siempre significa convertirte en otra persona.">
+        <p class="lead">
+          Muchas veces significa comprender quién eres, reconciliarte con partes de tu historia, soltar lo que ya no
+          te sirve y volver a ti con más conciencia. Ese proceso tiene su propio orden, y no hay que apurarlo.
+        </p>
+      </SectionHeading>
+      <Process />
+      <Offer
+        items={[
+          {
+            title: 'Validación emocional',
+            text: 'Un lugar donde lo que sientes puede reconocerse y comprenderse sin juicio inmediato.',
+          },
+          {
+            title: 'Acompañamiento',
+            text: 'No camino delante de ti diciéndote hacia dónde ir. Camino a tu lado mientras descubres hacia dónde quieres dirigirte.',
+          },
+          {
+            title: 'Psicoeducación',
+            text: 'Entender lo que pasa por dentro te da herramientas para responder de otra manera.',
+          },
+          {
+            title: 'Espacio seguro',
+            text: 'Aquí puedes ser, sentir, hablar, callar, preguntar y ser vulnerable. Nada de eso hay que justificarlo.',
+          },
+        ]}
+      />
+    </div>
+  </section>
+
+  <section class="section section--sand">
+    <div class="container">
+      <SectionHeading eyebrow="Áreas de acompañamiento" title="Lo que traes a terapia no tiene que tener nombre todavía." />
+      <Areas
+        areas={[
+          {
+            title: 'Tú contigo',
+            topics: ['Autoaceptación', 'Culpa', 'Perdón', 'Diálogo interno', 'Valores', 'Identidad', 'Vulnerabilidad', 'Emociones'],
+            href: '/terapia-individual/#tu-contigo',
+          },
+          {
+            title: 'Tú con otros',
+            topics: ['Pareja', 'Comunicación', 'Límites', 'Conflictos', 'Patrones relacionales', 'Conexión', 'Responsabilidad'],
+            href: '/terapia-individual/#tu-con-otros',
+          },
+          {
+            title: 'Tú frente a la vida',
+            topics: ['Cambios', 'Pérdidas', 'Estrés', 'Ansiedad', 'Transiciones', 'Burnout', 'Experiencias difíciles'],
+            href: '/terapia-individual/#tu-frente-a-la-vida',
+          },
+        ]}
+      />
+      <div class="areas-cta" data-reveal>
+        <Button href="/como-trabajo/" variant="link">Explora cómo trabajo</Button>
+      </div>
+    </div>
+  </section>
+
+  <ProgressReveal />
+
+  <Manifesto eyebrow="Growing Souls" title="Un espacio seguro para sentir, comprender y crecer." cta={{ label: 'Conoce Growing Souls', href: '/melanie/#growing-souls' }}>
+    <p>
+      <Verify note="Aprobación Melanie · origen del nombre pendiente de entrevista">
+        Growing Souls nació de una convicción: la psicología puede ser rigurosa y profundamente humana al mismo
+        tiempo. Aquí no hay nada que reparar. Hay algo que comprender. Vengo a acompañarte mientras entiendes tu
+        historia, reconoces tus patrones y decides, con tus propios valores, hacia dónde quieres crecer.
+      </Verify>
+    </p>
+  </Manifesto>
+
+  <Triptych
+    image={fotoOlivo}
+    alt="Melanie sentada junto a un olivo, con las manos sobre un modelo de cerebro, sonriendo"
+    focus="50% 28%"
+    quote="Aquí no hay nada que reparar. Hay algo que comprender."
+    quoteCite="Mi manera de hacer terapia"
+    eyebrow="Evidencia y humanidad"
+    title="La evidencia da estructura. La humanidad da conexión."
+    cta={{ label: 'Explora cómo trabajo', href: '/como-trabajo/' }}
+    tone="ivory"
+  >
+    <p>
+      Trabajo con enfoques con respaldo científico (ACT, EFT y CBT), explicados primero como se viven y después por su
+      nombre. Y con algo que ningún manual incluye: alguien que te escucha con respeto, sin apurarte y sin decidir por ti.
+    </p>
+  </Triptych>
+
+  <section class="section section--sand">
+    <div class="container">
+      <SectionHeading eyebrow="Cómo podemos trabajar" title="Tres maneras de empezar." />
+      <ServiceCard
+        services={[
+          {
+            title: 'Terapia individual',
+            text: 'Para lo que llevas contigo, lo que vives con otros y lo que la vida te está pidiendo ahora.',
+            href: '/terapia-individual/',
+            label: 'Conoce la terapia individual',
+          },
+          {
+            title: 'Terapia de pareja',
+            text: 'Amarnos no significa automáticamente saber relacionarnos.',
+            href: '/parejas/',
+            label: 'Hablemos de relaciones',
+          },
+          {
+            title: 'Oficina virtual',
+            text: 'Tu espacio seguro también puede encontrarte donde estés.',
+            href: '/oficina-virtual/',
+            label: 'Conoce la oficina virtual',
+          },
+        ]}
+      />
+    </div>
+  </section>
+
+  {
+    posts.length > 0 && (
+      <section class="section">
+        <div class="container">
+          <SectionHeading eyebrow="Growing Journal" title="Para sentir y pensar.">
+            <p class="lead">
+              Reflexiones sobre relaciones, emociones, culpa, límites y las historias que nos contamos. Sin
+              diagnósticos por Instagram y sin promesas.
+            </p>
+          </SectionHeading>
+          <div class="journal-grid">
+            {posts.map((post, i) => (
+              <JournalCard
+                href={`/journal/${post.id}/`}
+                title={post.data.title}
+                description={post.data.description}
+                tema={post.data.tema}
+                readingTime={post.data.readingTime}
+                draft={post.data.draft}
+                index={i}
+              />
+            ))}
+          </div>
+          <div class="areas-cta" data-reveal>
+            <Button href="/journal/" variant="link">Leer el Journal</Button>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBand
+    title="Tal vez llevas algún tiempo pensando en comenzar."
+    subtitle="Cuando sientas que es el momento de hablar, aquí hay un espacio para escucharte."
+    cta={{ label: 'Solicitar una cita', href: '/agenda/' }}
+    tone="sand"
+  />
+</Base>
+
+<style>
+  .about__grid {
+    display: grid;
+    gap: var(--space-8);
+    align-items: center;
+  }
+  .about__photos {
+    width: min(100%, 30rem);
+    margin-inline: auto;
+  }
+  .about__text {
+    display: grid;
+    gap: var(--space-3);
+  }
+  .about__text h2 {
+    max-width: 16ch;
+  }
+  .about__text p:not(.eyebrow) {
+    max-width: var(--measure);
+  }
+  .about__cta {
+    margin-top: var(--space-1);
+  }
+  @media (min-width: 960px) {
+    .about__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 7vw, 7rem);
+    }
+    .about__photos {
+      width: min(100%, 34rem);
+    }
+  }
+  .areas-cta {
+    margin-top: var(--space-6);
+  }
+  .journal-grid {
+    display: grid;
+    gap: var(--space-3);
+  }
+  @media (min-width: 960px) {
+    .journal-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+  }
+</style>

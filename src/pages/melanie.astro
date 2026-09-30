@@ -1,0 +1,209 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Chapter from '../components/Chapter.astro';
+import Quote from '../components/Quote.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Verify from '../components/Verify.astro';
+import { isPreview } from '../data/site';
+
+import fotoHero from '../assets/melanie/06-banquillo-retrato.jpg';
+import fotoOlivo from '../assets/melanie/03-olivo.jpg';
+import fotoLaptop from '../assets/melanie/04-banquillo-laptop.jpg';
+
+const chapters = [
+  { id: 'antes', numeral: 'I', title: 'Antes de la Dra. Acevedo', preview: true },
+  { id: 'acompanar', numeral: 'II', title: 'Aprender a acompañar', preview: false },
+  { id: 'puerto-rico', numeral: 'III', title: 'Cuando Puerto Rico también necesitaba ser escuchado', preview: false },
+  { id: 'escuchando', numeral: 'IV', title: 'Lo que aprendí escuchando', preview: true },
+  { id: 'psicologia', numeral: 'V', title: 'Mi manera de entender la psicología', preview: false },
+  { id: 'growing-souls', numeral: 'VI', title: 'Growing Souls', preview: true },
+  { id: 'construir', numeral: 'VII', title: 'Lo que todavía quiero construir', preview: false },
+].filter((c) => isPreview || !c.preview);
+---
+
+<Base
+  title="Conoce a la Dra. Melanie Acevedo Vélez · Growing Souls"
+  description="Antes de ser psicóloga, soy persona. La historia de una psicóloga clínica puertorriqueña y de su manera de acompañar."
+>
+  <PageHero
+    eyebrow="Mi historia"
+    title="Antes de ser psicóloga, soy persona."
+    subtitle="Esta no es una lista de títulos. Es la historia de cómo aprendí a escuchar, y de por qué hago terapia como la hago."
+    image={fotoHero}
+    alt="Melanie sentada en un banquillo, con blusa marrón, sonriendo hacia la cámara"
+    focus="50% 18%"
+  />
+
+  <section class="story">
+    <div class="container story__grid">
+      <aside class="story__index" aria-label="Capítulos">
+        <p class="eyebrow">Capítulos</p>
+        <ol role="list">
+          {
+            chapters.map((c) => (
+              <li>
+                <a href={`#${c.id}`}>
+                  <span class="story__num">{c.numeral}</span> {c.title}
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </aside>
+
+      <div class="story__chapters">
+        <Chapter id="antes" numeral="I" title="Antes de la Dra. Acevedo" pending="Infancia, familia, por qué psicología y el momento de decir: esto es lo mío. Se escribe con la entrevista." />
+
+        <Chapter id="acompanar" numeral="II" title="Aprender a acompañar" image={fotoLaptop} alt="Melanie trabaja en su laptop sentada en el piso, con libros de psicología a su lado">
+          <p>
+            <Verify note="Aprobación Melanie">
+              La universidad me dio teoría, estructura y conocimiento. Hay algo que ningún libro sustituye: la
+              calidad humana de quien te escucha.
+            </Verify>
+          </p>
+          <Verify as="div" note="Formación: grados, instituciones, fechas e internado" hide>
+            <p class="muted">
+              Formación, prácticas, internado, primeros pacientes y lo que los libros no enseñan. Datos por verificar
+              con documentos antes de publicar.
+            </p>
+          </Verify>
+        </Chapter>
+
+        <Chapter id="puerto-rico" numeral="III" title="Cuando Puerto Rico también necesitaba ser escuchado">
+          <p>
+            <Verify note="Aprobación Melanie · organizaciones, fechas y funciones por verificar">
+              No viví esas crisis solo desde el rol profesional. Las viví como puertorriqueña, mientras aprendía a
+              acompañar a otros.
+            </Verify>
+          </p>
+          <p>
+            <Verify note="Aprobación Melanie">
+              Cuando Puerto Rico atravesaba momentos de incertidumbre, yo también estaba creciendo como persona y como
+              profesional. Aprendí que escuchar, a veces, es lo primero que una comunidad necesita.
+            </Verify>
+          </p>
+        </Chapter>
+
+        {
+          isPreview && (
+            <Chapter id="escuchando" numeral="IV" title="Lo que aprendí escuchando">
+              <p class="muted small">Reflexiones propuestas. Ninguna se publica sin la aprobación de Melanie.</p>
+              <ul class="story__lessons" role="list">
+                {[
+                  'He aprendido que muchas personas que parecen fuertes simplemente llevan demasiado tiempo sobreviviendo.',
+                  'He aprendido que poner límites también puede ser una forma de amar.',
+                  'He aprendido que sentir culpa no siempre significa que hicimos algo malo.',
+                  'He aprendido que perdonarnos puede ser más difícil que perdonar a otros.',
+                  'He aprendido que cambiar nuestra historia comienza muchas veces cambiando la manera en que nos la contamos.',
+                  'He aprendido que pedir ayuda no es rendirse; es decidir dejar de cargar con todo en silencio.',
+                  'He aprendido que el silencio en una sesión también dice algo, y que hay que respetarlo.',
+                ].map((line) => (
+                  <li>
+                    <Verify note="Aprobación Melanie (frase atribuida)" hide>
+                      {line}
+                    </Verify>
+                  </li>
+                ))}
+              </ul>
+            </Chapter>
+          )
+        }
+
+        <Chapter id="psicologia" numeral="V" title="Mi manera de entender la psicología" image={fotoOlivo} alt="Melanie sentada junto a un olivo, con las manos sobre un modelo de cerebro, sonriendo">
+          <Quote align="left">
+            <Verify note="Aprobación Melanie">
+              No estoy aquí para decirte quién debes ser. Estoy aquí para acompañarte mientras descubres quién eres,
+              qué necesitas y hacia dónde quieres caminar.
+            </Verify>
+          </Quote>
+          <p>
+            <Verify note="Aprobación Melanie">
+              Creo en una terapia de colaboración, no de poder. Tu vida sigue siendo tuya; yo acompaño el proceso.
+              Creo en la evidencia, porque mereces herramientas que funcionan, y creo en la humanidad, porque ninguna
+              herramienta sirve sin alguien que te escuche con respeto.
+            </Verify>
+          </p>
+        </Chapter>
+
+        <Chapter id="growing-souls" numeral="VI" title="Growing Souls" pending="Por qué ese nombre, quién lo escogió, qué significa y cuándo nació. Se escribe con la entrevista." />
+
+        <Chapter id="construir" numeral="VII" title="Lo que todavía quiero construir">
+          <p>
+            <Verify note="Aprobación Melanie">
+              Growing Souls no tiene que ser solo yo. Quiero que crezca con profesionales que compartan esta manera de
+              entender la psicología, y que en Puerto Rico pedir ayuda se entienda como lo que es: un acto de cuidado,
+              de conciencia y de crecimiento.
+            </Verify>
+          </p>
+          <p class="muted serif-italic story__note">Esta historia se sigue escribiendo.</p>
+        </Chapter>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Ahora que sabes quién soy, mira cómo trabajo."
+    subtitle="Cómo se siente una sesión, qué puedes esperar y con qué evidencia acompaño."
+    cta={{ label: 'Explora cómo trabajo', href: '/como-trabajo/' }}
+    tone="sand"
+  />
+</Base>
+
+<style>
+  .story {
+    padding-block: var(--space-6) 0;
+  }
+  .story__grid {
+    display: grid;
+    gap: var(--space-6);
+    align-items: start;
+  }
+  .story__index ol {
+    margin-top: var(--space-2);
+    display: grid;
+    gap: 0.6rem;
+    padding: 0;
+  }
+  .story__index a {
+    display: flex;
+    gap: 0.6rem;
+    font-size: var(--step-small);
+    text-decoration: none;
+    color: var(--fg);
+  }
+  .story__index a:hover {
+    text-decoration: underline;
+  }
+  .story__num {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--olive-deep);
+    min-width: 1.6rem;
+  }
+  .story__lessons {
+    display: grid;
+    gap: var(--space-2);
+    padding: 0;
+  }
+  .story__lessons li {
+    font-family: var(--font-serif);
+    font-size: calc(var(--step-h3) * 0.85);
+    line-height: 1.3;
+    padding-left: 1rem;
+    border-left: 1px solid var(--olive);
+  }
+  .story__note {
+    margin-top: var(--space-4);
+  }
+  @media (min-width: 960px) {
+    .story__grid {
+      grid-template-columns: 16rem 1fr;
+      gap: var(--space-10);
+    }
+    .story__index {
+      position: sticky;
+      top: calc(var(--nav-height) + 2rem);
+    }
+  }
+</style>

@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import Statement from '../components/Statement.astro';
-import PhotoDuo from '../components/PhotoDuo.astro';
 import Triptych from '../components/Triptych.astro';
 import ArchPhoto from '../components/ArchPhoto.astro';
 import SectionHeading from '../components/SectionHeading.astro';
@@ -20,11 +19,10 @@ import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
 import { isPreview } from '../data/site';
 
-import fotoHero from '../assets/melanie/05-mirada-abajo.jpg';
-import fotoNotas from '../assets/melanie/02-piso-notas.jpg';
-import fotoBanquillo from '../assets/melanie/06-banquillo-retrato.jpg';
-import fotoLaptop from '../assets/melanie/04-banquillo-laptop.jpg';
-import fotoOlivo from '../assets/melanie/03-olivo.jpg';
+import fotoHero from '../assets/melanie/05-mirada-abajo-cerca.jpg';
+import fotoNotas from '../assets/melanie/02-laptop-cerca.jpg';
+import fotoRetrato from '../assets/melanie/06-banquillo-recorte.png';
+import fotoOlivo from '../assets/melanie/03-olivo-cerca.jpg';
 
 /* La foto del hero es el elemento más grande de la primera pantalla: se anuncia en el head para que cargue primero. */
 const heroImg = await getImage({ src: fotoHero, widths: [480, 720, 960, 1200], format: 'webp', quality: 82 });
@@ -49,7 +47,7 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
     image={fotoHero}
     alt="Melanie sonríe mirando hacia abajo, sentada en el piso entre hojas de olivo, con las manos sobre un modelo de cerebro"
     caption="Dra. Melanie Acevedo Vélez · Psicóloga Clínica"
-    focus="50% 22%"
+    focus="50% 30%"
   />
 
   <Statement
@@ -88,14 +86,12 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
   <section class="section section--sand about">
     <div class="container about__grid">
       <div class="about__photos">
-        <PhotoDuo
-          main={fotoBanquillo}
-          mainAlt="Melanie sentada en un banquillo de madera, sonriendo hacia la cámara"
-          mainFocus="50% 18%"
-          secondary={fotoLaptop}
-          secondaryAlt="Melanie trabaja en su laptop, sentada en el piso junto a libros de psicología"
-          secondaryFocus="55% 45%"
-          side="right"
+        <ArchPhoto
+          src={fotoRetrato}
+          alt="Melanie sentada en un banquillo de madera, sonriendo hacia la cámara"
+          focus="50% 50%"
+          fill="ivory"
+          sizes="(min-width: 960px) 34vw, (min-width: 640px) 60vw, 100vw"
         />
       </div>
       <div class="about__text" data-reveal style="--reveal-index: 1">
@@ -190,7 +186,7 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
   <Triptych
     image={fotoOlivo}
     alt="Melanie sentada junto a un olivo, con las manos sobre un modelo de cerebro, sonriendo"
-    focus="50% 28%"
+    focus="50% 40%"
     quote="Aquí no hay nada que reparar. Hay algo que comprender."
     quoteCite="Mi manera de hacer terapia"
     eyebrow="Evidencia y humanidad"
@@ -209,9 +205,9 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
       <div class="talleres__figure">
         <ArchPhoto
           src={fotoNotas}
-          alt="Melanie sostiene un tablero con notas mientras explica, sentada frente a la cámara"
-          focus="50% 84%"
-          zoom={1.35}
+          alt="Melanie, sentada en el piso, sostiene su laptop con notas de recordatorio pegadas en la tapa"
+          focus="50% 50%"
+          ratio="2 / 3"
           sizes="(min-width: 960px) 34vw, (min-width: 640px) 60vw, 100vw"
         />
       </div>
@@ -277,7 +273,7 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
     align-items: center;
   }
   .about__photos {
-    width: min(100%, 30rem);
+    width: min(100%, 22rem);
     margin-inline: auto;
   }
   .about__text {
@@ -301,7 +297,8 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
       gap: clamp(3rem, 7vw, 7rem);
     }
     .about__photos {
-      width: min(100%, 34rem);
+      width: min(100%, 27rem);
+      justify-self: center;
     }
     .about__text {
       justify-items: start;

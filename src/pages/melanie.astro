@@ -7,9 +7,9 @@ import CtaBand from '../components/CtaBand.astro';
 import Verify from '../components/Verify.astro';
 import { isPreview } from '../data/site';
 
-import fotoHero from '../assets/melanie/01-libros.jpg';
-import fotoOlivo from '../assets/melanie/03-olivo.jpg';
-import fotoRetrato from '../assets/melanie/06-banquillo-retrato.jpg';
+import fotoHero from '../assets/melanie/01-libros-recorte.png';
+import fotoOlivo from '../assets/melanie/03-olivo-cerca.jpg';
+import fotoRetrato from '../assets/melanie/06-banquillo-recorte.png';
 
 const roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
 const allChapters = [
@@ -36,7 +36,9 @@ const num = Object.fromEntries(chapters.map((c) => [c.id, c.numeral])) as Record
     subtitle="Esta no es una lista de títulos. Es la historia de cómo aprendí a escuchar, y de por qué hago terapia como la hago."
     image={fotoHero}
     alt="Melanie sostiene varios libros de psicología y sonríe"
-    focus="50% 12%"
+    focus="50% 0%"
+    ratio="2 / 3"
+    fill="sand"
     caption="Dra. Melanie Acevedo Vélez · Psicóloga Clínica"
   />
 
@@ -60,7 +62,7 @@ const num = Object.fromEntries(chapters.map((c) => [c.id, c.numeral])) as Record
       <div class="story__chapters">
         <Chapter id="antes" numeral={num['antes']} title="Antes de la Dra. Acevedo" pending="Infancia, familia, por qué psicología y el momento de decir: esto es lo mío. Se escribe con la entrevista." />
 
-        <Chapter id="acompanar" numeral={num['acompanar']} title="Aprender a acompañar" image={fotoRetrato} focus="50% 18%" alt="Melanie sentada en un banquillo, sonriendo hacia la cámara">
+        <Chapter id="acompanar" numeral={num['acompanar']} title="Aprender a acompañar" image={fotoRetrato} focus="50% 50%" fill="sand" alt="Melanie sentada en un banquillo, sonriendo hacia la cámara">
           <p>
             <Verify note="Aprobación Melanie">
               La universidad me dio teoría, estructura y conocimiento. Hay algo que ningún libro sustituye: la
@@ -115,7 +117,7 @@ const num = Object.fromEntries(chapters.map((c) => [c.id, c.numeral])) as Record
           )
         }
 
-        <Chapter id="psicologia" numeral={num['psicologia']} title="Mi manera de entender la psicología" image={fotoOlivo} focus="50% 30%" alt="Melanie sentada junto a un olivo, con las manos sobre un modelo de cerebro, sonriendo">
+        <Chapter id="psicologia" numeral={num['psicologia']} title="Mi manera de entender la psicología" image={fotoOlivo} focus="50% 40%" alt="Melanie sentada junto a un olivo, con las manos sobre un modelo de cerebro, sonriendo">
           <Quote align="left">
             <Verify note="Aprobación Melanie">
               No estoy aquí para decirte quién debes ser. Estoy aquí para acompañarte mientras descubres quién eres,

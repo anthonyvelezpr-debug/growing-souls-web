@@ -188,6 +188,18 @@ const phrases = [
   .progress.is-staged .progress__step:last-child {
     height: 90svh;
   }
+  /* En móvil el recorrido es más corto: menos pulgar por frase. */
+  @media (max-width: 639px) {
+    .progress.is-staged .progress__step {
+      height: 48svh;
+    }
+    .progress.is-staged .progress__step:first-child {
+      height: 30svh;
+    }
+    .progress.is-staged .progress__step:last-child {
+      height: 70svh;
+    }
+  }
 </style>
 
 <script>

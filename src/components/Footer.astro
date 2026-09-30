@@ -136,6 +136,12 @@ const phoneHref = site.contact.phone ? `tel:${site.contact.phone.replace(/\D/g, 
     padding-block: var(--space-3) var(--space-6);
     border-top: 1px solid var(--line);
   }
+  /* Hueco para la barra fija de acción en móvil y tablet. */
+  @media (max-width: 959px) {
+    .footer__bottom {
+      padding-bottom: calc(var(--space-6) + 4rem + env(safe-area-inset-bottom, 0px));
+    }
+  }
   @media (min-width: 640px) {
     .footer__cols {
       grid-template-columns: repeat(3, 1fr);

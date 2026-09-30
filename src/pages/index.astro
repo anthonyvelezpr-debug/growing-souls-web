@@ -57,6 +57,34 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
     subtitle="A veces, llegar es el primer acto de valentía."
   />
 
+  <section class="section section--tight">
+    <div class="container">
+      <SectionHeading eyebrow="Cómo podemos trabajar" title="Tres maneras de empezar." />
+      <ServiceCard
+        services={[
+          {
+            title: 'Terapia individual',
+            text: 'Para lo que llevas contigo, lo que vives con otros y lo que la vida te está pidiendo ahora.',
+            href: '/terapia-individual/',
+            label: 'Conoce la terapia individual',
+          },
+          {
+            title: 'Terapia de pareja',
+            text: 'Amarnos no significa automáticamente saber relacionarnos.',
+            href: '/parejas/',
+            label: 'Hablemos de relaciones',
+          },
+          {
+            title: 'Oficina virtual',
+            text: 'Tu espacio seguro también puede encontrarte donde estés.',
+            href: '/oficina-virtual/',
+            label: 'Conoce la oficina virtual',
+          },
+        ]}
+      />
+    </div>
+  </section>
+
   <section class="section section--sand about">
     <div class="container about__grid">
       <div class="about__photos">
@@ -175,34 +203,6 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
       nombre. Y con algo que ningún manual incluye: alguien que te escucha con respeto, sin apurarte y sin decidir por ti.
     </p>
   </Triptych>
-
-  <section class="section section--sand">
-    <div class="container">
-      <SectionHeading eyebrow="Cómo podemos trabajar" title="Tres maneras de empezar." />
-      <ServiceCard
-        services={[
-          {
-            title: 'Terapia individual',
-            text: 'Para lo que llevas contigo, lo que vives con otros y lo que la vida te está pidiendo ahora.',
-            href: '/terapia-individual/',
-            label: 'Conoce la terapia individual',
-          },
-          {
-            title: 'Terapia de pareja',
-            text: 'Amarnos no significa automáticamente saber relacionarnos.',
-            href: '/parejas/',
-            label: 'Hablemos de relaciones',
-          },
-          {
-            title: 'Oficina virtual',
-            text: 'Tu espacio seguro también puede encontrarte donde estés.',
-            href: '/oficina-virtual/',
-            label: 'Conoce la oficina virtual',
-          },
-        ]}
-      />
-    </div>
-  </section>
 
   <section class="section talleres" id="talleres">
     <div class="container talleres__grid">

@@ -25,7 +25,7 @@ import { site } from '../data/site';
         }
       </ul>
       <p class="crisis__closing serif-italic">Pedir ayuda ahora también es cuidarte.</p>
-      <p class="small muted">
+      <p class="small muted crisis__source">
         Los números provienen de la <a href={site.crisis.source} rel="noopener">Línea PAS de ASSMCA</a>. Si alguno
         cambia, avísanos para actualizarlo.
       </p>
@@ -42,7 +42,9 @@ import { site } from '../data/site';
   .crisis__item {
     display: grid;
     gap: 0.35rem;
-    padding: var(--space-4);
+    justify-items: center;
+    text-align: center;
+    padding: var(--space-5) var(--space-4);
     border: 1px solid var(--line);
     border-radius: var(--radius);
     background: var(--sand);
@@ -50,6 +52,8 @@ import { site } from '../data/site';
   .crisis__number {
     font-family: var(--font-serif);
     font-size: var(--step-h2);
+    font-variant-numeric: lining-nums tabular-nums;
+    letter-spacing: 0.02em;
     line-height: 1.1;
     text-decoration: none;
     color: var(--navy);
@@ -61,5 +65,10 @@ import { site } from '../data/site';
   .crisis__closing {
     margin-top: var(--space-6);
     font-size: calc(var(--step-h3) * 0.9);
+    text-align: center;
+  }
+  .crisis__source {
+    margin-top: var(--space-2);
+    text-align: center;
   }
 </style>

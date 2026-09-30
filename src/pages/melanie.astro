@@ -7,19 +7,23 @@ import CtaBand from '../components/CtaBand.astro';
 import Verify from '../components/Verify.astro';
 import { isPreview } from '../data/site';
 
-import fotoHero from '../assets/melanie/06-banquillo-retrato.jpg';
+import fotoHero from '../assets/melanie/01-libros.jpg';
 import fotoOlivo from '../assets/melanie/03-olivo.jpg';
-import fotoLaptop from '../assets/melanie/04-banquillo-laptop.jpg';
+import fotoRetrato from '../assets/melanie/06-banquillo-retrato.jpg';
 
-const chapters = [
-  { id: 'antes', numeral: 'I', title: 'Antes de la Dra. Acevedo', preview: true },
-  { id: 'acompanar', numeral: 'II', title: 'Aprender a acompañar', preview: false },
-  { id: 'puerto-rico', numeral: 'III', title: 'Cuando Puerto Rico también necesitaba ser escuchado', preview: false },
-  { id: 'escuchando', numeral: 'IV', title: 'Lo que aprendí escuchando', preview: true },
-  { id: 'psicologia', numeral: 'V', title: 'Mi manera de entender la psicología', preview: false },
-  { id: 'growing-souls', numeral: 'VI', title: 'Growing Souls', preview: true },
-  { id: 'construir', numeral: 'VII', title: 'Lo que todavía quiero construir', preview: false },
-].filter((c) => isPreview || !c.preview);
+const roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
+const allChapters = [
+  { id: 'antes', title: 'Antes de la Dra. Acevedo', preview: true },
+  { id: 'acompanar', title: 'Aprender a acompañar', preview: false },
+  { id: 'puerto-rico', title: 'Cuando Puerto Rico también necesitaba ser escuchado', preview: false },
+  { id: 'escuchando', title: 'Lo que aprendí escuchando', preview: true },
+  { id: 'psicologia', title: 'Mi manera de entender la psicología', preview: false },
+  { id: 'growing-souls', title: 'Growing Souls', preview: true },
+  { id: 'construir', title: 'Lo que todavía quiero construir', preview: false },
+];
+/* Los capítulos pendientes de entrevista solo existen en vista previa; la numeración pública es siempre correlativa. */
+const chapters = allChapters.filter((c) => isPreview || !c.preview).map((c, i) => ({ ...c, numeral: roman[i] }));
+const num = Object.fromEntries(chapters.map((c) => [c.id, c.numeral])) as Record<string, string>;
 ---
 
 <Base
@@ -31,8 +35,9 @@ const chapters = [
     title="Antes de ser psicóloga, soy persona."
     subtitle="Esta no es una lista de títulos. Es la historia de cómo aprendí a escuchar, y de por qué hago terapia como la hago."
     image={fotoHero}
-    alt="Melanie sentada en un banquillo, con blusa marrón, sonriendo hacia la cámara"
-    focus="50% 18%"
+    alt="Melanie sostiene varios libros de psicología y sonríe"
+    focus="50% 12%"
+    caption="Dra. Melanie Acevedo Vélez · Psicóloga Clínica"
   />
 
   <section class="story">
@@ -53,9 +58,9 @@ const chapters = [
       </aside>
 
       <div class="story__chapters">
-        <Chapter id="antes" numeral="I" title="Antes de la Dra. Acevedo" pending="Infancia, familia, por qué psicología y el momento de decir: esto es lo mío. Se escribe con la entrevista." />
+        <Chapter id="antes" numeral={num['antes']} title="Antes de la Dra. Acevedo" pending="Infancia, familia, por qué psicología y el momento de decir: esto es lo mío. Se escribe con la entrevista." />
 
-        <Chapter id="acompanar" numeral="II" title="Aprender a acompañar" image={fotoLaptop} alt="Melanie trabaja en su laptop sentada en el piso, con libros de psicología a su lado">
+        <Chapter id="acompanar" numeral={num['acompanar']} title="Aprender a acompañar" image={fotoRetrato} focus="50% 18%" alt="Melanie sentada en un banquillo, sonriendo hacia la cámara">
           <p>
             <Verify note="Aprobación Melanie">
               La universidad me dio teoría, estructura y conocimiento. Hay algo que ningún libro sustituye: la
@@ -70,7 +75,7 @@ const chapters = [
           </Verify>
         </Chapter>
 
-        <Chapter id="puerto-rico" numeral="III" title="Cuando Puerto Rico también necesitaba ser escuchado">
+        <Chapter id="puerto-rico" numeral={num['puerto-rico']} title="Cuando Puerto Rico también necesitaba ser escuchado">
           <p>
             <Verify note="Aprobación Melanie · organizaciones, fechas y funciones por verificar">
               No viví esas crisis solo desde el rol profesional. Las viví como puertorriqueña, mientras aprendía a
@@ -87,7 +92,7 @@ const chapters = [
 
         {
           isPreview && (
-            <Chapter id="escuchando" numeral="IV" title="Lo que aprendí escuchando">
+            <Chapter id="escuchando" numeral={num['escuchando']} title="Lo que aprendí escuchando">
               <p class="muted small">Reflexiones propuestas. Ninguna se publica sin la aprobación de Melanie.</p>
               <ul class="story__lessons" role="list">
                 {[
@@ -110,7 +115,7 @@ const chapters = [
           )
         }
 
-        <Chapter id="psicologia" numeral="V" title="Mi manera de entender la psicología" image={fotoOlivo} alt="Melanie sentada junto a un olivo, con las manos sobre un modelo de cerebro, sonriendo">
+        <Chapter id="psicologia" numeral={num['psicologia']} title="Mi manera de entender la psicología" image={fotoOlivo} focus="50% 30%" alt="Melanie sentada junto a un olivo, con las manos sobre un modelo de cerebro, sonriendo">
           <Quote align="left">
             <Verify note="Aprobación Melanie">
               No estoy aquí para decirte quién debes ser. Estoy aquí para acompañarte mientras descubres quién eres,
@@ -126,9 +131,9 @@ const chapters = [
           </p>
         </Chapter>
 
-        <Chapter id="growing-souls" numeral="VI" title="Growing Souls" pending="Por qué ese nombre, quién lo escogió, qué significa y cuándo nació. Se escribe con la entrevista." />
+        <Chapter id="growing-souls" numeral={num['growing-souls']} title="Growing Souls" pending="Por qué ese nombre, quién lo escogió, qué significa y cuándo nació. Se escribe con la entrevista." />
 
-        <Chapter id="construir" numeral="VII" title="Lo que todavía quiero construir">
+        <Chapter id="construir" numeral={num['construir']} title="Lo que todavía quiero construir">
           <p>
             <Verify note="Aprobación Melanie">
               Growing Souls no tiene que ser solo yo. Quiero que crezca con profesionales que compartan esta manera de
@@ -195,6 +200,27 @@ const chapters = [
   }
   .story__note {
     margin-top: var(--space-4);
+  }
+  @media (max-width: 959px) {
+    .story__index {
+      text-align: center;
+    }
+    .story__index a {
+      display: inline;
+    }
+    .story__index li {
+      max-width: 30ch;
+      margin-inline: auto;
+    }
+    .story__num {
+      min-width: 0;
+      margin-right: 0.5ch;
+    }
+    .story__lessons li {
+      padding-left: 0;
+      border-left: 0;
+      text-align: center;
+    }
   }
   @media (min-width: 960px) {
     .story__grid {

@@ -250,12 +250,14 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
   .about__text {
     display: grid;
     gap: var(--space-3);
+    justify-items: center;
+    text-align: center;
   }
   .about__text h2 {
     max-width: 16ch;
   }
   .about__text p:not(.eyebrow) {
-    max-width: var(--measure);
+    max-width: 44ch;
   }
   .about__cta {
     margin-top: var(--space-1);
@@ -268,9 +270,19 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
     .about__photos {
       width: min(100%, 34rem);
     }
+    .about__text {
+      justify-items: start;
+      text-align: left;
+    }
+    .about__text p:not(.eyebrow) {
+      max-width: var(--measure);
+    }
   }
   .areas-cta {
     margin-top: var(--space-6);
+    display: grid;
+    justify-items: center;
+    text-align: center;
   }
   .journal-grid {
     display: grid;

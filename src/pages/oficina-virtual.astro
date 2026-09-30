@@ -48,7 +48,8 @@ const faqJsonLd = {
     subtitle="La terapia en línea no es “la alternativa cuando no puedes venir”. Es una manera legítima de hacer terapia, con la misma presencia y la misma confidencialidad."
     image={fotoLaptop}
     alt="Melanie sentada en el piso con su laptop, sonriendo"
-    focus="50% 78%"
+    focus="50% 88%"
+    zoom={1.42}
   />
 
   <section class="section section--tight">
@@ -111,12 +112,13 @@ const faqJsonLd = {
     gap: var(--space-3);
     padding: 0;
   }
+  /* Móvil y tablet: número sobre el texto, centrado. Desktop: cuatro columnas, alineadas a la izquierda. */
   .steps li {
     display: grid;
-    grid-template-columns: auto 1fr;
-    gap: var(--space-3);
-    align-items: start;
-    padding-top: var(--space-3);
+    gap: var(--space-2);
+    justify-items: center;
+    text-align: center;
+    padding-top: var(--space-4);
     border-top: 1px solid var(--line);
   }
   .steps__n {
@@ -125,10 +127,15 @@ const faqJsonLd = {
     font-size: var(--step-h2);
     line-height: 1;
     color: var(--olive-deep);
-    min-width: 2ch;
   }
   .steps p {
     max-width: 30ch;
+  }
+  @media (min-width: 640px) and (max-width: 959px) {
+    .steps {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-4);
+    }
   }
   @media (min-width: 960px) {
     .steps {
@@ -136,8 +143,9 @@ const faqJsonLd = {
       gap: var(--space-6);
     }
     .steps li {
-      grid-template-columns: 1fr;
-      gap: var(--space-2);
+      justify-items: start;
+      text-align: left;
+      padding-top: var(--space-3);
     }
   }
 </style>

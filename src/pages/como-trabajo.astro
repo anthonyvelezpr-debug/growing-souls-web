@@ -79,12 +79,11 @@ import fotoLaptop from '../assets/melanie/04-banquillo-laptop.jpg';
           src={fotoLaptop}
           alt="Melanie trabaja en su laptop, sentada en el piso junto a un banquillo y libros de psicología"
           focus="50% 40%"
-          caption="Evidencia y calidad humana"
           sizes="(min-width: 960px) 34vw, (min-width: 640px) 60vw, 100vw"
         />
       </div>
       <div class="evidence__text">
-        <SectionHeading eyebrow="Con qué evidencia trabajo" title="Primero te cuento cómo se vive; después, cómo se llama.">
+        <SectionHeading eyebrow="Con qué evidencia trabajo" title="Primero te cuento cómo se vive; después, cómo se llama." align="left">
           <p class="lead">Tres enfoques con respaldo científico, explicados como se sienten en una sesión.</p>
         </SectionHeading>
         <ol class="evidence__list" role="list">
@@ -159,6 +158,18 @@ import fotoLaptop from '../assets/melanie/04-banquillo-laptop.jpg';
   }
   .evidence__cta {
     margin-top: var(--space-4);
+  }
+  @media (max-width: 959px) {
+    .evidence__list li {
+      justify-items: center;
+      text-align: center;
+    }
+    .evidence__how {
+      margin-inline: auto;
+    }
+    .evidence__cta {
+      text-align: center;
+    }
   }
   @media (min-width: 960px) {
     .evidence {

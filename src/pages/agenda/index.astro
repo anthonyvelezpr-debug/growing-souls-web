@@ -87,6 +87,19 @@ import { site } from '../../data/site';
     padding: 0;
     font-size: var(--step-small);
   }
+  @media (max-width: 959px) {
+    .agenda__aside {
+      text-align: center;
+    }
+    .agenda__steps {
+      padding-left: 0;
+      list-style-position: inside;
+      justify-items: center;
+    }
+    .agenda__steps li {
+      max-width: 30ch;
+    }
+  }
   @media (min-width: 960px) {
     .agenda {
       grid-template-columns: 1fr 1.6fr;

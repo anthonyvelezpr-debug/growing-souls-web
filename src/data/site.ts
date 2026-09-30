@@ -24,11 +24,13 @@ export const site = {
     areaServed: 'Puerto Rico',
   },
 
-  // Contacto (confirmado por Anthony, 30 sep 2026).
+  // Contacto (confirmado por Anthony, 30 sep 2026). El número es WhatsApp.
   contact: {
     email: 'support@growingsoulspr.com',
     instagram: 'growingsouls.pr',
     phone: '787-461-9260',
+    whatsapp: '17874619260',
+    whatsappText: 'Hola, me gustaría información para solicitar una cita.',
   },
 
   // Endpoint del formulario de cita (prompt 02). Vacío = modo mailto o aviso.
@@ -45,6 +47,9 @@ export const site = {
     source: 'https://lineapas.assmca.pr.gov/',
   },
 } as const;
+
+/** Enlace de WhatsApp (click to chat) con el mensaje inicial ya escrito. */
+export const whatsappHref = `https://wa.me/${site.contact.whatsapp}?text=${encodeURIComponent(site.contact.whatsappText)}`;
 
 export const nav = [
   { label: 'Conoce a Melanie', href: '/melanie/' },

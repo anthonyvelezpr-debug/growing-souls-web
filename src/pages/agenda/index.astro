@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import AppointmentForm from '../../components/AppointmentForm.astro';
-import { site } from '../../data/site';
+import { site, whatsappHref } from '../../data/site';
 ---
 
 <Base
@@ -37,7 +37,7 @@ import { site } from '../../data/site';
                 )}
                 {site.contact.phone && (
                   <li>
-                    <a href={`tel:${site.contact.phone.replace(/\D/g, '')}`}>{site.contact.phone}</a>
+                    <a href={whatsappHref} rel="noopener">WhatsApp · {site.contact.phone}</a>
                   </li>
                 )}
                 {site.contact.instagram && (

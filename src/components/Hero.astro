@@ -1,9 +1,13 @@
 ---
-import { getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Button from './Button.astro';
 import ArchPhoto from './ArchPhoto.astro';
 
+/**
+ * Hero de portada. Una sola foto (el arco) en todos los tamaños:
+ * en móvil va primero, con su pie, y el texto debajo; en tablet, texto y arco apilados y centrados;
+ * en desktop, dos mitades iguales con el texto a la izquierda.
+ */
 interface Props {
   eyebrow?: string;
   title: string;
@@ -11,30 +15,13 @@ interface Props {
   signature?: string;
   primary?: { label: string; href: string };
   secondary?: { label: string; href: string };
-  imageDesktop: ImageMetadata;
-  imageMobile?: ImageMetadata;
+  image: ImageMetadata;
   alt: string;
   caption?: string;
-  /** Posición del recorte en desktop, p. ej. "50% 30%" */
-  focusDesktop?: string;
+  /** Posición del recorte, p. ej. "50% 30%" */
+  focus?: string;
 }
-const {
-  eyebrow,
-  title,
-  subtitle,
-  signature,
-  primary,
-  secondary,
-  imageDesktop,
-  imageMobile,
-  alt,
-  caption,
-  focusDesktop = '50% 30%',
-} = Astro.props;
-
-const mobileSrc = imageMobile ?? imageDesktop;
-const mobile = await getImage({ src: mobileSrc, widths: [480, 720, 960], format: 'webp', quality: 80 });
-const BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+const { eyebrow, title, subtitle, signature, primary, secondary, image, alt, caption, focus = '50% 30%' } = Astro.props;
 ---
 
 <section class="hero">
@@ -69,54 +56,38 @@ const BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAI
     }
   </div>
 
-  <!-- Móvil: la foto entra por debajo del texto solo por su pared vacía. -->
-  <figure class="hero__mobile">
-    <picture>
-      <!-- En tablet y desktop esta figura está oculta: el píxel transparente evita descargar la foto. -->
-      <source media="(min-width: 640px)" srcset={BLANK} />
-      <img
-        src={mobile.src}
-        srcset={mobile.srcSet.attribute}
-        sizes="100vw"
-        width={mobileSrc.width}
-        height={mobileSrc.height}
-        alt={alt}
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-      />
-    </picture>
-  </figure>
-
-  <!-- Tablet y desktop: arco centrado en su mitad. -->
-  <div class="hero__desktop">
+  <div class="hero__photo">
     <ArchPhoto
-      src={imageDesktop}
+      src={image}
       alt={alt}
       loading="eager"
-      focus={focusDesktop}
+      focus={focus}
       caption={caption}
-      sizes="(min-width: 960px) 40vw, 100vw"
-      hideMedia="(max-width: 639px)"
+      sizes="(min-width: 960px) 40vw, (min-width: 640px) 416px, 336px"
     />
   </div>
 </section>
 
 <style>
+  /* Móvil (< 640 px): la foto primero, centrada, y el texto debajo. Lo primero que se ve es a Melanie. */
   .hero {
     display: grid;
-    padding-top: clamp(1.5rem, 5vh, 3rem);
+    gap: var(--space-5);
+    padding-top: var(--space-4);
+    padding-inline: var(--gutter);
+    justify-items: center;
+    text-align: center;
+  }
+  .hero__photo {
+    order: -1;
+    width: min(100%, 21rem);
   }
   .hero__text {
-    position: relative;
-    z-index: 1;
     display: grid;
     gap: var(--space-3);
     justify-items: center;
     text-align: center;
     max-width: 36rem;
-    margin-inline: auto;
-    padding-inline: var(--gutter);
   }
   .hero__title {
     font-size: var(--step-h1);
@@ -155,50 +126,22 @@ const BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAI
   .hero__actions :global(.btn) {
     width: 100%;
   }
-
-  /* Móvil (< 640 px): texto sobre el espacio negativo (36 % superior de la foto); la cara empieza al 51 %. */
-  .hero__mobile {
-    position: relative;
-    margin: -55vw 0 0;
-  }
-  .hero__mobile picture {
-    display: block;
-  }
-  .hero__mobile img {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1366 / 2048;
-    object-fit: cover;
-  }
-  .hero__mobile::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(
-      to bottom,
-      var(--ivory) 0%,
-      color-mix(in srgb, var(--ivory) 88%, transparent) 22%,
-      color-mix(in srgb, var(--ivory) 45%, transparent) 36%,
-      transparent 48%
-    );
-  }
-  .hero__desktop {
-    display: none;
+  /* En móvil el pie de foto ya dice nombre y título: la firma se omite para no repetirlo. */
+  @media (max-width: 639px) {
+    .hero__signature {
+      display: none;
+    }
   }
 
-  /* Tablet (640 a 959 px): apilado y centrado, sin superposición. */
+  /* Tablet (640 a 959 px): texto arriba y arco debajo, todo centrado. */
   @media (min-width: 640px) {
     .hero {
       gap: var(--space-6);
-      padding-inline: var(--gutter);
-      justify-items: center;
-      text-align: center;
+      padding-top: clamp(1.5rem, 5vh, 3rem);
     }
-    .hero__text {
-      padding-inline: 0;
-      justify-items: center;
+    .hero__photo {
+      order: 0;
+      width: min(100%, 26rem);
     }
     .hero__title,
     .hero__subtitle {
@@ -213,13 +156,6 @@ const BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAI
     .hero__actions :global(.btn) {
       width: auto;
     }
-    .hero__mobile {
-      display: none;
-    }
-    .hero__desktop {
-      display: block;
-      width: min(100%, 26rem);
-    }
   }
 
   /* Desktop: dos mitades iguales, texto centrado en vertical, arco centrado en su mitad. */
@@ -233,6 +169,8 @@ const BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAI
       gap: clamp(2rem, 6vw, 6rem);
       text-align: left;
       justify-items: stretch;
+      min-height: calc(100vh - var(--nav-height));
+      align-content: center;
     }
     .hero__text {
       max-width: 34rem;
@@ -259,13 +197,9 @@ const BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAI
     .hero__actions :global(.btn) {
       width: auto;
     }
-    .hero__desktop {
+    .hero__photo {
       width: min(100%, 33rem);
       justify-self: center;
-    }
-    .hero {
-      min-height: calc(100vh - var(--nav-height));
-      align-content: center;
     }
   }
 </style>

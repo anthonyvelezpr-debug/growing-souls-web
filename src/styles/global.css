@@ -166,6 +166,75 @@ li {
   display: grid;
   gap: var(--space-1);
 }
+.prose ul {
+  list-style: none;
+  padding-left: 0;
+}
+.prose ul > li {
+  position: relative;
+  padding-left: 1.1em;
+}
+.prose ul > li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.78em;
+  width: 0.55em;
+  height: 1px;
+  background: var(--olive);
+}
+.prose ol {
+  list-style: none;
+  padding-left: 0;
+  counter-reset: prose-ol;
+}
+.prose ol > li {
+  position: relative;
+  padding-left: 1.6em;
+  counter-increment: prose-ol;
+}
+.prose ol > li::before {
+  content: counter(prose-ol) '.';
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--olive-deep);
+}
+/* En móvil, la prosa se centra como el resto de la página; las listas se centran como bloque. */
+@media (max-width: 639px) {
+  .prose {
+    text-align: center;
+  }
+  .prose p,
+  .prose li,
+  .prose h2,
+  .prose h3 {
+    margin-inline: auto;
+  }
+  .prose ul,
+  .prose ol {
+    justify-items: center;
+    gap: var(--space-3);
+  }
+  .prose ul > li,
+  .prose ol > li {
+    padding-left: 0;
+    text-align: center;
+  }
+  .prose ul > li::before {
+    position: static;
+    display: block;
+    margin: 0 auto 0.5rem;
+    width: 1.25rem;
+  }
+  .prose ol > li::before {
+    position: static;
+    display: block;
+    margin-bottom: 0.1rem;
+  }
+}
 
 a {
   color: inherit;

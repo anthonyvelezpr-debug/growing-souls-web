@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import MobileBar from '../components/MobileBar.astro';
 import { site, isPreview } from '../data/site';
 
 interface Props {
@@ -12,6 +13,8 @@ interface Props {
   noindex?: boolean;
   jsonLd?: Record<string, unknown>[];
   bodyClass?: string;
+  /** Barra fija de acción en móvil (cita y llamada). Se apaga en agenda y crisis. */
+  mobileBar?: boolean;
 }
 
 const {
@@ -22,6 +25,7 @@ const {
   noindex = false,
   jsonLd = [],
   bodyClass = '',
+  mobileBar = true,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, site.url).href;
@@ -143,6 +147,7 @@ const structuredData = JSON.stringify({ '@context': 'https://schema.org', '@grap
       <slot />
     </main>
     <Footer />
+    {mobileBar && <MobileBar />}
 
     <script>
       const els = document.querySelectorAll<HTMLElement>('[data-reveal]');

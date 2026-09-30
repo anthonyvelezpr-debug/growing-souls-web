@@ -2,10 +2,15 @@
 const steps = ['Sentir', 'Comprender', 'Procesar', 'Desaprender', 'Aprender', 'Relacionarte', 'Crecer'];
 ---
 
+<!--
+  Móvil y tablet: línea vertical centrada con un punto por paso y la palabra centrada.
+  Desktop: línea horizontal con siete puntos equidistantes.
+-->
 <ol class="process" role="list" aria-label="El proceso: sentir, comprender, procesar, desaprender, aprender, relacionarte, crecer">
   {
     steps.map((step, i) => (
       <li class="process__step" data-reveal style={`--reveal-index: ${i + 1}`}>
+        <span class="process__dot" aria-hidden="true" />
         <span class="process__word">{step}</span>
       </li>
     ))
@@ -14,45 +19,54 @@ const steps = ['Sentir', 'Comprender', 'Procesar', 'Desaprender', 'Aprender', 'R
 
 <style>
   .process {
+    --process-bg: var(--ivory);
+    position: relative;
     display: grid;
     gap: 0;
     margin-block: var(--space-6);
     padding: 0;
+    justify-items: center;
+    text-align: center;
   }
-  .process__step {
-    position: relative;
-    padding: 0.85rem 0 0.85rem 1.75rem;
-    font-family: var(--font-serif);
-    font-size: var(--step-h3);
-    line-height: 1.15;
-  }
-  .process__step::before {
+  /* Línea vertical continua, centrada, de punto a punto. */
+  .process::before {
     content: '';
     position: absolute;
-    left: 0.35rem;
-    top: 0;
-    bottom: 0;
+    left: 50%;
+    top: 0.375rem;
+    bottom: 0.375rem;
     width: 1px;
     background: var(--olive);
     opacity: 0.6;
   }
-  .process__step::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
+  .process__step {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 0.45rem;
+    padding-block: 0.75rem;
+    font-family: var(--font-serif);
+    font-size: var(--step-h3);
+    line-height: 1.15;
+  }
+  .process__step:first-child {
+    padding-top: 0;
+  }
+  .process__step:last-child {
+    padding-bottom: 0;
+  }
+  .process__dot {
+    display: block;
     width: 0.75rem;
     height: 0.75rem;
-    margin-top: -0.375rem;
     border-radius: 50%;
     border: 1px solid var(--olive);
-    background: var(--ivory);
+    background: var(--process-bg);
   }
-  .process__step:first-child::before {
-    top: 50%;
-  }
-  .process__step:last-child::before {
-    bottom: 50%;
+  /* La palabra tapa la línea con su propio fondo. */
+  .process__word {
+    background: var(--process-bg);
+    padding-inline: 0.75rem;
   }
   .process__step:last-child .process__word {
     font-style: italic;
@@ -62,34 +76,24 @@ const steps = ['Sentir', 'Comprender', 'Procesar', 'Desaprender', 'Aprender', 'R
   @media (min-width: 960px) {
     .process {
       grid-template-columns: repeat(7, 1fr);
-      text-align: center;
+      justify-items: stretch;
     }
-    .process__step {
-      padding: 2rem 0.5rem 0;
-    }
-    .process__step::before {
-      left: 0;
-      right: 0;
-      top: 0.35rem;
+    .process::before {
+      left: calc(100% / 14);
+      right: calc(100% / 14);
+      top: 0.375rem;
       bottom: auto;
       width: auto;
       height: 1px;
     }
-    .process__step:first-child::before {
-      left: 50%;
-      top: 0.35rem;
-    }
-    .process__step:last-child::before {
-      right: 50%;
-      bottom: auto;
-    }
-    .process__step::after {
-      left: 50%;
-      top: 0;
-      margin: 0 0 0 -0.375rem;
+    .process__step {
+      padding: 0 0.5rem;
+      gap: 1.1rem;
     }
     .process__word {
       display: block;
+      background: none;
+      padding-inline: 0;
       font-size: clamp(1.15rem, 0.9rem + 0.8vw, 1.6rem);
     }
   }

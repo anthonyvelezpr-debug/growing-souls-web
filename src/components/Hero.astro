@@ -41,7 +41,15 @@ const mobile = await getImage({ src: mobileSrc, widths: [480, 720, 960], format:
     {eyebrow && <p class="eyebrow">{eyebrow}</p>}
     <h1 class="hero__title">{title}</h1>
     {subtitle && <p class="hero__subtitle">{subtitle}</p>}
-    {signature && <p class="hero__signature">{signature}</p>}
+    {
+      signature && (
+        <p class="hero__signature">
+          {signature.split(' · ').map((part, i) => (
+            <span class:list={['hero__sig', { 'hero__sig--name': i === 0 }]}>{part}</span>
+          ))}
+        </p>
+      )
+    }
     {
       (primary || secondary) && (
         <div class="hero__actions">
@@ -98,12 +106,15 @@ const mobile = await getImage({ src: mobileSrc, widths: [480, 720, 960], format:
     z-index: 1;
     display: grid;
     gap: var(--space-3);
+    justify-items: center;
+    text-align: center;
     max-width: 36rem;
+    margin-inline: auto;
     padding-inline: var(--gutter);
   }
   .hero__title {
     font-size: var(--step-h1);
-    max-width: 13ch;
+    max-width: 18ch;
   }
   .hero__subtitle {
     font-size: calc(var(--step-body) * 1.1);
@@ -113,12 +124,30 @@ const mobile = await getImage({ src: mobileSrc, widths: [480, 720, 960], format:
     font-size: var(--step-small);
     letter-spacing: 0.05em;
     color: var(--fg-soft);
-  }
-  .hero__actions {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 0.6ch;
+    row-gap: 0.15rem;
+  }
+  .hero__sig--name {
+    flex-basis: 100%;
+    color: var(--fg);
+  }
+  .hero__sig:not(.hero__sig--name):not(:last-child)::after {
+    content: '·';
+    margin-left: 0.6ch;
+    color: var(--olive);
+  }
+  /* Dos botones del mismo ancho, apilados y centrados en móvil. */
+  .hero__actions {
+    display: grid;
     gap: var(--space-2);
+    width: min(100%, 20rem);
     margin-top: var(--space-1);
+  }
+  .hero__actions :global(.btn) {
+    width: 100%;
   }
 
   /* Móvil (< 640 px): texto sobre el espacio negativo (36 % superior de la foto); la cara empieza al 51 %. */
@@ -167,7 +196,13 @@ const mobile = await getImage({ src: mobileSrc, widths: [480, 720, 960], format:
       margin-inline: auto;
     }
     .hero__actions {
+      grid-auto-flow: column;
+      grid-auto-columns: max-content;
+      width: auto;
       justify-content: center;
+    }
+    .hero__actions :global(.btn) {
+      width: auto;
     }
     .hero__mobile {
       display: none;
@@ -192,18 +227,36 @@ const mobile = await getImage({ src: mobileSrc, widths: [480, 720, 960], format:
     }
     .hero__text {
       max-width: 34rem;
+      margin-inline: 0;
       justify-items: start;
+      text-align: left;
+    }
+    .hero__title {
+      max-width: 15ch;
+    }
+    .hero__signature {
+      justify-content: flex-start;
     }
     .hero__title,
-    .hero__subtitle {
+    .hero__subtitle,
+    .hero__signature {
       margin-inline: 0;
     }
     .hero__actions {
-      justify-content: flex-start;
+      grid-auto-flow: column;
+      grid-auto-columns: max-content;
+      width: auto;
+    }
+    .hero__actions :global(.btn) {
+      width: auto;
     }
     .hero__desktop {
-      width: min(100%, 30rem);
+      width: min(100%, 33rem);
       justify-self: center;
+    }
+    .hero {
+      min-height: calc(100vh - var(--nav-height));
+      align-content: center;
     }
   }
 </style>

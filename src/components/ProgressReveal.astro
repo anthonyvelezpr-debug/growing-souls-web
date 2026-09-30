@@ -11,66 +11,80 @@ const phrases = [
 ];
 ---
 
+<!--
+  Momento firma. Con JavaScript y sin reduced-motion: un escenario fijo (sticky) en el que
+  las frases aparecen de una en una al hacer scroll, centradas, y al final el cierre.
+  Sin JavaScript o con reduced-motion: todas las frases apiladas y visibles.
+-->
 <section class="progress" aria-labelledby="progreso-titulo" data-progress>
-  <div class="container--narrow progress__inner">
-    <p class="eyebrow center">Qué significa progresar</p>
-    <ul class="progress__list" role="list">
-      {
-        phrases.map((p, i) => (
-          <li class="progress__phrase" data-reveal data-phrase style={`--reveal-index: ${(i % 2) + 1}`}>
-            {p}
-          </li>
-        ))
-      }
-    </ul>
-    <div class="progress__final" data-reveal>
-      <hr class="progress__rule" />
-      <h2 id="progreso-titulo" class="progress__title">Eso también es progreso.</h2>
-      <p class="progress__note">
-        <Verify note="Aprobación Melanie">
-          Permitirte ser vulnerable dentro del espacio terapéutico ya puede ser una batalla ganada.
-        </Verify>
-      </p>
+  <div class="progress__track">
+    <div class="progress__stage">
+      <p class="eyebrow center progress__eyebrow">Qué significa progresar</p>
+      <ol class="progress__list" role="list">
+        {
+          phrases.map((p, i) => (
+            <li class="progress__phrase" data-phrase data-index={i}>
+              {p}
+            </li>
+          ))
+        }
+      </ol>
+      <div class="progress__final" data-final>
+        <hr class="progress__rule" />
+        <h2 id="progreso-titulo" class="progress__title">Eso también es progreso.</h2>
+        <p class="progress__note">
+          <Verify note="Aprobación Melanie">
+            Permitirte ser vulnerable dentro del espacio terapéutico ya puede ser una batalla ganada.
+          </Verify>
+        </p>
+      </div>
+      <ol class="progress__dots" role="list" aria-hidden="true" data-dots>
+        {phrases.map(() => <li />)}
+        <li class="progress__dot--final" />
+      </ol>
+    </div>
+    <!-- Centinelas: cada uno activa una frase al entrar en pantalla. -->
+    <div class="progress__steps" data-steps aria-hidden="true">
+      {phrases.map((_, i) => <div class="progress__step" data-step={i} />)}
+      <div class="progress__step" data-step={phrases.length} />
     </div>
   </div>
 </section>
 
 <style>
+  /* Base (sin JS / reduced-motion): todo visible y apilado. */
   .progress {
-    padding-block: var(--section-gap);
     background: var(--sand);
+    padding-block: var(--section-gap);
   }
-  .progress__inner {
+  .progress__stage {
+    width: min(100% - 2 * var(--gutter), 52rem);
+    margin-inline: auto;
     display: grid;
     gap: var(--space-6);
+    justify-items: center;
+    text-align: center;
   }
   .progress__list {
     display: grid;
-    gap: clamp(2rem, 6vh, 4rem);
+    gap: clamp(1.5rem, 5vh, 3rem);
     padding: 0;
-    text-align: center;
+    width: 100%;
   }
   .progress__phrase {
     font-family: var(--font-serif);
     font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.6rem);
     line-height: 1.2;
-    max-width: 24ch;
+    max-width: 22ch;
     margin-inline: auto;
-    color: var(--fg-soft);
-    transition:
-      color var(--dur-reveal) var(--ease),
-      opacity var(--dur-reveal) var(--ease),
-      transform var(--dur-reveal) var(--ease);
-  }
-  .progress__phrase.is-current {
     color: var(--fg);
+    text-wrap: balance;
   }
   .progress__final {
-    text-align: center;
     display: grid;
     gap: var(--space-4);
     justify-items: center;
-    padding-top: var(--space-4);
+    padding-top: var(--space-2);
   }
   .progress__rule {
     width: 4rem;
@@ -86,21 +100,122 @@ const phrases = [
     max-width: 38ch;
     color: var(--fg);
   }
+  .progress__dots,
+  .progress__steps {
+    display: none;
+  }
+
+  /* Modo escénico: solo con JS y sin reduced-motion. */
+  .progress.is-staged {
+    padding-block: 0;
+  }
+  .progress.is-staged .progress__track {
+    position: relative;
+  }
+  .progress.is-staged .progress__stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    align-items: center;
+    gap: 0;
+    padding-block: calc(var(--nav-height) + 1rem) 2rem;
+  }
+  .progress.is-staged .progress__list {
+    position: relative;
+    display: block;
+    height: 100%;
+  }
+  .progress.is-staged .progress__phrase,
+  .progress.is-staged .progress__final {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 600ms var(--ease),
+      transform 600ms var(--ease);
+    pointer-events: none;
+  }
+  .progress.is-staged .progress__phrase {
+    font-size: clamp(1.9rem, 1.3rem + 2.4vw, 3.4rem);
+    max-width: 20ch;
+  }
+  .progress.is-staged .progress__phrase.is-active,
+  .progress.is-staged .progress__final.is-active {
+    opacity: 1;
+    transform: none;
+    transition-delay: 120ms;
+  }
+  .progress.is-staged .progress__final {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    gap: var(--space-3);
+  }
+  .progress.is-staged .progress__dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0;
+  }
+  .progress.is-staged .progress__dots li {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    border: 1px solid var(--olive);
+    background: transparent;
+    transition: background-color var(--dur-fast) var(--ease);
+  }
+  .progress.is-staged .progress__dots li.is-active {
+    background: var(--olive);
+  }
+  /* Centinelas en flujo, debajo del escenario fijo: cada uno equivale a un "paso" de scroll. */
+  .progress.is-staged .progress__steps {
+    display: block;
+    pointer-events: none;
+  }
+  .progress.is-staged .progress__step {
+    height: 65svh;
+  }
+  .progress.is-staged .progress__step:first-child {
+    height: 40svh;
+  }
+  .progress.is-staged .progress__step:last-child {
+    height: 90svh;
+  }
 </style>
 
 <script>
-  const phrases = document.querySelectorAll<HTMLElement>('[data-phrase]');
-  if ('IntersectionObserver' in window && phrases.length) {
+  const root = document.querySelector<HTMLElement>('[data-progress]');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (root && !reduce && 'IntersectionObserver' in window) {
+    const phrases = [...root.querySelectorAll<HTMLElement>('[data-phrase]')];
+    const final = root.querySelector<HTMLElement>('[data-final]');
+    const dots = [...root.querySelectorAll<HTMLElement>('[data-dots] li')];
+    const steps = [...root.querySelectorAll<HTMLElement>('[data-step]')];
+
+    root.classList.add('is-staged');
+
+    const activate = (i: number) => {
+      phrases.forEach((p, k) => p.classList.toggle('is-active', k === i));
+      final?.classList.toggle('is-active', i === phrases.length);
+      dots.forEach((d, k) => d.classList.toggle('is-active', k <= i));
+    };
+
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          entry.target.classList.toggle('is-current', entry.isIntersecting);
+          if (entry.isIntersecting) activate(Number((entry.target as HTMLElement).dataset.step));
         }
       },
-      { threshold: 0.6, rootMargin: '-15% 0px -15% 0px' },
+      { rootMargin: '-45% 0px -45% 0px', threshold: 0 },
     );
-    phrases.forEach((p) => io.observe(p));
-  } else {
-    phrases.forEach((p) => p.classList.add('is-current'));
+    steps.forEach((s) => io.observe(s));
+    activate(0);
   }
 </script>

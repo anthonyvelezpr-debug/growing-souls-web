@@ -18,7 +18,7 @@ const { areas } = Astro.props;
         <h3 class="areas__title">{area.title}</h3>
         <span class="areas__rule" aria-hidden="true" />
         {area.intro && <p class="areas__intro">{area.intro}</p>}
-        <ul class="areas__topics" role="list">
+        <ul class="areas__topics" role="list" data-dotlist>
           {area.topics.map((t) => (
             <li>{t}</li>
           ))}
@@ -40,10 +40,10 @@ const { areas } = Astro.props;
     padding: 0;
   }
   .areas__card {
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: var(--space-3);
-    align-content: start;
-    justify-items: center;
     text-align: center;
     padding: var(--space-6) var(--space-4);
     border: 1px solid var(--line);
@@ -63,27 +63,41 @@ const { areas } = Astro.props;
   .areas__intro {
     font-size: var(--step-small);
   }
-  /* Lista en dos columnas centradas, sin adornos: la retícula hace el trabajo. */
+  /* Lista corrida y centrada, separada por puntos medios: simétrica a cualquier ancho. */
   .areas__topics {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    row-gap: 0.55rem;
+    row-gap: 0.35rem;
     padding: 0;
     width: 100%;
-    max-width: 22rem;
+    max-width: 20rem;
     font-family: var(--font-serif);
     font-size: calc(var(--step-body) * 1.1);
-    line-height: 1.3;
+    line-height: 1.35;
     color: var(--fg);
   }
+  /* El separador va en posición absoluta sobre el hueco: mostrarlo u ocultarlo nunca reacomoda la línea. */
   .areas__topics li {
-    flex: 0 0 50%;
-    text-align: center;
-    padding-inline: 0.5rem;
+    position: relative;
+    white-space: nowrap;
+    padding-inline: 0.6em;
   }
+  .areas__topics li:not(:first-child)::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translateX(-50%);
+    color: var(--olive);
+  }
+  .areas__topics li.is-line-start::before {
+    display: none;
+  }
+  /* El enlace se alinea al pie de cada tarjeta, a la misma altura en las tres. */
   .areas__link {
-    margin-top: var(--space-1);
+    margin-top: auto;
+    padding-top: var(--space-2);
     font-size: var(--step-small);
     color: var(--olive-deep);
     text-decoration: none;

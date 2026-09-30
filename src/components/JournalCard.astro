@@ -47,6 +47,10 @@ const { href, title, description, tema, readingTime, draft = false, index = 0 } 
   }
   .jcard__title a {
     text-decoration: none;
+    transition: color var(--dur-fast) var(--ease);
+  }
+  .jcard:hover .jcard__title a {
+    color: var(--olive-deep);
   }
   .jcard__title a::after {
     content: '';

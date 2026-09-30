@@ -24,27 +24,38 @@ const { items, columns = 4 } = Astro.props;
 <style>
   .offer {
     display: grid;
-    gap: var(--space-4);
+    gap: var(--space-6) var(--space-4);
     padding: 0;
   }
   .offer__item {
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--line);
     display: grid;
     gap: var(--space-2);
     align-content: start;
+    justify-items: center;
+    text-align: center;
+    padding-top: var(--space-3);
+    position: relative;
+  }
+  .offer__item::before {
+    content: '';
+    display: block;
+    width: 2.5rem;
+    height: 1px;
+    background: var(--olive);
+    margin-bottom: var(--space-1);
   }
   .offer__title {
-    font-size: calc(var(--step-h3) * 0.92);
+    font-size: calc(var(--step-h3) * 0.82);
+    text-wrap: balance;
   }
   .offer__text {
     color: var(--fg);
     font-size: var(--step-small);
+    max-width: 28ch;
   }
-  @media (min-width: 640px) {
+  @media (min-width: 480px) {
     .offer {
       grid-template-columns: repeat(2, 1fr);
-      gap: var(--space-6) var(--space-6);
     }
   }
   @media (min-width: 960px) {

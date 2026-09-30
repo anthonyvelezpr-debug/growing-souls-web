@@ -9,42 +9,46 @@ interface Props {
   id: string;
   image?: ImageMetadata;
   alt?: string;
+  /** Punto de enfoque del recorte 4:5, p. ej. "50% 25%". */
+  focus?: string;
   /** Sin copy aprobado: en vista previa se muestra como "en preparación"; en producción no se renderiza. */
   pending?: string;
 }
-const { numeral, title, id, image, alt = '', pending } = Astro.props;
+const { numeral, title, id, image, alt = '', focus = '50% 25%', pending } = Astro.props;
 const hasBody = Astro.slots.has('default');
 const render = hasBody || (pending && isPreview);
 ---
 
 {
   render && (
-    <article class="chapter" id={id}>
-      <header class="chapter__head" data-reveal>
-        <p class="chapter__numeral">Capítulo {numeral}</p>
-        <h2 class="chapter__title">{title}</h2>
-      </header>
+    <article class:list={['chapter', { 'chapter--image': !!image }]} id={id} style={`--focus: ${focus}`}>
       {image && (
         <figure class="chapter__figure" data-reveal>
           <Image
             src={image}
             alt={alt}
             widths={[480, 720, 960]}
-            sizes="(min-width: 960px) 40vw, 100vw"
+            sizes="(min-width: 960px) 34vw, (min-width: 640px) 60vw, 100vw"
             format="webp"
             quality={82}
             loading="lazy"
           />
         </figure>
       )}
-      <div class="chapter__body prose" data-reveal style="--reveal-index: 1">
-        {hasBody ? (
-          <slot />
-        ) : (
-          <p class="chapter__pending" data-verify={`Entrevista: ${pending}`} title={`Pendiente: ${pending}`}>
-            Capítulo en preparación. {pending}
-          </p>
-        )}
+      <div class="chapter__content">
+        <header class="chapter__head" data-reveal>
+          <p class="chapter__numeral">Capítulo {numeral}</p>
+          <h2 class="chapter__title">{title}</h2>
+        </header>
+        <div class="chapter__body prose" data-reveal style="--reveal-index: 1">
+          {hasBody ? (
+            <slot />
+          ) : (
+            <p class="chapter__pending" data-verify={`Entrevista: ${pending}`} title={`Pendiente: ${pending}`}>
+              Capítulo en preparación. {pending}
+            </p>
+          )}
+        </div>
       </div>
     </article>
   )
@@ -53,10 +57,14 @@ const render = hasBody || (pending && isPreview);
 <style>
   .chapter {
     display: grid;
-    gap: var(--space-4);
+    gap: var(--space-5);
     padding-block: var(--space-8);
     border-top: 1px solid var(--line);
     scroll-margin-top: calc(var(--nav-height) + 1rem);
+  }
+  .chapter__content {
+    display: grid;
+    gap: var(--space-4);
   }
   .chapter__head {
     display: grid;
@@ -73,35 +81,79 @@ const render = hasBody || (pending && isPreview);
   }
   .chapter__figure {
     margin: 0;
+    width: min(100%, 24rem);
+    margin-inline: auto;
   }
   .chapter__figure :global(img) {
     width: 100%;
-    max-width: 34rem;
     height: auto;
     aspect-ratio: 4 / 5;
     object-fit: cover;
-    object-position: 50% 25%;
+    object-position: var(--focus);
     border-radius: var(--radius);
   }
   .chapter__pending {
     font-style: italic;
     color: var(--fg-soft);
   }
+  /* Móvil y tablet: todo centrado, en orden cabecera, foto, texto. */
+  @media (max-width: 959px) {
+    .chapter__content {
+      display: contents;
+    }
+    .chapter__head {
+      order: 1;
+      justify-items: center;
+      text-align: center;
+    }
+    .chapter__figure {
+      order: 2;
+    }
+    .chapter__body {
+      order: 3;
+      text-align: center;
+    }
+    .chapter__title {
+      margin-inline: auto;
+    }
+  }
+  /* Desktop: sin foto, cabecera a la izquierda y texto a la derecha; con foto, la foto ocupa la izquierda
+     y cabecera + texto se centran verticalmente a su lado. */
   @media (min-width: 960px) {
     .chapter {
       grid-template-columns: 1fr 1.6fr;
       column-gap: var(--space-8);
+      align-items: start;
+    }
+    .chapter__content {
+      display: contents;
     }
     .chapter__head {
       grid-column: 1;
     }
-    .chapter__figure {
-      grid-column: 1;
-      grid-row: 2;
-    }
     .chapter__body {
       grid-column: 2;
-      grid-row: 1 / span 2;
+    }
+    .chapter--image {
+      grid-template-columns: 1fr 1.25fr;
+      align-items: center;
+    }
+    .chapter--image .chapter__figure {
+      grid-column: 1;
+      grid-row: 1;
+      width: 100%;
+      max-width: 26rem;
+      margin-inline: 0;
+    }
+    .chapter--image .chapter__content {
+      display: grid;
+      grid-column: 2;
+      grid-row: 1;
+      gap: var(--space-4);
+    }
+    .chapter--image .chapter__head,
+    .chapter--image .chapter__body {
+      grid-column: auto;
     }
   }
 </style>

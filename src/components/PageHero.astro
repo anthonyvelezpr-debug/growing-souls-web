@@ -9,10 +9,11 @@ interface Props {
   image?: ImageMetadata;
   alt?: string;
   focus?: string;
+  zoom?: number;
   caption?: string;
   tone?: 'ivory' | 'sand';
 }
-const { eyebrow, title, subtitle, image, alt = '', focus = '50% 20%', caption, tone = 'ivory' } = Astro.props;
+const { eyebrow, title, subtitle, image, alt = '', focus = '50% 20%', zoom = 1, caption, tone = 'ivory' } = Astro.props;
 ---
 
 <section class:list={['phero', `phero--${tone}`, { 'phero--with-image': !!image }]}>
@@ -32,7 +33,7 @@ const { eyebrow, title, subtitle, image, alt = '', focus = '50% 20%', caption, t
     {
       image && (
         <div class="phero__photo">
-          <ArchPhoto src={image} alt={alt} focus={focus} caption={caption} loading="eager" sizes="(min-width: 960px) 34vw, (min-width: 640px) 60vw, 100vw" />
+          <ArchPhoto src={image} alt={alt} focus={focus} zoom={zoom} caption={caption} loading="eager" sizes="(min-width: 960px) 34vw, (min-width: 640px) 60vw, 100vw" />
         </div>
       )
     }
@@ -54,15 +55,34 @@ const { eyebrow, title, subtitle, image, alt = '', focus = '50% 20%', caption, t
   .phero__text {
     display: grid;
     gap: var(--space-3);
+    justify-items: center;
+    text-align: center;
   }
   .phero__title {
-    max-width: 16ch;
+    max-width: 17ch;
+  }
+  .phero:not(.phero--with-image) .phero__title {
+    max-width: 22ch;
   }
   .phero__sub {
     font-family: var(--font-serif);
     font-style: italic;
     font-size: calc(var(--step-h3) * 0.9);
     max-width: 34ch;
+  }
+  @media (min-width: 960px) {
+    .phero__text {
+      justify-items: start;
+      text-align: left;
+    }
+    .phero--with-image .phero__text {
+      justify-items: start;
+    }
+    .phero:not(.phero--with-image) .phero__text {
+      justify-items: center;
+      text-align: center;
+      margin-inline: auto;
+    }
   }
   .phero__photo {
     width: min(100%, 22rem);

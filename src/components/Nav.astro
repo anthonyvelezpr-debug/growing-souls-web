@@ -138,12 +138,12 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
     white-space: nowrap;
     text-decoration: none;
     padding: 0.5rem 0;
-    border-bottom: 1px solid transparent;
-    transition: border-color var(--dur-fast) var(--ease);
+    background: linear-gradient(var(--olive), var(--olive)) no-repeat left bottom / 0 1px;
+    transition: background-size var(--dur-fast) var(--ease);
   }
   .nav__links a:hover,
   .nav__links a[aria-current='page'] {
-    border-bottom-color: var(--olive);
+    background-size: 100% 1px;
     opacity: 1;
   }
   .nav__cta {
@@ -169,26 +169,38 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
     overflow-y: auto;
   }
   .nav__drawer-inner {
-    padding-block: var(--space-4) var(--space-6);
+    padding-block: var(--space-6) var(--space-8);
     display: grid;
-    gap: var(--space-4);
+    gap: var(--space-6);
+    justify-items: center;
+    text-align: center;
   }
   .nav__drawer-links {
     display: grid;
+    gap: var(--space-2);
+    width: 100%;
   }
   .nav__drawer-links a {
     display: block;
-    padding: 0.9rem 0;
-    border-bottom: 1px solid var(--line);
+    padding: 0.5rem 0;
     font-family: var(--font-serif);
-    font-size: 1.6rem;
+    font-size: 1.75rem;
     text-decoration: none;
+    transition: color var(--dur-fast) var(--ease);
   }
   .nav__drawer-links a[aria-current='page'] {
     color: var(--olive-deep);
+    font-style: italic;
+  }
+  .nav__drawer-cta {
+    width: min(100%, 20rem);
+  }
+  .nav__drawer-cta :global(.btn) {
+    width: 100%;
   }
   .nav__drawer-note {
     color: var(--fg-soft);
+    max-width: 30ch;
   }
 
   @media (min-width: 1100px) {

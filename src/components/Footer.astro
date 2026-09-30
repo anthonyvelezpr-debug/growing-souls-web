@@ -1,7 +1,7 @@
 ---
-import { nav, site } from '../data/site';
+import { site } from '../data/site';
 const year = new Date().getFullYear();
-const hasContact = site.contact.email || site.contact.instagram || site.contact.phone;
+const phoneHref = site.contact.phone ? `tel:${site.contact.phone.replace(/\D/g, '')}` : '';
 ---
 
 <footer class="footer">
@@ -24,57 +24,63 @@ const hasContact = site.contact.email || site.contact.instagram || site.contact.
         decoding="async"
       />
       <p class="footer__person">
-        <strong>{site.person.name}</strong><br />
-        {site.person.jobTitle}<br />
-        {site.location.locality ? `${site.location.locality}, ${site.location.country}` : site.location.country}
+        <strong>{site.person.name}</strong>
+        <span>{site.person.jobTitle}</span>
+        <span>{site.location.locality ? `${site.location.locality}, ${site.location.country}` : site.location.country}</span>
       </p>
     </div>
 
-    <nav class="footer__col" aria-label="Páginas">
-      <p class="eyebrow">Explorar</p>
-      <ul role="list">
-        {
-          nav.map((item) => (
-            <li>
-              <a href={item.href}>{item.label}</a>
-            </li>
-          ))
-        }
-        <li><a href="/agenda/">Solicitar una cita</a></li>
-      </ul>
-    </nav>
+    <div class="footer__cols">
+      <nav class="footer__col" aria-label="Páginas">
+        <p class="eyebrow">Explorar</p>
+        <ul role="list">
+          <li><a href="/melanie/">Conoce a Melanie</a></li>
+          <li><a href="/como-trabajo/">Cómo trabajo</a></li>
+          <li><a href="/terapia-individual/">Terapia individual</a></li>
+          <li><a href="/parejas/">Parejas</a></li>
+        </ul>
+      </nav>
 
-    <div class="footer__col">
-      <p class="eyebrow">Contacto</p>
-      <ul role="list">
-        {site.contact.email && <li><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></li>}
-        {
-          site.contact.instagram && (
-            <li>
-              <a href={`https://www.instagram.com/${site.contact.instagram}/`} rel="noopener">
-                Instagram · @{site.contact.instagram}
-              </a>
-            </li>
-          )
-        }
-        {site.contact.phone && <li><a href={`tel:${site.contact.phone.replace(/\D/g, '')}`}>{site.contact.phone}</a></li>}
-        {!hasContact && <li class="muted">La forma más directa de escribirme es la página de <a href="/agenda/">agenda</a>.</li>}
-        <li><a href="/crisis/">Recursos en crisis</a></li>
-        <li><a href="/privacidad/">Privacidad</a></li>
-      </ul>
+      <nav class="footer__col" aria-label="Servicios y recursos">
+        <p class="eyebrow">Servicios</p>
+        <ul role="list">
+          <li><a href="/oficina-virtual/">Oficina virtual</a></li>
+          <li><a href="/journal/">Growing Journal</a></li>
+          <li><a href="/agenda/">Solicitar una cita</a></li>
+          <li><a href="/crisis/">Recursos en crisis</a></li>
+        </ul>
+      </nav>
+
+      <div class="footer__col">
+        <p class="eyebrow">Contacto</p>
+        <ul role="list">
+          {site.contact.email && <li><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></li>}
+          {site.contact.phone && <li><a href={phoneHref}>{site.contact.phone}</a></li>}
+          {
+            site.contact.instagram && (
+              <li>
+                <a href={`https://www.instagram.com/${site.contact.instagram}/`} rel="noopener">
+                  @{site.contact.instagram}
+                </a>
+              </li>
+            )
+          }
+          <li><a href="/privacidad/">Privacidad</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 
   <div class="container footer__bottom small muted">
-    <p>© {year} Growing Souls · {site.person.name}. Psicoterapia en Puerto Rico.</p>
+    <p>© {year} Growing Souls · {site.person.name} · Psicoterapia en Puerto Rico</p>
   </div>
 </footer>
 
 <style>
   .footer {
-    margin-top: var(--section-gap);
     border-top: 1px solid var(--line);
     background: var(--sand);
+    text-align: center;
   }
   .footer__crisis {
     background: var(--ivory);
@@ -86,36 +92,54 @@ const hasContact = site.contact.email || site.contact.instagram || site.contact.
   }
   .footer__inner {
     display: grid;
-    gap: var(--space-6);
+    gap: var(--space-8);
+    justify-items: center;
     padding-block: var(--space-8) var(--space-6);
   }
+  .footer__brand {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-3);
+  }
   .footer__brand img {
-    width: 110px;
+    width: 120px;
   }
   .footer__person {
-    margin-top: var(--space-3);
+    display: grid;
+    gap: 0.2rem;
     font-size: var(--step-small);
-    line-height: 1.6;
+    line-height: 1.5;
+  }
+  .footer__cols {
+    display: grid;
+    gap: var(--space-6);
+    width: 100%;
   }
   .footer__col ul {
     margin-top: var(--space-2);
     display: grid;
     gap: 0.55rem;
+    padding: 0;
   }
   .footer__col a {
     text-decoration: none;
     font-size: var(--step-small);
+    background: linear-gradient(var(--olive), var(--olive)) no-repeat center bottom / 0 1px;
+    transition: background-size var(--dur-fast) var(--ease);
+    padding-bottom: 1px;
   }
   .footer__col a:hover {
-    text-decoration: underline;
+    background-size: 100% 1px;
+    opacity: 1;
   }
   .footer__bottom {
     padding-block: var(--space-3) var(--space-6);
     border-top: 1px solid var(--line);
   }
   @media (min-width: 640px) {
-    .footer__inner {
-      grid-template-columns: 1.4fr 1fr 1fr;
+    .footer__cols {
+      grid-template-columns: repeat(3, 1fr);
+      max-width: 52rem;
     }
   }
 </style>

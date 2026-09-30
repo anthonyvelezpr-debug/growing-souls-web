@@ -30,16 +30,22 @@ const { services } = Astro.props;
 <style>
   .services {
     display: grid;
-    gap: var(--space-3);
+    gap: var(--space-4);
     padding: 0;
   }
   .services__card {
     position: relative;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: var(--space-2);
-    align-content: start;
-    padding: var(--space-4) 0;
+    align-items: center;
+    text-align: center;
+    padding: var(--space-6) var(--space-3);
     border-top: 1px solid var(--olive);
+    transition: background-color var(--dur-fast) var(--ease);
+  }
+  .services__card:hover {
+    background: color-mix(in srgb, var(--sand) 60%, transparent);
   }
   .services__title {
     font-size: var(--step-h3);
@@ -53,20 +59,26 @@ const { services } = Astro.props;
     inset: 0;
   }
   .services__text {
-    font-size: calc(var(--step-body) * 1.15);
-    max-width: 30ch;
+    font-size: calc(var(--step-body) * 1.12);
+    max-width: 26ch;
   }
   .services__link {
     position: relative;
     z-index: 1;
+    margin-top: auto;
+    padding-top: var(--space-1);
     font-size: var(--step-small);
     color: var(--olive-deep);
-    justify-self: start;
     text-decoration: none;
     border-bottom: 1px solid currentColor;
+    transition: letter-spacing var(--dur-fast) var(--ease);
   }
-  .services__card:hover .services__title a {
-    opacity: 0.85;
+  .services__link span {
+    display: inline-block;
+    transition: transform var(--dur-fast) var(--ease);
+  }
+  .services__card:hover .services__link span {
+    transform: translateX(4px);
   }
   @media (min-width: 960px) {
     .services {

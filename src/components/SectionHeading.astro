@@ -7,7 +7,7 @@ interface Props {
   size?: 'h1' | 'h2' | 'h3';
   class?: string;
 }
-const { eyebrow, title, as: Tag = 'h2', align = 'left', size, class: className = '' } = Astro.props;
+const { eyebrow, title, as: Tag = 'h2', align = 'center', size, class: className = '' } = Astro.props;
 const sizeClass = size ? `heading--${size}` : '';
 ---
 
@@ -35,6 +35,23 @@ const sizeClass = size ? `heading--${size}` : '';
   }
   .heading--center .heading__title {
     max-width: 24ch;
+    text-align: center;
+  }
+  .heading--center :global(.lead) {
+    text-align: center;
+  }
+  /* En móvil y tablet toda la página se centra; el alineado a la izquierda solo aplica en desktop. */
+  @media (max-width: 959px) {
+    .heading--left {
+      text-align: center;
+      justify-items: center;
+    }
+    .heading--left :global(p) {
+      margin-inline: auto;
+    }
+    .heading--left .heading__title {
+      max-width: 24ch;
+    }
   }
   .heading--h1 {
     font-size: var(--step-h1);

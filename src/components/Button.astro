@@ -44,18 +44,28 @@ const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ');
       background-color var(--dur-fast) var(--ease),
       color var(--dur-fast) var(--ease);
   }
-  .btn:hover {
-    opacity: 0.88;
-  }
   .btn--primary {
     background: var(--navy);
     color: var(--ivory);
     border-color: var(--navy);
   }
+  .btn--primary:hover {
+    background: color-mix(in srgb, var(--navy) 88%, var(--olive));
+    border-color: color-mix(in srgb, var(--navy) 88%, var(--olive));
+  }
   .btn--secondary {
     background: transparent;
     color: var(--navy);
     border-color: var(--navy);
+  }
+  .btn--secondary:hover {
+    background: var(--sand);
+  }
+  .btn--ghost:hover {
+    background: color-mix(in srgb, var(--ivory) 12%, transparent);
+  }
+  .btn--link:hover {
+    opacity: 0.85;
   }
   .btn--ghost {
     background: transparent;

@@ -52,8 +52,10 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
       <span class="nav__toggle-label" data-label-close hidden>Cerrar</span>
     </button>
   </div>
+</header>
 
-  <div id="menu-principal" class="nav__drawer" hidden data-nav-drawer>
+<!-- Cajón del menú (móvil y tablet): capa fija bajo la cabecera, no empuja la página ni mueve el scroll. -->
+<div id="menu-principal" class="nav__drawer" hidden data-nav-drawer>
     <div class="container nav__drawer-inner">
       <ul role="list" class="nav__drawer-links">
         {
@@ -73,8 +75,7 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
         Esta web no es un servicio de emergencias. <a href="/crisis/">Recursos en crisis</a>
       </p>
     </div>
-  </div>
-</header>
+</div>
 
 <style>
   .nav {
@@ -163,10 +164,17 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
     cursor: pointer;
   }
   .nav__drawer {
+    position: fixed;
+    inset: var(--nav-height) 0 0 0;
+    z-index: 49;
     border-top: 1px solid var(--line);
     background: var(--ivory);
-    max-height: calc(100dvh - var(--nav-height));
     overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  /* Con el menú abierto, la página no se desplaza por detrás. */
+  :global(html.menu-open) {
+    overflow: hidden;
   }
   .nav__drawer-inner {
     padding-block: var(--space-6) var(--space-8);
@@ -230,14 +238,18 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
     if (!toggle || !drawer) return;
     toggle.setAttribute('aria-expanded', String(open));
     drawer.hidden = !open;
+    document.documentElement.classList.toggle('menu-open', open);
     if (labelOpen) labelOpen.hidden = open;
     if (labelClose) labelClose.hidden = !open;
-    if (open) drawer.querySelector<HTMLElement>('a')?.focus();
-    else toggle.focus();
+    if (open) drawer.querySelector<HTMLElement>('a')?.focus({ preventScroll: true });
+    else toggle.focus({ preventScroll: true });
   };
 
   toggle?.addEventListener('click', () => {
     setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+  });
+  drawer?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) setOpen(false);
   });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') setOpen(false);

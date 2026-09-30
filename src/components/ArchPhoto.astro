@@ -20,6 +20,8 @@ interface Props {
   zoom?: number;
   /** Media query en la que la foto está oculta por CSS: evita descargarla (p. ej. "(max-width: 639px)"). */
   hideMedia?: string;
+  /** Color de fondo del arco, para fotos recortadas sin fondo: 'ivory' o 'sand'. */
+  fill?: 'ivory' | 'sand';
   class?: string;
 }
 const {
@@ -34,6 +36,7 @@ const {
   frame = true,
   zoom = 1,
   hideMedia,
+  fill,
   class: className = '',
 } = Astro.props;
 
@@ -43,7 +46,7 @@ const BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAI
 const captionLines = caption ? caption.split(' · ') : [];
 ---
 
-<figure class:list={['arch', { 'arch--frame': frame }, className]} style={`--focus: ${focus}; --ratio: ${ratio}; --zoom: ${zoom}`} data-reveal>
+<figure class:list={['arch', { 'arch--frame': frame, 'arch--fill': !!fill }, className]} style={`--focus: ${focus}; --ratio: ${ratio}; --zoom: ${zoom}; --fill: var(--${fill ?? 'ivory'})`} data-reveal>
   <div class="arch__mask">
     <picture>
       {hideMedia && <source media={hideMedia} srcset={BLANK} />}
@@ -86,6 +89,9 @@ const captionLines = caption ? caption.split(' · ') : [];
     border-radius: 999px 999px var(--radius) var(--radius);
     overflow: hidden;
     isolation: isolate;
+  }
+  .arch--fill .arch__mask {
+    background: var(--fill);
   }
   .arch__mask picture {
     display: block;

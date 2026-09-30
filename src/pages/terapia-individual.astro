@@ -5,7 +5,7 @@ import CtaBand from '../components/CtaBand.astro';
 import Verify from '../components/Verify.astro';
 
 import ArchPhoto from '../components/ArchPhoto.astro';
-import fotoLibros from '../assets/melanie/01-libros.jpg';
+import fotoLibros from '../assets/melanie/01-libros-recorte.png';
 
 const universos = [
   {
@@ -80,8 +80,9 @@ const universos = [
         <ArchPhoto
           src={fotoLibros}
           alt="Melanie sostiene varios libros de psicología y sonríe"
-          focus="50% 40%"
-          ratio="3 / 4"
+          focus="50% 0%"
+          ratio="2 / 3"
+          fill="sand"
           sizes="(min-width: 960px) 34vw, (min-width: 640px) 60vw, 100vw"
         />
       </div>

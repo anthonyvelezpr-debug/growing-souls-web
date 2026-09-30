@@ -1,0 +1,77 @@
+---
+interface Service {
+  title: string;
+  text: string;
+  href: string;
+  label: string;
+}
+interface Props {
+  services: Service[];
+}
+const { services } = Astro.props;
+---
+
+<ul class="services" role="list">
+  {
+    services.map((s, i) => (
+      <li class="services__card" data-reveal style={`--reveal-index: ${i + 1}`}>
+        <h3 class="services__title">
+          <a href={s.href}>{s.title}</a>
+        </h3>
+        <p class="services__text serif-italic">{s.text}</p>
+        <a class="services__link" href={s.href}>
+          {s.label} <span aria-hidden="true">→</span>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .services {
+    display: grid;
+    gap: var(--space-3);
+    padding: 0;
+  }
+  .services__card {
+    position: relative;
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+    padding: var(--space-4) 0;
+    border-top: 1px solid var(--olive);
+  }
+  .services__title {
+    font-size: var(--step-h3);
+  }
+  .services__title a {
+    text-decoration: none;
+  }
+  .services__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .services__text {
+    font-size: calc(var(--step-body) * 1.15);
+    max-width: 30ch;
+  }
+  .services__link {
+    position: relative;
+    z-index: 1;
+    font-size: var(--step-small);
+    color: var(--olive-deep);
+    justify-self: start;
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+  }
+  .services__card:hover .services__title a {
+    opacity: 0.85;
+  }
+  @media (min-width: 960px) {
+    .services {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+  }
+</style>

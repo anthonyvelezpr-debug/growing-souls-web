@@ -1,0 +1,58 @@
+---
+interface Item {
+  title: string;
+  text: string;
+}
+interface Props {
+  items: Item[];
+  columns?: 2 | 3 | 4;
+}
+const { items, columns = 4 } = Astro.props;
+---
+
+<ul class:list={['offer', `offer--${columns}`]} role="list">
+  {
+    items.map((item, i) => (
+      <li class="offer__item" data-reveal style={`--reveal-index: ${i + 1}`}>
+        <h3 class="offer__title">{item.title}</h3>
+        <p class="offer__text">{item.text}</p>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .offer {
+    display: grid;
+    gap: var(--space-4);
+    padding: 0;
+  }
+  .offer__item {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--line);
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+  }
+  .offer__title {
+    font-size: calc(var(--step-h3) * 0.92);
+  }
+  .offer__text {
+    color: var(--fg);
+    font-size: var(--step-small);
+  }
+  @media (min-width: 640px) {
+    .offer {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-6) var(--space-6);
+    }
+  }
+  @media (min-width: 960px) {
+    .offer--3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .offer--4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

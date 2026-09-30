@@ -1,0 +1,40 @@
+---
+interface Props {
+  cite?: string;
+  align?: 'left' | 'center';
+}
+const { cite, align = 'center' } = Astro.props;
+---
+
+<blockquote class:list={['quote', `quote--${align}`]} data-reveal>
+  <p class="quote__text"><slot /></p>
+  {cite && <footer class="quote__cite">{cite}</footer>}
+</blockquote>
+
+<style>
+  .quote {
+    margin: 0;
+    padding-block: var(--space-4);
+    display: grid;
+    gap: var(--space-2);
+  }
+  .quote--center {
+    text-align: center;
+    justify-items: center;
+  }
+  .quote__text {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(1.5rem, 1.15rem + 1.4vw, 2.4rem);
+    line-height: 1.25;
+    max-width: 30ch;
+    color: var(--fg);
+    text-wrap: balance;
+  }
+  .quote__cite {
+    font-size: var(--step-small);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fg-soft);
+  }
+</style>

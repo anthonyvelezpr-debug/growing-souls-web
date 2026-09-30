@@ -1,0 +1,106 @@
+---
+import Verify from './Verify.astro';
+
+const phrases = [
+  'Hoy dije que no.',
+  'Hoy sentí tristeza sin intentar escapar inmediatamente de ella.',
+  'Hoy dejé de culparme por algo que no podía controlar.',
+  'Hoy tuve una conversación que llevaba meses evitando.',
+  'Hoy pedí ayuda.',
+  'Hoy me permití ser vulnerable.',
+];
+---
+
+<section class="progress" aria-labelledby="progreso-titulo" data-progress>
+  <div class="container--narrow progress__inner">
+    <p class="eyebrow center">Qué significa progresar</p>
+    <ul class="progress__list" role="list">
+      {
+        phrases.map((p, i) => (
+          <li class="progress__phrase" data-reveal data-phrase style={`--reveal-index: ${(i % 2) + 1}`}>
+            {p}
+          </li>
+        ))
+      }
+    </ul>
+    <div class="progress__final" data-reveal>
+      <hr class="progress__rule" />
+      <h2 id="progreso-titulo" class="progress__title">Eso también es progreso.</h2>
+      <p class="progress__note">
+        <Verify note="Aprobación Melanie">
+          Permitirte ser vulnerable dentro del espacio terapéutico ya puede ser una batalla ganada.
+        </Verify>
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .progress {
+    padding-block: var(--section-gap);
+    background: var(--sand);
+  }
+  .progress__inner {
+    display: grid;
+    gap: var(--space-6);
+  }
+  .progress__list {
+    display: grid;
+    gap: clamp(2rem, 6vh, 4rem);
+    padding: 0;
+    text-align: center;
+  }
+  .progress__phrase {
+    font-family: var(--font-serif);
+    font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.6rem);
+    line-height: 1.2;
+    max-width: 24ch;
+    margin-inline: auto;
+    color: var(--fg-soft);
+    transition:
+      color var(--dur-reveal) var(--ease),
+      opacity var(--dur-reveal) var(--ease),
+      transform var(--dur-reveal) var(--ease);
+  }
+  .progress__phrase.is-current {
+    color: var(--fg);
+  }
+  .progress__final {
+    text-align: center;
+    display: grid;
+    gap: var(--space-4);
+    justify-items: center;
+    padding-top: var(--space-4);
+  }
+  .progress__rule {
+    width: 4rem;
+    border: 0;
+    border-top: 1px solid var(--olive);
+  }
+  .progress__title {
+    font-size: var(--step-display);
+    font-style: italic;
+    max-width: 14ch;
+  }
+  .progress__note {
+    max-width: 38ch;
+    color: var(--fg);
+  }
+</style>
+
+<script>
+  const phrases = document.querySelectorAll<HTMLElement>('[data-phrase]');
+  if ('IntersectionObserver' in window && phrases.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          entry.target.classList.toggle('is-current', entry.isIntersecting);
+        }
+      },
+      { threshold: 0.6, rootMargin: '-15% 0px -15% 0px' },
+    );
+    phrases.forEach((p) => io.observe(p));
+  } else {
+    phrases.forEach((p) => p.classList.add('is-current'));
+  }
+</script>

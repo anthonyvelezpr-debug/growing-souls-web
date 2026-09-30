@@ -1,0 +1,25 @@
+---
+/**
+ * Marca copy pendiente de verificación o de aprobación.
+ * - En desarrollo o vista previa (PUBLIC_PREVIEW=1) se ve con subrayado punteado y el motivo en el tooltip.
+ * - En producción no lleva estilo. Con `hide`, en producción no se renderiza nada.
+ * El script scripts/check-verify.mjs cuenta los data-verify del build para el lanzamiento definitivo.
+ */
+import { isPreview } from '../data/site';
+
+interface Props {
+  note: string;
+  hide?: boolean;
+  as?: 'span' | 'div';
+}
+const { note, hide = false, as: Tag = 'span' } = Astro.props;
+const render = isPreview || !hide;
+---
+
+{
+  render && (
+    <Tag data-verify={note} title={isPreview ? `Pendiente: ${note}` : undefined}>
+      <slot />
+    </Tag>
+  )
+}

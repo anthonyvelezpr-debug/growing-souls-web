@@ -1,0 +1,81 @@
+---
+import type { ImageMetadata } from 'astro';
+import ArchPhoto from './ArchPhoto.astro';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  image?: ImageMetadata;
+  alt?: string;
+  focus?: string;
+  caption?: string;
+  tone?: 'ivory' | 'sand';
+}
+const { eyebrow, title, subtitle, image, alt = '', focus = '50% 20%', caption, tone = 'ivory' } = Astro.props;
+---
+
+<section class:list={['phero', `phero--${tone}`, { 'phero--with-image': !!image }]}>
+  <div class="container phero__grid">
+    <div class="phero__text">
+      {eyebrow && <p class="eyebrow" data-reveal>{eyebrow}</p>}
+      <h1 class="phero__title" data-reveal style="--reveal-index: 1">{title}</h1>
+      {
+        subtitle && (
+          <p class="phero__sub" data-reveal style="--reveal-index: 2">
+            {subtitle}
+          </p>
+        )
+      }
+      <slot />
+    </div>
+    {
+      image && (
+        <div class="phero__photo">
+          <ArchPhoto src={image} alt={alt} focus={focus} caption={caption} loading="eager" sizes="(min-width: 960px) 34vw, (min-width: 640px) 60vw, 100vw" />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .phero {
+    padding-block: clamp(3rem, 2rem + 5vw, 7rem) clamp(2.5rem, 2rem + 3vw, 5rem);
+  }
+  .phero--sand {
+    background: var(--sand);
+  }
+  .phero__grid {
+    display: grid;
+    gap: var(--space-6);
+    align-items: center;
+  }
+  .phero__text {
+    display: grid;
+    gap: var(--space-3);
+  }
+  .phero__title {
+    max-width: 16ch;
+  }
+  .phero__sub {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: calc(var(--step-h3) * 0.9);
+    max-width: 34ch;
+  }
+  .phero__photo {
+    width: min(100%, 22rem);
+    margin-inline: auto;
+  }
+  @media (min-width: 960px) {
+    .phero--with-image .phero__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 6vw, 6rem);
+    }
+    .phero__photo {
+      width: min(100%, 26rem);
+      justify-self: center;
+    }
+  }
+</style>

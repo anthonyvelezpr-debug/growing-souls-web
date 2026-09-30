@@ -1,0 +1,137 @@
+---
+/**
+ * Tríptico simétrico: cita · foto en arco · texto. Tres columnas iguales en desktop,
+ * el arco siempre en el centro exacto. En móvil: foto, cita, texto.
+ */
+import type { ImageMetadata } from 'astro';
+import ArchPhoto from './ArchPhoto.astro';
+import Button from './Button.astro';
+
+interface Props {
+  image: ImageMetadata;
+  alt: string;
+  focus?: string;
+  quote: string;
+  quoteCite?: string;
+  eyebrow?: string;
+  title?: string;
+  cta?: { label: string; href: string };
+  tone?: 'ivory' | 'sand';
+  caption?: string;
+}
+const { image, alt, focus = '50% 25%', quote, quoteCite, eyebrow, title, cta, tone = 'sand', caption } = Astro.props;
+---
+
+<section class:list={['tri', `tri--${tone}`]}>
+  <div class="container tri__grid">
+    <blockquote class="tri__quote" data-reveal>
+      <p>{quote}</p>
+      {quoteCite && <footer>{quoteCite}</footer>}
+    </blockquote>
+
+    <div class="tri__photo">
+      <ArchPhoto src={image} alt={alt} focus={focus} caption={caption} sizes="(min-width: 960px) 28vw, (min-width: 640px) 60vw, 100vw" />
+    </div>
+
+    <div class="tri__text" data-reveal style="--reveal-index: 1">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      {title && <h2 class="tri__title">{title}</h2>}
+      <div class="tri__body flow">
+        <slot />
+      </div>
+      {
+        cta && (
+          <div class="tri__cta">
+            <Button href={cta.href} variant="link">
+              {cta.label}
+            </Button>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .tri {
+    padding-block: var(--section-gap);
+  }
+  .tri--sand {
+    background: var(--sand);
+  }
+  .tri__grid {
+    display: grid;
+    gap: var(--space-6);
+    align-items: center;
+  }
+  .tri__photo {
+    width: min(100%, 24rem);
+    margin-inline: auto;
+    order: -1;
+  }
+  .tri__quote {
+    margin: 0;
+    text-align: center;
+  }
+  .tri__quote p {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.3rem);
+    line-height: 1.25;
+    max-width: 22ch;
+    margin-inline: auto;
+    text-wrap: balance;
+  }
+  .tri__quote footer {
+    margin-top: var(--space-2);
+    font-size: var(--step-small);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fg-soft);
+  }
+  .tri__text {
+    display: grid;
+    gap: var(--space-2);
+    text-align: center;
+  }
+  .tri__title {
+    font-size: var(--step-h3);
+    max-width: 20ch;
+    margin-inline: auto;
+  }
+  .tri__body :global(p) {
+    max-width: 40ch;
+    margin-inline: auto;
+    font-size: var(--step-small);
+  }
+  .tri__cta {
+    justify-self: center;
+    margin-top: var(--space-1);
+  }
+  @media (min-width: 960px) {
+    .tri__grid {
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: clamp(2rem, 5vw, 5rem);
+    }
+    .tri__photo {
+      order: 0;
+      width: min(100%, 22rem);
+    }
+    .tri__quote {
+      text-align: left;
+    }
+    .tri__quote p {
+      margin-inline: 0;
+    }
+    .tri__text {
+      text-align: left;
+    }
+    .tri__title,
+    .tri__body :global(p) {
+      margin-inline: 0;
+    }
+    .tri__cta {
+      justify-self: start;
+    }
+  }
+</style>

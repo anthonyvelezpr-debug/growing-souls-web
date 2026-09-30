@@ -1,0 +1,121 @@
+---
+import { nav, site } from '../data/site';
+const year = new Date().getFullYear();
+const hasContact = site.contact.email || site.contact.instagram || site.contact.phone;
+---
+
+<footer class="footer">
+  <div class="footer__crisis">
+    <div class="container footer__crisis-inner">
+      <p class="small">
+        Esta web no es un servicio de emergencias. Si estás en crisis, <a href="/crisis/">aquí tienes recursos</a>.
+      </p>
+    </div>
+  </div>
+
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <img
+        src="/images/brand/logo-circular-navy.png"
+        alt="Growing Souls, Dra. Melanie Acevedo"
+        width="120"
+        height="120"
+        loading="lazy"
+        decoding="async"
+      />
+      <p class="footer__person">
+        <strong>{site.person.name}</strong><br />
+        {site.person.jobTitle}<br />
+        {site.location.locality ? `${site.location.locality}, ${site.location.country}` : site.location.country}
+      </p>
+    </div>
+
+    <nav class="footer__col" aria-label="Páginas">
+      <p class="eyebrow">Explorar</p>
+      <ul role="list">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
+        <li><a href="/agenda/">Solicitar una cita</a></li>
+      </ul>
+    </nav>
+
+    <div class="footer__col">
+      <p class="eyebrow">Contacto</p>
+      <ul role="list">
+        {site.contact.email && <li><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></li>}
+        {
+          site.contact.instagram && (
+            <li>
+              <a href={`https://www.instagram.com/${site.contact.instagram}/`} rel="noopener">
+                Instagram · @{site.contact.instagram}
+              </a>
+            </li>
+          )
+        }
+        {site.contact.phone && <li><a href={`tel:${site.contact.phone.replace(/\D/g, '')}`}>{site.contact.phone}</a></li>}
+        {!hasContact && <li class="muted">La forma más directa de escribirme es la página de <a href="/agenda/">agenda</a>.</li>}
+        <li><a href="/crisis/">Recursos en crisis</a></li>
+        <li><a href="/privacidad/">Privacidad</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container footer__bottom small muted">
+    <p>© {year} Growing Souls · {site.person.name}. Psicoterapia en Puerto Rico.</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: var(--section-gap);
+    border-top: 1px solid var(--line);
+    background: var(--sand);
+  }
+  .footer__crisis {
+    background: var(--ivory);
+    border-bottom: 1px solid var(--line);
+  }
+  .footer__crisis-inner {
+    padding-block: var(--space-2);
+    color: var(--fg-soft);
+  }
+  .footer__inner {
+    display: grid;
+    gap: var(--space-6);
+    padding-block: var(--space-8) var(--space-6);
+  }
+  .footer__brand img {
+    width: 110px;
+  }
+  .footer__person {
+    margin-top: var(--space-3);
+    font-size: var(--step-small);
+    line-height: 1.6;
+  }
+  .footer__col ul {
+    margin-top: var(--space-2);
+    display: grid;
+    gap: 0.55rem;
+  }
+  .footer__col a {
+    text-decoration: none;
+    font-size: var(--step-small);
+  }
+  .footer__col a:hover {
+    text-decoration: underline;
+  }
+  .footer__bottom {
+    padding-block: var(--space-3) var(--space-6);
+    border-top: 1px solid var(--line);
+  }
+  @media (min-width: 640px) {
+    .footer__inner {
+      grid-template-columns: 1.4fr 1fr 1fr;
+    }
+  }
+</style>

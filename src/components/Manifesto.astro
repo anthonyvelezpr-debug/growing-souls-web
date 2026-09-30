@@ -1,0 +1,92 @@
+---
+import Button from './Button.astro';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  cta?: { label: string; href: string };
+  showLogo?: boolean;
+}
+const { eyebrow, title, cta, showLogo = true } = Astro.props;
+---
+
+<section class="manifesto">
+  <div class="container--narrow manifesto__inner center">
+    {
+      showLogo && (
+        <img
+          class="manifesto__logo"
+          src="/images/brand/logo-circular-ivory.png"
+          alt=""
+          width="150"
+          height="150"
+          loading="lazy"
+          decoding="async"
+          data-reveal
+        />
+      )
+    }
+    {eyebrow && <p class="eyebrow manifesto__eyebrow" data-reveal>{eyebrow}</p>}
+    <h2 class="manifesto__title" data-reveal style="--reveal-index: 1">{title}</h2>
+    <div class="manifesto__body flow" data-reveal style="--reveal-index: 2">
+      <slot />
+    </div>
+    {
+      cta && (
+        <div data-reveal style="--reveal-index: 3">
+          <Button href={cta.href} variant="ghost">
+            {cta.label}
+          </Button>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .manifesto {
+    position: relative;
+    isolation: isolate;
+    background: var(--navy);
+    color: var(--ivory);
+    padding-block: clamp(5rem, 4rem + 6vw, 10rem);
+    overflow: hidden;
+  }
+  /* Una sola marca de agua del isotipo, grande y muy tenue, centrada detrás del texto. */
+  .manifesto::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: min(120vh, 70rem);
+    aspect-ratio: 696 / 785;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    background: url('/images/brand/isotipo-ivory.png') center / contain no-repeat;
+    opacity: 0.045;
+    pointer-events: none;
+  }
+  .manifesto__inner {
+    display: grid;
+    gap: var(--space-4);
+    justify-items: center;
+  }
+  .manifesto__logo {
+    width: clamp(120px, 14vw, 170px);
+    height: auto;
+    margin-bottom: var(--space-2);
+  }
+  .manifesto__eyebrow {
+    color: color-mix(in srgb, var(--ivory) 75%, transparent);
+  }
+  .manifesto__title {
+    max-width: 20ch;
+    font-style: italic;
+  }
+  .manifesto__body :global(p) {
+    max-width: 58ch;
+    margin-inline: auto;
+    font-size: calc(var(--step-body) * 1.05);
+    color: color-mix(in srgb, var(--ivory) 92%, transparent);
+  }
+</style>

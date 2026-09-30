@@ -1,0 +1,54 @@
+---
+import Button from './Button.astro';
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  cta?: { label: string; href: string };
+  tone?: 'ivory' | 'sand' | 'navy';
+}
+const { title, subtitle, cta = { label: 'Solicitar una cita', href: '/agenda/' }, tone = 'ivory' } = Astro.props;
+---
+
+<section class:list={['cta', `cta--${tone}`]}>
+  <div class="container--narrow cta__inner center">
+    <h2 class="cta__title" data-reveal>{title}</h2>
+    {
+      subtitle && (
+        <p class="cta__sub" data-reveal style="--reveal-index: 1">
+          {subtitle}
+        </p>
+      )
+    }
+    <div data-reveal style="--reveal-index: 2">
+      <Button href={cta.href} variant={tone === 'navy' ? 'ghost' : 'primary'}>{cta.label}</Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    padding-block: clamp(5rem, 4rem + 7vw, 12rem);
+  }
+  .cta--sand {
+    background: var(--sand);
+  }
+  .cta--navy {
+    background: var(--navy);
+    color: var(--ivory);
+  }
+  .cta__inner {
+    display: grid;
+    gap: var(--space-4);
+    justify-items: center;
+  }
+  .cta__title {
+    max-width: 20ch;
+  }
+  .cta__sub {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: calc(var(--step-h3) * 0.9);
+    max-width: 32ch;
+  }
+</style>

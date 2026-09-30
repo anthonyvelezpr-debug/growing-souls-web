@@ -1,0 +1,52 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  as?: 'h1' | 'h2' | 'h3';
+  align?: 'left' | 'center';
+  size?: 'h1' | 'h2' | 'h3';
+  class?: string;
+}
+const { eyebrow, title, as: Tag = 'h2', align = 'left', size, class: className = '' } = Astro.props;
+const sizeClass = size ? `heading--${size}` : '';
+---
+
+<div class:list={['heading', `heading--${align}`, className]} data-reveal>
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <Tag class:list={['heading__title', sizeClass]}>{title}</Tag>
+  <slot />
+</div>
+
+<style>
+  .heading {
+    display: grid;
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
+  }
+  .heading--center {
+    text-align: center;
+    justify-items: center;
+  }
+  .heading--center :global(p) {
+    margin-inline: auto;
+  }
+  .heading__title {
+    max-width: 22ch;
+  }
+  .heading--center .heading__title {
+    max-width: 24ch;
+  }
+  .heading--h1 {
+    font-size: var(--step-h1);
+  }
+  .heading--h2 {
+    font-size: var(--step-h2);
+  }
+  .heading--h3 {
+    font-size: var(--step-h3);
+  }
+  .heading :global(.lead) {
+    max-width: var(--measure);
+    margin-top: var(--space-1);
+  }
+</style>

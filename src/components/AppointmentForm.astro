@@ -1,0 +1,261 @@
+---
+import { site } from '../data/site';
+import Button from './Button.astro';
+
+const endpoint = site.formEndpoint;
+const email = site.contact.email;
+const mode = endpoint ? 'endpoint' : email ? 'mailto' : 'pending';
+---
+
+<form
+  class="form"
+  method="post"
+  action={endpoint || undefined}
+  novalidate
+  data-form
+  data-mode={mode}
+  data-email={email || undefined}
+  data-todo={mode === 'endpoint' ? undefined : 'form-endpoint'}
+>
+  <div class="form__grid">
+    <div class="form__field">
+      <label for="nombre">Nombre</label>
+      <input id="nombre" name="nombre" type="text" autocomplete="name" required aria-describedby="nombre-error" />
+      <p class="form__error" id="nombre-error" hidden>Escribe tu nombre para poder responderte.</p>
+    </div>
+
+    <div class="form__field">
+      <label for="correo">Correo electrónico</label>
+      <input id="correo" name="correo" type="email" autocomplete="email" inputmode="email" required aria-describedby="correo-error" />
+      <p class="form__error" id="correo-error" hidden>Revisa el correo; parece incompleto.</p>
+    </div>
+
+    <div class="form__field">
+      <label for="telefono">Teléfono <span class="form__optional">(opcional)</span></label>
+      <input id="telefono" name="telefono" type="tel" autocomplete="tel" inputmode="tel" />
+    </div>
+
+    <div class="form__field">
+      <label for="modalidad">Modalidad preferida</label>
+      <select id="modalidad" name="modalidad">
+        <option value="no-se">No sé todavía</option>
+        <option value="virtual">Virtual (oficina virtual)</option>
+        <option value="presencial">Presencial</option>
+      </select>
+    </div>
+
+    <div class="form__field">
+      <label for="tipo">Tipo de proceso</label>
+      <select id="tipo" name="tipo">
+        <option value="no-se">No sé todavía</option>
+        <option value="individual">Individual</option>
+        <option value="pareja">Pareja</option>
+      </select>
+    </div>
+
+    <div class="form__field form__field--full">
+      <label for="mensaje">Mensaje <span class="form__optional">(opcional; puedes dejarlo vacío)</span></label>
+      <textarea id="mensaje" name="mensaje" rows="4"></textarea>
+    </div>
+
+    <div class="form__field form__field--full form__check">
+      <input id="consentimiento" name="consentimiento" type="checkbox" required aria-describedby="consentimiento-error" />
+      <label for="consentimiento">Acepto que me contacten para coordinar la cita.</label>
+      <p class="form__error" id="consentimiento-error" hidden>Necesito tu permiso para escribirte.</p>
+    </div>
+
+    <div class="form__hp" aria-hidden="true">
+      <label for="website">Deja este campo vacío</label>
+      <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+  </div>
+
+  <div class="form__actions">
+    <Button type="submit" variant="primary">Enviar solicitud</Button>
+    <p class="form__note small">
+      Este formulario no es para información clínica ni para emergencias. Si estás en crisis,
+      <a href="/crisis/">aquí tienes recursos</a>.
+    </p>
+  </div>
+
+  <div class="form__status" role="status" aria-live="polite" data-status hidden></div>
+</form>
+
+<style>
+  .form {
+    display: grid;
+    gap: var(--space-4);
+  }
+  .form__grid {
+    display: grid;
+    gap: var(--space-3);
+  }
+  .form__field {
+    display: grid;
+    gap: 0.4rem;
+  }
+  .form__field label {
+    font-size: var(--step-small);
+    font-weight: 500;
+  }
+  .form__optional {
+    font-weight: 400;
+    color: var(--fg-soft);
+  }
+  .form input:not([type='checkbox']),
+  .form select,
+  .form textarea {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid var(--stone);
+    border-radius: var(--radius);
+    background: var(--ivory);
+    color: var(--fg);
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+  .form input:focus,
+  .form select:focus,
+  .form textarea:focus {
+    border-color: var(--olive);
+    outline: 2px solid var(--olive);
+    outline-offset: 2px;
+  }
+  .form textarea {
+    resize: vertical;
+    min-height: 7rem;
+  }
+  .form__check {
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    column-gap: 0.7rem;
+  }
+  .form__check input {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-top: 0.2rem;
+    accent-color: var(--navy);
+  }
+  .form__check .form__error {
+    grid-column: 1 / -1;
+  }
+  .form__error {
+    font-size: var(--step-small);
+    color: var(--rose-deep);
+  }
+  .form__hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .form__actions {
+    display: grid;
+    gap: var(--space-2);
+    justify-items: start;
+  }
+  .form__note {
+    color: var(--fg-soft);
+    max-width: 48ch;
+  }
+  .form__status {
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--olive);
+    border-radius: var(--radius);
+    background: var(--sand);
+  }
+  .form__status[data-tone='warn'] {
+    border-color: var(--rose);
+  }
+  @media (min-width: 640px) {
+    .form__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .form__field--full {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-form]');
+  if (form) {
+    const status = form.querySelector<HTMLElement>('[data-status]');
+    const mode = form.dataset.mode;
+    const email = form.dataset.email;
+
+    const showError = (id: string, show: boolean) => {
+      const el = form.querySelector<HTMLElement>(`#${id}-error`);
+      const input = form.querySelector<HTMLInputElement>(`#${id}`);
+      if (el) el.hidden = !show;
+      if (input) input.setAttribute('aria-invalid', String(show));
+    };
+
+    const say = (html: string, tone: 'ok' | 'warn' = 'ok') => {
+      if (!status) return;
+      status.innerHTML = html;
+      status.dataset.tone = tone;
+      status.hidden = false;
+      status.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    };
+
+    form.addEventListener('submit', (e) => {
+      const nombre = form.querySelector<HTMLInputElement>('#nombre');
+      const correo = form.querySelector<HTMLInputElement>('#correo');
+      const consent = form.querySelector<HTMLInputElement>('#consentimiento');
+      const hp = form.querySelector<HTMLInputElement>('#website');
+
+      let ok = true;
+      const n = nombre?.value.trim() ?? '';
+      const c = correo?.value.trim() ?? '';
+      showError('nombre', n.length < 2);
+      showError('correo', !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c));
+      showError('consentimiento', !consent?.checked);
+      if (n.length < 2 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c) || !consent?.checked) ok = false;
+
+      if (!ok) {
+        e.preventDefault();
+        form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+        return;
+      }
+      if (hp && hp.value) {
+        e.preventDefault();
+        return;
+      }
+
+      if (mode === 'endpoint') return; // envío normal al endpoint configurado
+
+      e.preventDefault();
+      const data = new FormData(form);
+      const lines = [
+        `Nombre: ${data.get('nombre')}`,
+        `Correo: ${data.get('correo')}`,
+        `Teléfono: ${data.get('telefono') || '(no indicado)'}`,
+        `Modalidad: ${data.get('modalidad')}`,
+        `Tipo: ${data.get('tipo')}`,
+        '',
+        `${data.get('mensaje') || ''}`,
+      ];
+
+      if (mode === 'mailto' && email) {
+        const subject = encodeURIComponent('Solicitud de cita · Growing Souls');
+        const body = encodeURIComponent(lines.join('\n'));
+        window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+        say(
+          'Gracias por dar este paso. Se abrirá tu aplicación de correo con la solicitud lista para enviar. Si no se abre, escríbeme directamente a <a href="mailto:' +
+            email +
+            '">' +
+            email +
+            '</a>.',
+        );
+        return;
+      }
+
+      say(
+        'Gracias por dar este paso. El envío automático de este formulario se activa en los próximos días; mientras tanto, guarda lo que escribiste y vuelve pronto.',
+        'warn',
+      );
+    });
+  }
+</script>

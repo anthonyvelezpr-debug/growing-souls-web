@@ -1,0 +1,90 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'link' | 'ghost';
+  type?: 'button' | 'submit';
+  class?: string;
+  ariaLabel?: string;
+}
+const { href, variant = 'primary', type = 'button', class: className = '', ariaLabel } = Astro.props;
+const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ');
+---
+
+{
+  href ? (
+    <a class={classes} href={href} aria-label={ariaLabel}>
+      <slot />
+    </a>
+  ) : (
+    <button class={classes} type={type} aria-label={ariaLabel}>
+      <slot />
+    </button>
+  )
+}
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3rem;
+    padding: 0.8rem 1.6rem;
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    font-family: var(--font-sans);
+    font-size: var(--step-small);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      opacity var(--dur-fast) var(--ease),
+      background-color var(--dur-fast) var(--ease),
+      color var(--dur-fast) var(--ease);
+  }
+  .btn:hover {
+    opacity: 0.88;
+  }
+  .btn--primary {
+    background: var(--navy);
+    color: var(--ivory);
+    border-color: var(--navy);
+  }
+  .btn--secondary {
+    background: transparent;
+    color: var(--navy);
+    border-color: var(--navy);
+  }
+  .btn--ghost {
+    background: transparent;
+    color: var(--ivory);
+    border-color: var(--ivory);
+  }
+  .btn--link {
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--olive-deep);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    text-decoration-color: currentColor;
+  }
+  .btn--link::after {
+    content: '→';
+    font-family: var(--font-serif);
+    font-size: 1.1em;
+    line-height: 1;
+    transition: transform var(--dur-fast) var(--ease);
+  }
+  .btn--link:hover::after {
+    transform: translateX(3px);
+  }
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+</style>

@@ -1,0 +1,55 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  size?: 'display' | 'h2';
+  tone?: 'ivory' | 'sand';
+  as?: 'h1' | 'h2';
+}
+const { title, subtitle, size = 'display', tone = 'ivory', as: Tag = 'h2' } = Astro.props;
+---
+
+<section class:list={['statement', `statement--${tone}`]}>
+  <div class="container--narrow center statement__inner">
+    <Tag class:list={['statement__title', { 'statement__title--display': size === 'display' }]} data-reveal>
+      {title}
+    </Tag>
+    {
+      subtitle && (
+        <p class="statement__sub" data-reveal style="--reveal-index: 2">
+          {subtitle}
+        </p>
+      )
+    }
+    <slot />
+  </div>
+</section>
+
+<style>
+  .statement {
+    padding-block: clamp(6rem, 4rem + 9vw, 14rem);
+  }
+  .statement--sand {
+    background: var(--sand);
+  }
+  .statement__inner {
+    display: grid;
+    gap: var(--space-3);
+    justify-items: center;
+  }
+  .statement__title {
+    max-width: 20ch;
+    font-weight: 500;
+  }
+  .statement__title--display {
+    font-size: var(--step-display);
+    line-height: 1.05;
+  }
+  .statement__sub {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: calc(var(--step-h3) * 0.95);
+    max-width: 30ch;
+    color: var(--fg);
+  }
+</style>

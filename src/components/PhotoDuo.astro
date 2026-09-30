@@ -1,0 +1,111 @@
+---
+/**
+ * Composición editorial de dos fotos sobre una retícula de 12 columnas:
+ * la principal ocupa 9 columnas; la secundaria, 5, superpuesta en la esquina inferior opuesta.
+ * Las dos comparten radio, marco y ritmo. La cara nunca queda bajo la foto pequeña
+ * porque la secundaria se ancla al tercio inferior.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  main: ImageMetadata;
+  mainAlt: string;
+  mainFocus?: string;
+  secondary: ImageMetadata;
+  secondaryAlt: string;
+  secondaryFocus?: string;
+  /** Lado en el que cae la foto secundaria */
+  side?: 'left' | 'right';
+  caption?: string;
+}
+const {
+  main,
+  mainAlt,
+  mainFocus = '50% 20%',
+  secondary,
+  secondaryAlt,
+  secondaryFocus = '50% 50%',
+  side = 'right',
+  caption,
+} = Astro.props;
+---
+
+<figure class:list={['duo', `duo--${side}`]} data-reveal>
+  <div class="duo__main" style={`--focus: ${mainFocus}`}>
+    <Image src={main} alt={mainAlt} widths={[480, 720, 960, 1200]} sizes="(min-width: 960px) 34vw, 75vw" format="webp" quality={82} loading="lazy" />
+  </div>
+  <div class="duo__secondary" style={`--focus: ${secondaryFocus}`}>
+    <Image src={secondary} alt={secondaryAlt} widths={[320, 480, 720]} sizes="(min-width: 960px) 19vw, 42vw" format="webp" quality={82} loading="lazy" />
+  </div>
+  {caption && <figcaption class="duo__caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .duo {
+    position: relative;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(12, auto);
+    align-items: end;
+  }
+  .duo__main {
+    grid-column: 1 / span 9;
+    grid-row: 1 / span 12;
+  }
+  .duo--left .duo__main {
+    grid-column: 4 / span 9;
+  }
+  .duo__secondary {
+    grid-column: 8 / span 5;
+    grid-row: 8 / span 5;
+    padding: 0 0 0 0;
+    z-index: 1;
+    /* filete marfil para separar las dos fotos con limpieza */
+    outline: 6px solid var(--ivory);
+    outline-offset: 0;
+    background: var(--ivory);
+  }
+  .duo--left .duo__secondary {
+    grid-column: 1 / span 5;
+  }
+  .section--sand .duo__secondary,
+  :global(.section--sand) .duo__secondary {
+    outline-color: var(--sand);
+    background: var(--sand);
+  }
+  .duo :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: var(--focus);
+    border-radius: var(--radius);
+    transform: scale(1.03);
+    transition: transform 1400ms var(--ease);
+  }
+  .duo.is-visible :global(img) {
+    transform: scale(1);
+  }
+  .duo__main :global(img) {
+    aspect-ratio: 4 / 5;
+  }
+  .duo__secondary :global(img) {
+    aspect-ratio: 1 / 1;
+  }
+  .duo__caption {
+    grid-column: 1 / -1;
+    padding-top: var(--space-3);
+    font-size: var(--step-small);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fg-soft);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .duo :global(img) {
+      transform: none;
+      transition: none;
+    }
+  }
+</style>

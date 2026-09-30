@@ -1,0 +1,113 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Button from './Button.astro';
+
+interface Props {
+  image: ImageMetadata;
+  alt: string;
+  side?: 'left' | 'right';
+  eyebrow?: string;
+  title: string;
+  titleAs?: 'h2' | 'h3';
+  cta?: { label: string; href: string };
+  ctaVariant?: 'link' | 'secondary' | 'primary';
+  tone?: 'ivory' | 'sand';
+  focus?: string;
+  ratio?: string;
+}
+const {
+  image,
+  alt,
+  side = 'left',
+  eyebrow,
+  title,
+  titleAs: Tag = 'h2',
+  cta,
+  ctaVariant = 'link',
+  tone = 'ivory',
+  focus = '50% 30%',
+  ratio = '4 / 5',
+} = Astro.props;
+---
+
+<section class:list={['split', `split--${side}`, `split--${tone}`]}>
+  <div class="container split__grid">
+    <figure class="split__figure" data-reveal>
+      <Image
+        src={image}
+        alt={alt}
+        widths={[480, 720, 960, 1200]}
+        sizes="(min-width: 960px) 45vw, 100vw"
+        format="webp"
+        quality={82}
+        loading="lazy"
+        style={`object-position: ${focus}; aspect-ratio: ${ratio}`}
+      />
+    </figure>
+    <div class="split__text" data-reveal style="--reveal-index: 2">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <Tag class="split__title">{title}</Tag>
+      <div class="split__body flow">
+        <slot />
+      </div>
+      {
+        cta && (
+          <div class="split__cta">
+            <Button href={cta.href} variant={ctaVariant}>
+              {cta.label}
+            </Button>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .split {
+    padding-block: var(--section-gap);
+  }
+  .split--sand {
+    background: var(--sand);
+  }
+  .split__grid {
+    display: grid;
+    gap: var(--space-6);
+    align-items: center;
+  }
+  .split__figure {
+    margin: 0;
+  }
+  .split__figure :global(img) {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: var(--radius);
+  }
+  .split__text {
+    display: grid;
+    gap: var(--space-3);
+  }
+  .split__title {
+    max-width: 18ch;
+  }
+  .split__body :global(p) {
+    max-width: var(--measure);
+  }
+  .split__cta {
+    margin-top: var(--space-1);
+  }
+  @media (min-width: 960px) {
+    .split__grid {
+      grid-template-columns: 45fr 55fr;
+      gap: clamp(3rem, 6vw, 6rem);
+    }
+    .split--right .split__figure {
+      order: 2;
+    }
+    .split--right .split__grid {
+      grid-template-columns: 55fr 45fr;
+    }
+  }
+</style>

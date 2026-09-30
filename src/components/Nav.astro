@@ -1,0 +1,233 @@
+---
+import { nav, cta, site } from '../data/site';
+import Button from './Button.astro';
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => path === href || (href !== '/' && path.startsWith(href));
+---
+
+<header class="nav" data-nav>
+  <div class="container nav__inner">
+    <a class="nav__brand" href="/" aria-label="Growing Souls, inicio">
+      <img
+        class="nav__mark"
+        src="/images/brand/isotipo-navy.png"
+        alt=""
+        width="36"
+        height="41"
+        decoding="async"
+      />
+      <span class="nav__name">
+        <span class="nav__wordmark">Growing Souls</span>
+        <span class="nav__sub">{site.person.shortName}</span>
+      </span>
+    </a>
+
+    <nav class="nav__links" aria-label="Principal">
+      <ul role="list">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="nav__cta">
+      <Button href={cta.href} variant="primary">{cta.label}</Button>
+    </div>
+
+    <button
+      class="nav__toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="menu-principal"
+      data-nav-toggle
+    >
+      <span class="nav__toggle-label" data-label-open>Menú</span>
+      <span class="nav__toggle-label" data-label-close hidden>Cerrar</span>
+    </button>
+  </div>
+
+  <div id="menu-principal" class="nav__drawer" hidden data-nav-drawer>
+    <div class="container nav__drawer-inner">
+      <ul role="list" class="nav__drawer-links">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="nav__drawer-cta">
+        <Button href={cta.href} variant="primary">{cta.label}</Button>
+      </div>
+      <p class="nav__drawer-note small">
+        Esta web no es un servicio de emergencias. <a href="/crisis/">Recursos en crisis</a>
+      </p>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--ivory) 94%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+  .nav.is-scrolled {
+    border-bottom-color: var(--line);
+  }
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    min-height: var(--nav-height);
+  }
+  .nav__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+  }
+  .nav__mark {
+    width: 34px;
+    height: auto;
+  }
+  .nav__name {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.05;
+  }
+  .nav__wordmark {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.45rem;
+    letter-spacing: 0.01em;
+  }
+  .nav__sub {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fg-soft);
+    margin-top: 0.15rem;
+  }
+  .nav__links {
+    display: none;
+  }
+  .nav__links ul {
+    display: flex;
+    gap: clamp(1rem, 2vw, 1.75rem);
+  }
+  .nav__links a {
+    font-size: var(--step-small);
+    white-space: nowrap;
+    text-decoration: none;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+  .nav__links a:hover,
+  .nav__links a[aria-current='page'] {
+    border-bottom-color: var(--olive);
+    opacity: 1;
+  }
+  .nav__cta {
+    display: none;
+    white-space: nowrap;
+  }
+  .nav__toggle {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid var(--navy);
+    border-radius: var(--radius);
+    background: transparent;
+    font-size: var(--step-small);
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .nav__drawer {
+    border-top: 1px solid var(--line);
+    background: var(--ivory);
+    max-height: calc(100dvh - var(--nav-height));
+    overflow-y: auto;
+  }
+  .nav__drawer-inner {
+    padding-block: var(--space-4) var(--space-6);
+    display: grid;
+    gap: var(--space-4);
+  }
+  .nav__drawer-links {
+    display: grid;
+  }
+  .nav__drawer-links a {
+    display: block;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    text-decoration: none;
+  }
+  .nav__drawer-links a[aria-current='page'] {
+    color: var(--olive-deep);
+  }
+  .nav__drawer-note {
+    color: var(--fg-soft);
+  }
+
+  @media (min-width: 1100px) {
+    .nav__links,
+    .nav__cta {
+      display: block;
+    }
+    .nav__toggle,
+    .nav__drawer {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-nav]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  const drawer = document.querySelector<HTMLElement>('[data-nav-drawer]');
+  const labelOpen = toggle?.querySelector<HTMLElement>('[data-label-open]');
+  const labelClose = toggle?.querySelector<HTMLElement>('[data-label-close]');
+
+  const onScroll = () => header?.classList.toggle('is-scrolled', window.scrollY > 24);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const setOpen = (open: boolean) => {
+    if (!toggle || !drawer) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    drawer.hidden = !open;
+    if (labelOpen) labelOpen.hidden = open;
+    if (labelClose) labelClose.hidden = !open;
+    if (open) drawer.querySelector<HTMLElement>('a')?.focus();
+    else toggle.focus();
+  };
+
+  toggle?.addEventListener('click', () => {
+    setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') setOpen(false);
+  });
+</script>

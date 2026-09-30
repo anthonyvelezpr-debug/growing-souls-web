@@ -1,0 +1,60 @@
+---
+import { temas } from '../data/site';
+
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  tema: string;
+  readingTime?: number;
+  draft?: boolean;
+  index?: number;
+}
+const { href, title, description, tema, readingTime, draft = false, index = 0 } = Astro.props;
+---
+
+<article class="jcard" data-reveal style={`--reveal-index: ${(index % 3) + 1}`}>
+  <p class="jcard__meta">
+    <span class="jcard__tema">{temas[tema] ?? tema}</span>
+    {readingTime && <span class="jcard__time">· {readingTime} min</span>}
+    {draft && <span class="jcard__draft">· Borrador</span>}
+  </p>
+  <h3 class="jcard__title"><a href={href}>{title}</a></h3>
+  <p class="jcard__desc">{description}</p>
+</article>
+
+<style>
+  .jcard {
+    position: relative;
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+    padding: var(--space-4) 0;
+    border-top: 1px solid var(--line);
+  }
+  .jcard__meta {
+    font-size: var(--step-small);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--olive-deep);
+  }
+  .jcard__draft {
+    color: var(--rose-deep);
+  }
+  .jcard__title {
+    font-size: var(--step-h3);
+    max-width: 22ch;
+  }
+  .jcard__title a {
+    text-decoration: none;
+  }
+  .jcard__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .jcard__desc {
+    font-size: var(--step-small);
+    max-width: 44ch;
+  }
+</style>

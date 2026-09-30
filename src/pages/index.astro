@@ -4,6 +4,7 @@ import Hero from '../components/Hero.astro';
 import Statement from '../components/Statement.astro';
 import PhotoDuo from '../components/PhotoDuo.astro';
 import Triptych from '../components/Triptych.astro';
+import ArchPhoto from '../components/ArchPhoto.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import Process from '../components/Process.astro';
 import Offer from '../components/Offer.astro';
@@ -198,6 +199,34 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
     </div>
   </section>
 
+  <section class="section talleres" id="talleres">
+    <div class="container talleres__grid">
+      <div class="talleres__figure">
+        <ArchPhoto
+          src={fotoHeroMobile}
+          alt="Melanie sostiene un tablero con notas mientras explica, sentada frente a la cámara"
+          focus="50% 84%"
+          zoom={1.35}
+          sizes="(min-width: 960px) 34vw, (min-width: 640px) 60vw, 100vw"
+        />
+      </div>
+      <div class="talleres__text" data-reveal style="--reveal-index: 1">
+        <p class="eyebrow">Talleres y charlas</p>
+        <h2>Lo que se trabaja en sesión también se puede aprender en grupo.</h2>
+        <p>
+          <Verify note="Aprobación Melanie · temas, públicos y formatos de los talleres por confirmar">
+            Melanie da talleres y charlas para grupos, organizaciones y comunidades: espacios prácticos para
+            entender lo que sentimos, poner límites, cuidar la salud emocional y hablar de lo que casi nunca se
+            habla. Presenciales o en línea, adaptados a cada grupo.
+          </Verify>
+        </p>
+        <div class="talleres__cta">
+          <Button href="/agenda/?tipo=taller" variant="secondary">Solicitar un taller</Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   {
     posts.length > 0 && (
       <section class="section">
@@ -275,6 +304,47 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
       text-align: left;
     }
     .about__text p:not(.eyebrow) {
+      max-width: var(--measure);
+    }
+  }
+  /* Talleres: arco a la izquierda y texto a la derecha en desktop; centrado en móvil y tablet. */
+  .talleres__grid {
+    display: grid;
+    gap: var(--space-6);
+    align-items: center;
+  }
+  .talleres__figure {
+    width: min(100%, 22rem);
+    margin-inline: auto;
+  }
+  .talleres__text {
+    display: grid;
+    gap: var(--space-3);
+    justify-items: center;
+    text-align: center;
+  }
+  .talleres__text h2 {
+    max-width: 21ch;
+  }
+  .talleres__text p:not(.eyebrow) {
+    max-width: 44ch;
+  }
+  .talleres__cta {
+    margin-top: var(--space-1);
+  }
+  @media (min-width: 960px) {
+    .talleres__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-10);
+    }
+    .talleres__figure {
+      width: min(100%, 26rem);
+    }
+    .talleres__text {
+      justify-items: start;
+      text-align: left;
+    }
+    .talleres__text p:not(.eyebrow) {
       max-width: var(--measure);
     }
   }

@@ -11,19 +11,21 @@ interface Props {
   alt?: string;
   /** Punto de enfoque del recorte 4:5, p. ej. "50% 25%". */
   focus?: string;
+  /** Color de fondo detrás de la foto (para recortes sin fondo). */
+  fill?: 'ivory' | 'sand';
   /** Sin copy aprobado: en vista previa se muestra como "en preparación"; en producción no se renderiza. */
   pending?: string;
 }
-const { numeral, title, id, image, alt = '', focus = '50% 25%', pending } = Astro.props;
+const { numeral, title, id, image, alt = '', focus = '50% 25%', fill, pending } = Astro.props;
 const hasBody = Astro.slots.has('default');
 const render = hasBody || (pending && isPreview);
 ---
 
 {
   render && (
-    <article class:list={['chapter', { 'chapter--image': !!image }]} id={id} style={`--focus: ${focus}`}>
+    <article class:list={['chapter', { 'chapter--image': !!image }]} id={id} style={`--focus: ${focus}; --fill: var(--${fill ?? 'ivory'})`}>
       {image && (
-        <figure class="chapter__figure" data-reveal>
+        <figure class:list={['chapter__figure', { 'chapter__figure--fill': !!fill }]} data-reveal>
           <Image
             src={image}
             alt={alt}
@@ -91,6 +93,9 @@ const render = hasBody || (pending && isPreview);
     object-fit: cover;
     object-position: var(--focus);
     border-radius: var(--radius);
+  }
+  .chapter__figure--fill :global(img) {
+    background: var(--fill);
   }
   .chapter__pending {
     font-style: italic;

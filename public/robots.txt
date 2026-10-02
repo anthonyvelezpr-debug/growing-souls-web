@@ -1,5 +1,63 @@
+# growingsoulspr.com · Growing Souls, Dra. Melanie Acevedo Vélez, psicóloga clínica en Puerto Rico
+# Todo el sitio es público. Solo se excluye la página de confirmación del formulario.
+# Buscadores y asistentes de IA: bienvenidos. El resumen del sitio para modelos de lenguaje está en /llms.txt
+
 User-agent: *
 Allow: /
 Disallow: /agenda/gracias/
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: CCBot
+Allow: /
 
 Sitemap: https://growingsoulspr.com/sitemap-index.xml

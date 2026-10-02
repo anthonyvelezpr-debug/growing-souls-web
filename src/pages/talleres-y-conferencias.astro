@@ -36,6 +36,8 @@ const galeria = [
     alt: 'Melanie, con micrófono de diadema, da una charla junto a una pantalla con el título “Decidir bien no es cuestión de suerte”',
     caption: 'Decidir bien: claridad e inteligencia emocional.',
     shape: 'tall',
+    /* En escritorio la foto alta se recorta un poco más: se ancla a la izquierda para conservar el título completo. */
+    position: '0% 50%',
   },
   {
     src: fotoMesa,
@@ -107,7 +109,8 @@ const temas = [
                   <Image
                     src={foto.src}
                     alt={foto.alt}
-                    widths={foto.shape === 'wide' ? [640, 960, 1400, 1740] : [480, 720, 960, 1300]}
+                    style={'position' in foto ? `object-position: ${foto.position}` : undefined}
+                    widths={foto.shape === 'wide' ? [640, 960, 1400, 2000] : [480, 720, 960, 1300]}
                     sizes={foto.shape === 'wide' ? '(min-width: 960px) 56vw, 100vw' : '(min-width: 960px) 28vw, 100vw'}
                     format="webp"
                     quality={80}

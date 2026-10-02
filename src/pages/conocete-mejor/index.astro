@@ -14,13 +14,13 @@ const minutos = (d: string) => d.replace(' minutos', ' min');
 ---
 
 <Base
-  title="Conócete mejor · Ejercicios de profundidad y autoevaluaciones · Growing Souls"
-  description="Ejercicios guiados de reflexión, de los que se usan en terapia, y cuestionarios validados sobre bienestar, ánimo, ansiedad y estrés. Gratuitos, privados y sin diagnósticos."
+  title="Conócete mejor · Ejercicios guiados y autoevaluaciones · Growing Souls"
+  description="Ejercicios guiados de reflexión, inspirados en técnicas de psicoterapia, y cuestionarios validados sobre bienestar, ánimo, ansiedad y estrés. Gratuitos, confidenciales y sin diagnósticos."
 >
   <PageHero
-    eyebrow="Conócete mejor"
-    title="Hay preguntas que nadie te hace. Aquí te las haces tú."
-    subtitle="Ejercicios de profundidad, de los que se usan en terapia, para descubrir lo que todavía no has puesto en palabras. Y cuestionarios validados para saber cómo estás. Gratis, privados y sin diagnósticos."
+    eyebrow="Recursos · Conócete mejor"
+    title="Herramientas para conocerte mejor."
+    subtitle="Ejercicios guiados de reflexión y cuestionarios validados para explorar, a tu ritmo, cómo te sientes y lo que es importante para ti."
   />
 
   <section class="section section--tight">
@@ -43,12 +43,12 @@ const minutos = (d: string) => d.replace(' minutos', ' min');
 
   <section class="section" id="ejercicios">
     <div class="container">
-      <SectionHeading eyebrow="Ejercicios de profundidad" title="Escribes. Y al final lees lo que no sabías que sabías.">
+      <SectionHeading eyebrow="Ejercicios guiados" title="Reflexiona a tu ritmo, paso a paso.">
         <p class="lead">
-          <Verify note="Aprobación Melanie · ejercicios de profundidad (textos y enfoque)">
-            Cada ejercicio te guía paso a paso y termina en un reflejo: tus propias palabras, ordenadas para que las veas
-            de frente. Son adaptaciones de ejercicios que se usan en terapia y en retiros; aquí los haces a solas, a tu
-            ritmo y sin que nada salga de tu dispositivo.
+          <Verify note="Aprobación Melanie · textos de los ejercicios (versión revisada con su comentario de tono)">
+            Cada ejercicio te acompaña paso a paso y termina con un resumen de lo que escribiste, para que puedas leerlo
+            con calma. Están inspirados en técnicas que se utilizan en psicoterapia y se realizan de forma individual,
+            sin que lo que escribes salga de tu dispositivo.
           </Verify>
         </p>
       </SectionHeading>
@@ -84,7 +84,7 @@ const minutos = (d: string) => d.replace(' minutos', ' min');
                       <p class="ejs__sub">{ej.subtitulo}</p>
                       <p class="ejs__text small">{ej.descripcion}</p>
                       <p class="ejs__llevas small">
-                        <span class="ejs__k">Te llevas</span> {ej.teLlevas}
+                        <span class="ejs__k">Al finalizar</span> {ej.teLlevas}
                       </p>
                       <a class="ejs__go" href={hrefEj(ej.id)}>
                         Empezar <span aria-hidden="true">→</span>
@@ -100,8 +100,8 @@ const minutos = (d: string) => d.replace(' minutos', ' min');
       }
 
       <div class="orden" data-reveal>
-        <p class="eyebrow">Si quieres hacerlos todos</p>
-        <p class="orden__text small">Un orden que tiene sentido, de lo más ligero a lo más hondo. Uno por semana es un buen ritmo; el de pareja, solo si tienes pareja.</p>
+        <p class="eyebrow">Orden sugerido</p>
+        <p class="orden__text small">Si deseas realizar todos los ejercicios, te sugerimos este orden, de los más ligeros a los más profundos. Un ejercicio por semana es un buen ritmo. El ejercicio de pareja aplica si tienes una relación de pareja.</p>
         <ol class="orden__list small" role="list">
           {
             caminoSugerido.map((id, i) => (
@@ -118,10 +118,11 @@ const minutos = (d: string) => d.replace(' minutos', ' min');
 
   <section class="section section--sand" id="cuestionarios">
     <div class="container">
-      <SectionHeading eyebrow="Cuestionarios validados" title="Para saber cómo estás, con los mismos instrumentos que usan los profesionales.">
+      <SectionHeading eyebrow="Cuestionarios validados" title="Cuestionarios breves para conocer cómo te has sentido.">
         <p class="lead">
-          Cuatro cuestionarios breves, de uso libre y en su versión oficial en español, para mirar con calma tu
-          bienestar, tu ánimo, tu ansiedad y tu estrés. Orientación, no diagnóstico.
+          Cuatro instrumentos de uso libre, utilizados por profesionales de la salud y en su versión oficial en
+          español, para explorar tu bienestar, tu estado de ánimo, la ansiedad y el estrés. Ofrecen orientación, no un
+          diagnóstico.
         </p>
       </SectionHeading>
       <ul class="colec" role="list">
@@ -151,7 +152,7 @@ const minutos = (d: string) => d.replace(' minutos', ' min');
 
   <section class="section" id="aviso">
     <div class="container--narrow aviso" data-reveal>
-      <SectionHeading eyebrow="Antes de empezar" title="Lo que estas herramientas son, y lo que no." />
+      <SectionHeading eyebrow="Antes de empezar" title="Información importante sobre estas herramientas." />
       <ul class="aviso__list" role="list">
         <li>
           <h3>Orientación, no diagnóstico</h3>
@@ -159,14 +160,15 @@ const minutos = (d: string) => d.replace(' minutos', ' min');
           <p>{textosEjercicios.aviso}</p>
         </li>
         <li>
-          <h3>Privadas de verdad</h3>
+          <h3>Privacidad</h3>
           <p>{textos.privacidad}</p>
           <p>{textosEjercicios.privacidad} {textosEjercicios.dispositivo}</p>
         </li>
         <li>
           <h3>Si estás en crisis</h3>
           <p>
-            Estas herramientas no son para emergencias. Si piensas en hacerte daño, llama ahora:{' '}
+            Estas herramientas no están diseñadas para situaciones de emergencia. Si estás pensando en hacerte daño,
+            comunícate ahora con:{' '}
             {site.crisis.lines.map((l, i) => (
               <>
                 <a href={l.href}>{l.number}</a>
@@ -182,27 +184,27 @@ const minutos = (d: string) => d.replace(' minutos', ' min');
 
   <section class="section section--sand">
     <div class="container pasos-wrap">
-      <SectionHeading eyebrow="Cómo funciona" title="A tu ritmo. Y a solas." />
+      <SectionHeading eyebrow="Cómo funciona" title="A tu ritmo y con total privacidad." />
       <ol class="pasos" role="list">
         <li data-reveal>
           <span class="pasos__n">1</span>
-          <p>Elige por dónde empezar: un cuestionario de tres minutos o un ejercicio de veinte.</p>
+          <p>Elige por dónde empezar: un cuestionario breve, de unos tres minutos, o un ejercicio guiado, de diez a veinticinco minutos.</p>
         </li>
         <li data-reveal style="--reveal-index: 1">
           <span class="pasos__n">2</span>
-          <p>Responde o escribe paso a paso. Puedes volver atrás, y en los ejercicios el borrador se queda en tu pestaña si recargas.</p>
+          <p>Responde o escribe paso a paso. Puedes volver atrás cuando lo necesites y, en los ejercicios, tu borrador se conserva en la pestaña si recargas la página.</p>
         </li>
         <li data-reveal style="--reveal-index: 2">
           <span class="pasos__n">3</span>
-          <p>Lee tu resultado o tu reflejo, con sus límites y sus ideas. Imprímelo si quieres traerlo a una primera sesión.</p>
+          <p>Lee tu resultado o tu resumen, con sus alcances y algunas recomendaciones. Si lo deseas, imprímelo para traerlo a tu primera sesión.</p>
         </li>
       </ol>
     </div>
   </section>
 
   <CtaBand
-    title="Un ejercicio abre una puerta. Hablar la cruza."
-    subtitle="Si quieres conversar sobre lo que viste aquí, o sobre lo que no cabe en una pantalla, aquí hay un espacio para escucharte."
+    title="¿Te gustaría conversar sobre lo que descubriste?"
+    subtitle="Estas herramientas pueden ser un buen punto de partida. Si deseas profundizar con acompañamiento profesional, puedes solicitar una cita."
     tone="ivory"
   />
 </Base>

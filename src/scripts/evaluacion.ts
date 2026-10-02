@@ -165,7 +165,7 @@ if (root && dataEl) {
         eyebrow: 'Último paso',
         titulo: 'Tu resultado está listo.',
         texto:
-          'Déjame tu nombre y tu contacto para mostrarte el resultado completo y que Melanie pueda darte seguimiento si lo deseas. Solo se envía tu puntuación total y el rango: tus respuestas no salen de tu dispositivo.',
+          'Deja tu nombre y tu contacto para ver tu resultado completo y, si lo deseas, recibir seguimiento de la Dra. Acevedo. Solo se envían tu puntuación total y el rango; tus respuestas no salen de tu dispositivo.',
         consentimiento:
           'Autorizo a Growing Souls a recibir mi nombre, mi contacto y el resultado de esta autoevaluación para mostrármelo y poder darme seguimiento.',
         boton: 'Ver mi resultado',
@@ -218,7 +218,7 @@ if (root && dataEl) {
         ${
           riesgo
             ? `<div class="ev__safety ev__safety--result" role="region" aria-label="Ayuda inmediata">
-                <p class="ev__safety-text"><strong>Antes que nada:</strong> una de tus respuestas habla de pensar en hacerte daño. Si eso está presente ahora, hay ayuda inmediata, gratuita y en español, a cualquier hora.</p>
+                <p class="ev__safety-text"><strong>Antes que nada:</strong> una de tus respuestas indica pensamientos de hacerte daño. Si eso está presente ahora, hay ayuda inmediata, gratuita y en español, a cualquier hora.</p>
                 <ul class="ev__crisis" role="list">${crisisHtml(cfg.crisis)}</ul>
               </div>`
             : ''
@@ -240,7 +240,7 @@ if (root && dataEl) {
         ${
           b.evaluar
             ? `<div class="ev__callout">
-                <p><strong>Este resultado amerita una evaluación profesional más completa.</strong> No es un diagnóstico: es una señal de que vale la pena hablarlo con alguien preparado para escucharte.</p>
+                <p><strong>Este resultado amerita una evaluación profesional más completa.</strong> No es un diagnóstico, pero sí una señal de que vale la pena conversarlo con un profesional de la salud mental.</p>
                 <div class="ev__nav ev__nav--center">
                   <a class="btn btn--primary" href="${esc(cfg.citaHref)}">Solicitar una cita</a>
                   <a class="btn btn--secondary" href="${esc(cfg.whatsappHref)}" rel="noopener">Escribir por WhatsApp</a>
@@ -253,13 +253,13 @@ if (root && dataEl) {
           <ul class="ev__recs" role="list">${ins.recomendaciones.map((r) => `<li>${esc(r)}</li>`).join('')}</ul>
         </div>
         <div class="ev__block ev__block--limits">
-          <h3>Lo que este resultado no puede decirte</h3>
+          <h3>Alcance y limitaciones de este resultado</h3>
           <p>${esc(cfg.textos.limitaciones)}</p>
         </div>
         ${
           !b.evaluar
             ? `<div class="ev__callout ev__callout--soft">
-                <p>Si quieres hablar de lo que viste aquí, o de lo que no cabe en un cuestionario, aquí hay un espacio para escucharte.</p>
+                <p>Si deseas conversar sobre tu resultado o sobre cualquier otra inquietud, puedes solicitar una cita.</p>
                 <div class="ev__nav ev__nav--center">
                   <a class="btn btn--primary" href="${esc(cfg.citaHref)}">Solicitar una cita</a>
                   <a class="btn btn--secondary" href="${esc(ins.servicio.href)}">${esc(ins.servicio.label)}</a>
@@ -269,7 +269,7 @@ if (root && dataEl) {
         }
         ${
           enviado === 'error'
-            ? `<p class="ev__note small">No pudimos registrar tus datos en este momento. Tu resultado está aquí igual; si quieres seguimiento, escríbenos por <a href="${esc(cfg.whatsappHref)}" rel="noopener">WhatsApp</a>.</p>`
+            ? `<p class="ev__note small">No pudimos registrar tus datos en este momento. Tu resultado está disponible de todos modos; si deseas seguimiento, escríbenos por <a href="${esc(cfg.whatsappHref)}" rel="noopener">WhatsApp</a>.</p>`
             : enviado === 'demo'
               ? `<p class="ev__note small">Vista previa: el envío de datos está simulado.</p>`
               : ''

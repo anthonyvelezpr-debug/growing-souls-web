@@ -1,0 +1,388 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Verify from '../components/Verify.astro';
+import { evaluaciones } from '../data/evaluaciones';
+import { ejercicios, caminos } from '../data/ejercicios';
+import { lineasAyuda, isPreview } from '../data/site';
+
+/*
+ * Recursos (pestaña pedida por la Dra., 2 oct 2026): reúne Conócete mejor, las líneas de ayuda, la orientación para
+ * la primera cita y, cuando haya artículos publicados, el Journal. No se inventa material: lecturas recomendadas o
+ * descargables se añaden cuando ella los elija.
+ */
+const posts = (await getCollection('journal', ({ data }) => isPreview || !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const porCamino = caminos.map((c) => ({ ...c, total: ejercicios.filter((e) => e.camino === c.nombre).length }));
+const fuenteCorta = (nombre: string) => nombre.split(' · ')[0];
+
+const comenzar = [
+  {
+    titulo: 'Qué esperar de la primera sesión',
+    texto: 'Cómo es el primer encuentro y qué puedes esperar del proceso terapéutico.',
+    href: '/mision-y-vision/#primera-sesion',
+  },
+  {
+    titulo: 'Terapia individual',
+    texto: 'Ansiedad, estrés, duelo, autoestima, transiciones de vida y relaciones.',
+    href: '/terapia-individual/',
+  },
+  {
+    titulo: 'Terapia de pareja',
+    texto: 'Comunicación, manejo del conflicto, confianza y conexión.',
+    href: '/parejas/',
+  },
+  {
+    titulo: 'Talleres y conferencias',
+    texto: 'Psicoeducación para empresas, iglesias, asociaciones estudiantiles y comunidades.',
+    href: '/talleres-y-conferencias/',
+  },
+];
+---
+
+<Base
+  title="Recursos · Growing Souls"
+  description="Recursos de bienestar emocional de la Dra. Melanie Acevedo Vélez: cuestionarios validados, ejercicios guiados de reflexión, líneas de ayuda en Puerto Rico y orientación para tu primera cita."
+>
+  <PageHero
+    eyebrow="Recursos"
+    title="Recursos para cuidar tu bienestar emocional."
+    subtitle="Herramientas de autoconocimiento, líneas de ayuda y orientación para dar el primer paso, reunidas en un solo lugar."
+  />
+
+  <section class="section section--tight" id="conocete-mejor">
+    <div class="container">
+      <SectionHeading eyebrow="Conócete mejor" title="Herramientas de autoconocimiento.">
+        <p class="lead">
+          Recursos gratuitos y confidenciales para explorar cómo te sientes. Lo que respondes o escribes no sale de tu
+          dispositivo. Ofrecen orientación, no un diagnóstico.
+        </p>
+      </SectionHeading>
+
+      <div class="rec-cards">
+        <article class="rec-card" data-reveal>
+          <p class="rec-card__meta small muted">{evaluaciones.length} cuestionarios · 2 a 3 minutos</p>
+          <h3 class="rec-card__title">Cuestionarios validados</h3>
+          <p class="rec-card__text">
+            Instrumentos breves que utilizan los profesionales de la salud, en su versión oficial en español.
+          </p>
+          <ul class="rec-card__list" role="list">
+            {
+              evaluaciones.map((ev) => (
+                <li>
+                  <a href={`/conocete-mejor/${ev.id}/`}>
+                    {ev.area} <span class="muted">· {fuenteCorta(ev.fuente.nombre)}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+          <a class="btn btn--primary rec-card__btn" href="/conocete-mejor/#cuestionarios">Ver los cuestionarios</a>
+        </article>
+
+        <article class="rec-card" data-reveal style="--reveal-index: 1">
+          <p class="rec-card__meta small muted">{ejercicios.length} ejercicios · 10 a 25 minutos</p>
+          <h3 class="rec-card__title">Ejercicios guiados de reflexión</h3>
+          <p class="rec-card__text">
+            Inspirados en técnicas que se utilizan en psicoterapia, te acompañan paso a paso y terminan con un resumen de
+            lo que escribiste.
+          </p>
+          <ul class="rec-card__list" role="list">
+            {
+              porCamino.map((c) => (
+                <li>
+                  <a href="/conocete-mejor/#ejercicios">
+                    {c.nombre} <span class="muted">· {c.total} {c.total === 1 ? 'ejercicio' : 'ejercicios'}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+          <a class="btn btn--primary rec-card__btn" href="/conocete-mejor/#ejercicios">Ver los ejercicios</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sand" id="lineas-de-ayuda">
+    <div class="container">
+      <SectionHeading eyebrow="Líneas de ayuda" title="Si necesitas ayuda inmediata.">
+        <p class="lead">
+          Growing Souls no es un servicio de emergencias. Estas líneas atienden en español, de forma gratuita y
+          confidencial.
+        </p>
+      </SectionHeading>
+      <ul class="lineas" role="list">
+        {
+          lineasAyuda.map((linea, i) => (
+            <li class="linea" data-reveal style={`--reveal-index: ${i + 1}`}>
+              <p class="linea__nombre">{linea.nombre}</p>
+              <p class="linea__numero">
+                <a href={linea.href}>{linea.numero}</a>
+              </p>
+              {'alterno' in linea && (
+                <p class="linea__alterno small">
+                  También al <a href={linea.alterno.href}>{linea.alterno.numero}</a>
+                </p>
+              )}
+              <p class="linea__texto small">{linea.texto}</p>
+              {'fuente' in linea && (
+                <p class="linea__fuente small">
+                  <a href={linea.fuente} rel="noopener">
+                    Fuente oficial
+                  </a>
+                </p>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+      <p class="lineas__nota small center">
+        Más información en la página de <a href="/crisis/">recursos en crisis</a>. Si algún número cambia, escríbenos
+        para actualizarlo.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="para-comenzar">
+    <div class="container">
+      <SectionHeading eyebrow="Para comenzar" title="Orientación para dar el primer paso." />
+      <ul class="comenzar" role="list">
+        {
+          comenzar.map((c, i) => (
+            <li data-reveal style={`--reveal-index: ${i + 1}`}>
+              <a class="comenzar__link" href={c.href}>
+                <span class="comenzar__titulo">{c.titulo}</span>
+                <span class="comenzar__texto small">{c.texto}</span>
+                <span class="comenzar__go" aria-hidden="true">→</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <Verify as="div" note="Futuro: lecturas recomendadas y material descargable elegidos por la Dra." hide>
+        <p class="muted small center comenzar__pendiente">
+          Pendiente: lecturas recomendadas y material descargable, cuando la Dra. los elija.
+        </p>
+      </Verify>
+    </div>
+  </section>
+
+  {
+    posts.length > 0 && (
+      <section class="section section--sand" id="journal">
+        <div class="container--narrow">
+          <SectionHeading eyebrow="Growing Journal" title="Artículos para leer con calma." />
+          <ul class="journal-list" role="list">
+            {posts.map((post) => (
+              <li>
+                <a href={`/journal/${post.id}/`}>{post.data.title}</a>
+                {post.data.readingTime && <span class="small muted"> · {post.data.readingTime} min de lectura</span>}
+              </li>
+            ))}
+          </ul>
+          <p class="center">
+            <a href="/journal/">Ver todos los artículos</a>
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBand
+    title="¿Tienes dudas sobre por dónde empezar?"
+    subtitle="Puedes solicitar una cita y con gusto te oriento sobre el proceso."
+    tone="ivory"
+  />
+</Base>
+
+<style>
+  /* Conócete mejor: dos tarjetas con la misma estructura; una columna en móvil, dos desde tablet. */
+  .rec-cards {
+    display: grid;
+    gap: var(--space-3);
+  }
+  .rec-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-5) var(--space-3);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--ivory);
+    text-align: center;
+    align-items: center;
+  }
+  .rec-card__title {
+    font-size: var(--step-h3);
+    text-wrap: balance;
+  }
+  .rec-card__text {
+    max-width: 40ch;
+  }
+  .rec-card__list {
+    display: grid;
+    gap: 0.45rem;
+    width: 100%;
+    max-width: 24rem;
+    margin-block: var(--space-1) var(--space-2);
+    padding: 0;
+  }
+  .rec-card__list li {
+    padding-top: 0.45rem;
+    border-top: 1px solid var(--line);
+  }
+  .rec-card__list a {
+    font-family: var(--font-serif);
+    font-size: calc(var(--step-body) * 1.08);
+    color: var(--navy);
+    text-decoration: none;
+  }
+  .rec-card__list a:hover {
+    color: var(--olive-deep);
+  }
+  .rec-card__btn {
+    margin-top: auto;
+  }
+  @media (min-width: 640px) {
+    .rec-cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-4);
+    }
+    .rec-card {
+      padding: var(--space-6) var(--space-5);
+    }
+  }
+
+  /* Líneas de ayuda: número grande, nombre y descripción; tres columnas en desktop. */
+  .lineas {
+    display: grid;
+    gap: var(--space-3);
+    padding: 0;
+  }
+  .linea {
+    display: grid;
+    align-content: start;
+    justify-items: center;
+    gap: 0.4rem;
+    padding: var(--space-5) var(--space-3);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--ivory);
+    text-align: center;
+  }
+  .linea__nombre {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--olive-deep);
+  }
+  .linea__numero {
+    font-family: var(--font-serif);
+    font-size: var(--step-h2);
+    line-height: 1.1;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+  .linea__numero a {
+    color: var(--navy);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .linea__alterno {
+    margin-top: -0.2rem;
+    color: var(--fg-soft);
+  }
+  .linea__alterno a {
+    font-weight: 500;
+    color: var(--navy);
+  }
+  .linea__texto {
+    max-width: 34ch;
+  }
+  .linea__fuente a {
+    color: var(--fg-soft);
+  }
+  .lineas__nota {
+    margin-top: var(--space-4);
+    color: var(--fg-soft);
+  }
+  @media (min-width: 960px) {
+    .lineas {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-4);
+    }
+  }
+
+  /* Para comenzar: enlaces con filete superior, en dos columnas desde tablet. */
+  .comenzar {
+    display: grid;
+    gap: 0;
+    padding: 0;
+  }
+  .comenzar__link {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.2rem var(--space-2);
+    padding: var(--space-3) 0;
+    border-top: 1px solid var(--line);
+    color: var(--fg);
+    text-decoration: none;
+  }
+  .comenzar__titulo {
+    font-family: var(--font-serif);
+    font-size: calc(var(--step-h3) * 0.85);
+    line-height: 1.2;
+    color: var(--navy);
+  }
+  .comenzar__texto {
+    grid-column: 1;
+    color: var(--fg-soft);
+  }
+  .comenzar__go {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+    font-family: var(--font-serif);
+    color: var(--olive-deep);
+    transition: transform var(--dur-fast) var(--ease);
+  }
+  .comenzar__link:hover .comenzar__go {
+    transform: translateX(3px);
+  }
+  .comenzar__link:hover .comenzar__titulo {
+    color: var(--olive-deep);
+  }
+  .comenzar__pendiente {
+    margin-top: var(--space-3);
+  }
+  @media (min-width: 640px) {
+    .comenzar {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: var(--space-6);
+    }
+  }
+
+  .journal-list {
+    display: grid;
+    gap: var(--space-2);
+    padding: 0;
+    margin-bottom: var(--space-4);
+    text-align: center;
+  }
+  .journal-list a {
+    font-family: var(--font-serif);
+    font-size: calc(var(--step-h3) * 0.8);
+  }
+  #conocete-mejor,
+  #lineas-de-ayuda,
+  #para-comenzar,
+  #journal {
+    scroll-margin-top: calc(var(--nav-height) + 1rem);
+  }
+</style>

@@ -42,7 +42,7 @@ export interface CitaPayload {
   idioma: string;
 }
 
-/** Ejercicio de profundidad terminado. Nunca viaja nada de lo que la persona escribió. */
+/** Ejercicio guiado terminado. Nunca viaja nada de lo que la persona escribió. */
 export interface EjercicioPayload {
   source: 'ejercicio';
   ejercicio_id: string;

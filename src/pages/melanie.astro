@@ -3,9 +3,11 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Chapter from '../components/Chapter.astro';
 import Quote from '../components/Quote.astro';
+import SectionHeading from '../components/SectionHeading.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Verify from '../components/Verify.astro';
 import { isPreview } from '../data/site';
+import { formacion, formacionDetalle, formacionClinica, experiencia, experienciaClinica } from '../data/perfil';
 
 import fotoHero from '../assets/melanie/01-libros-recorte.png';
 import fotoOlivo from '../assets/melanie/03-olivo-cerca.jpg';
@@ -27,13 +29,13 @@ const num = Object.fromEntries(chapters.map((c) => [c.id, c.numeral])) as Record
 ---
 
 <Base
-  title="Conoce a la Dra. Melanie Acevedo Vélez · Growing Souls"
-  description="Antes de ser psicóloga, soy persona. La historia de una psicóloga clínica puertorriqueña y de su manera de acompañar."
+  title="Conóceme · Dra. Melanie Acevedo Vélez, PsyD · Growing Souls"
+  description="Psicóloga clínica (PsyD, Universidad Albizu) y fundadora de Growing Souls. Mi historia, mi formación y mi manera de acompañar."
 >
   <PageHero
-    eyebrow="Mi historia"
+    eyebrow="Conóceme"
     title="Antes de ser psicóloga, soy persona."
-    subtitle="Esta no es una lista de títulos. Es la historia de cómo aprendí a escuchar, y de por qué hago terapia como la hago."
+    subtitle="Mi historia, mi formación y la manera en que entiendo la psicología."
     image={fotoHero}
     alt="Melanie sostiene varios libros de psicología y sonríe"
     focus="50% 0%"
@@ -56,6 +58,11 @@ const num = Object.fromEntries(chapters.map((c) => [c.id, c.numeral])) as Record
               </li>
             ))
           }
+          <li>
+            <a href="#trayectoria">
+              <span class="story__num" aria-hidden="true">·</span> Formación y trayectoria
+            </a>
+          </li>
         </ol>
       </aside>
 
@@ -69,12 +76,14 @@ const num = Object.fromEntries(chapters.map((c) => [c.id, c.numeral])) as Record
               calidad humana de quien te escucha.
             </Verify>
           </p>
-          <Verify as="div" note="Formación: grados, instituciones, fechas e internado" hide>
-            <p class="muted">
-              Formación, prácticas, internado, primeros pacientes y lo que los libros no enseñan. Datos por verificar
-              con documentos antes de publicar.
-            </p>
-          </Verify>
+          <p>
+            <Verify note="Aprobación Melanie · datos confirmados con su CV y su biografía de HBN Academy">
+              Estudié Psicología en la Universidad de Puerto Rico, Recinto de Mayagüez, y completé la maestría y el
+              doctorado en Psicología Clínica en la Universidad Albizu. Mi investigación doctoral se enfocó en la
+              comunicación asertiva en el matrimonio, y realicé mi internado en una clínica comunitaria en Indiana, una
+              experiencia que amplió mi mirada multicultural.
+            </Verify>
+          </p>
         </Chapter>
 
         <Chapter id="puerto-rico" numeral={num['puerto-rico']} title="Cuando Puerto Rico también necesitaba ser escuchado">
@@ -149,11 +158,74 @@ const num = Object.fromEntries(chapters.map((c) => [c.id, c.numeral])) as Record
     </div>
   </section>
 
+  <section class="section section--sand trayectoria" id="trayectoria">
+    <div class="container">
+      <SectionHeading eyebrow="Formación y trayectoria" title="Mi preparación profesional.">
+        <p class="lead">Psicóloga clínica, fundadora de Growing Souls.</p>
+      </SectionHeading>
+      <Verify as="div" note="Datos del CV 2026 y de la biografía de HBN Academy · Melanie confirma qué experiencia nombrar públicamente">
+        <div class="tray">
+          <div class="tray__col" data-reveal>
+            <h3 class="tray__h">Formación académica</h3>
+            <ul class="tray__list" role="list">
+              {
+                formacion.map((g) => (
+                  <li>
+                    <p class="tray__titulo">{g.titulo}</p>
+                    <p class="tray__meta small">
+                      {g.institucion} · {g.anio}
+                      {g.honor && <span> · {g.honor}</span>}
+                    </p>
+                  </li>
+                ))
+              }
+            </ul>
+            <ul class="tray__notas small" role="list">
+              {formacionDetalle.map((t) => <li>{t}</li>)}
+            </ul>
+            <h3 class="tray__h tray__h--sep">Formación clínica</h3>
+            <ul class="tray__list" role="list">
+              {
+                formacionClinica.map((f) => (
+                  <li>
+                    <p class="tray__titulo">{f}</p>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+          <div class="tray__col" data-reveal style="--reveal-index: 1">
+            <h3 class="tray__h">Experiencia profesional</h3>
+            <ul class="tray__list" role="list">
+              {
+                experiencia.map((e) => (
+                  <li>
+                    <p class="tray__titulo">{e.cargo}</p>
+                    <p class="tray__meta small">
+                      {e.lugar} · {e.periodo}
+                    </p>
+                    <p class="tray__texto small">{e.texto}</p>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+        <div class="tray__areas" data-reveal>
+          <p class="eyebrow">Experiencia clínica con</p>
+          <ul class="tray__chips" role="list" data-dotlist>
+            {experienciaClinica.map((a) => <li>{a}</li>)}
+          </ul>
+        </div>
+      </Verify>
+    </div>
+  </section>
+
   <CtaBand
-    title="Ahora que sabes quién soy, mira cómo trabajo."
-    subtitle="Cómo se siente una sesión, qué puedes esperar y con qué evidencia acompaño."
-    cta={{ label: 'Explora cómo trabajo', href: '/como-trabajo/' }}
-    tone="sand"
+    title="Conoce mi misión, mi visión y cómo trabajo."
+    subtitle="Lo que guía mi práctica, lo que puedes esperar de una sesión y los enfoques en los que me he formado."
+    cta={{ label: 'Misión y visión', href: '/mision-y-vision/' }}
+    tone="ivory"
   />
 </Base>
 
@@ -202,6 +274,105 @@ const num = Object.fromEntries(chapters.map((c) => [c.id, c.numeral])) as Record
   }
   .story__note {
     margin-top: var(--space-4);
+  }
+  /* Formación y trayectoria: dos columnas en desktop (formación | experiencia); una en móvil, centrada. */
+  .trayectoria {
+    scroll-margin-top: var(--nav-height);
+  }
+  .tray {
+    display: grid;
+    gap: var(--space-6);
+  }
+  .tray__h {
+    font-size: calc(var(--step-h3) * 0.8);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--olive);
+  }
+  .tray__h--sep {
+    margin-top: var(--space-5);
+  }
+  .tray__list {
+    display: grid;
+    gap: 0;
+    padding: 0;
+  }
+  .tray__list li {
+    display: grid;
+    gap: 0.2rem;
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .tray__titulo {
+    font-family: var(--font-serif);
+    font-variant-numeric: lining-nums;
+    font-size: calc(var(--step-body) * 1.12);
+    line-height: 1.3;
+    color: var(--navy);
+  }
+  .tray__meta {
+    color: var(--olive-deep);
+  }
+  .tray__texto {
+    color: var(--fg-soft);
+    max-width: 52ch;
+  }
+  .tray__notas {
+    display: grid;
+    gap: 0.35rem;
+    margin-top: var(--space-2);
+    padding: 0;
+    color: var(--fg-soft);
+  }
+  .tray__areas {
+    display: grid;
+    gap: var(--space-2);
+    justify-items: center;
+    text-align: center;
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--line);
+  }
+  /* Lista corrida con punto medio (misma pieza que en Terapia individual). */
+  .tray__chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 0.35rem;
+    padding: 0;
+    max-width: 44rem;
+    font-family: var(--font-serif);
+    font-size: calc(var(--step-body) * 1.1);
+    line-height: 1.35;
+  }
+  .tray__chips li {
+    position: relative;
+    white-space: nowrap;
+    padding-inline: 0.6em;
+  }
+  .tray__chips li:not(:first-child)::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translateX(-50%);
+    color: var(--olive);
+  }
+  .tray__chips li.is-line-start::before {
+    display: none;
+  }
+  @media (max-width: 959px) {
+    .tray__col {
+      text-align: center;
+    }
+    .tray__texto {
+      margin-inline: auto;
+    }
+  }
+  @media (min-width: 960px) {
+    .tray {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+      gap: var(--space-10);
+    }
   }
   @media (max-width: 959px) {
     .story__index {

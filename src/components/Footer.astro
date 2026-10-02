@@ -35,18 +35,20 @@ const hayJournal = (await getCollection('journal', ({ data }) => isPreview || !d
       <nav class="footer__col" aria-label="Páginas">
         <p class="eyebrow">Explorar</p>
         <ul role="list">
-          <li><a href="/melanie/">Conoce a Melanie</a></li>
-          <li><a href="/como-trabajo/">Cómo trabajo</a></li>
+          <li><a href="/melanie/">Conóceme</a></li>
+          <li><a href="/mision-y-vision/">Misión y visión</a></li>
           <li><a href="/terapia-individual/">Terapia individual</a></li>
-          <li><a href="/parejas/">Parejas</a></li>
+          <li><a href="/parejas/">Terapia de pareja</a></li>
+          <li><a href="/talleres-y-conferencias/">Talleres y conferencias</a></li>
         </ul>
       </nav>
 
-      <nav class="footer__col" aria-label="Servicios y recursos">
-        <p class="eyebrow">Servicios</p>
+      <nav class="footer__col" aria-label="Recursos">
+        <p class="eyebrow">Recursos</p>
         <ul role="list">
-          <li><a href="/talleres-y-conferencias/">Talleres y conferencias</a></li>
+          <li><a href="/recursos/">Todos los recursos</a></li>
           <li><a href="/conocete-mejor/">Conócete mejor</a></li>
+          <li><a href="/recursos/#lineas-de-ayuda">Líneas de ayuda</a></li>
           {hayJournal && <li><a href="/journal/">Growing Journal</a></li>}
           <li><a href="/agenda/">Solicitar una cita</a></li>
         </ul>

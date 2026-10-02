@@ -135,7 +135,7 @@ if (root && dataEl && ej) {
       <div class="ev__nav">
         <button type="button" class="ev__back" data-back ${i === 0 ? 'hidden' : ''}>← Atrás</button>
         <button type="button" class="btn btn--primary ev__next" data-next ${completo(p) ? '' : 'disabled'}>${
-          etiqueta ?? (i === total - 1 ? 'Ver mi reflejo' : 'Siguiente')
+          etiqueta ?? (i === total - 1 ? 'Ver mi resumen' : 'Siguiente')
         }</button>
       </div>`;
 
@@ -184,7 +184,7 @@ if (root && dataEl && ej) {
         <h2 class="ev__question" tabindex="-1" data-focus>${esc(dyn(p.titulo))}</h2>
         <p class="ej__lectura-texto">${esc(p.texto)}</p>
       </div>
-      ${navegacion(i, p, 'Seguir')}`,
+      ${navegacion(i, p, 'Continuar')}`,
       () => {
         anunciar(`${dyn(p.titulo)} ${p.texto}`);
         engancharNav(i);
@@ -202,7 +202,7 @@ if (root && dataEl && ej) {
         ${
           p.respiracion
             ? reduced
-              ? `<p class="ej__breath-static small">Inhala contando hasta cuatro. Exhala contando hasta seis. Tres veces.</p>`
+              ? `<p class="ej__breath-static small">Inhala contando hasta cuatro y exhala contando hasta seis. Repite tres veces.</p>`
               : `<div class="ej__breath" data-breath>
                   <span class="ej__breath-circle" aria-hidden="true"></span>
                   <span class="ej__breath-label" data-breath-label aria-live="polite">Inhala</span>
@@ -211,7 +211,7 @@ if (root && dataEl && ej) {
             : ''
         }
       </div>
-      ${navegacion(i, p, 'Seguir')}`,
+      ${navegacion(i, p, 'Continuar')}`,
       () => {
         anunciar(`${dyn(p.titulo)} ${p.texto}`);
         engancharNav(i);
@@ -233,7 +233,7 @@ if (root && dataEl && ej) {
           window.setTimeout(() => {
             wrap.classList.add('is-done');
             label.textContent = 'Listo';
-            count.textContent = 'Cuando quieras, sigue.';
+            count.textContent = 'Cuando quieras, puedes continuar.';
           }, 30000),
         );
       },
@@ -255,7 +255,7 @@ if (root && dataEl && ej) {
             ? `<div class="ej__timer" data-timer aria-live="off">
                 <span class="ej__timer-text" data-timer-text>${mmss(seg)}</span>
                 <span class="ej__timer-bar" aria-hidden="true"><span class="ej__timer-fill" data-timer-fill></span></span>
-                <span class="ej__timer-note small muted" data-timer-note>El tiempo empieza a contar con tu primera palabra. Escribe sin parar hasta que termine.</span>
+                <span class="ej__timer-note small muted" data-timer-note>El tiempo comienza con tu primera palabra. Intenta escribir de forma continua hasta que termine.</span>
               </div>`
             : ''
         }
@@ -264,7 +264,7 @@ if (root && dataEl && ej) {
         ${
           p.ayudas?.length
             ? `<div class="ej__ayudas">
-                <span class="ej__ayudas-label small muted">Si te trabas:</span>
+                <span class="ej__ayudas-label small muted">Si necesitas una idea para empezar:</span>
                 ${p.ayudas.map((a) => `<button type="button" class="ej__ayuda" data-ayuda="${esc(a)}">${esc(a)}</button>`).join('')}
               </div>`
             : ''
@@ -330,14 +330,14 @@ if (root && dataEl && ej) {
           /* El reloj arranca con la primera palabra, no al abrir la pantalla: primero se lee la consigna. */
           const arrancar = () => {
             if (temporizador) return;
-            note.textContent = 'Escribe sin parar hasta que termine.';
+            note.textContent = 'Intenta escribir de forma continua hasta que termine el tiempo.';
             temporizador = window.setInterval(() => {
               restante = Math.max(0, restante - 1);
               pintar();
               if (restante === 0) {
                 limpiarTemporizadores();
-                note.textContent = 'Tiempo cumplido. Puedes seguir escribiendo o continuar.';
-                anunciar('Tiempo cumplido. Puedes seguir escribiendo o continuar.');
+                note.textContent = 'Se cumplió el tiempo sugerido. Puedes seguir escribiendo o continuar.';
+                anunciar('Se cumplió el tiempo sugerido. Puedes seguir escribiendo o continuar.');
               }
             }, 1000);
           };
@@ -368,7 +368,7 @@ if (root && dataEl && ej) {
         </li>`,
       )
       .join('');
-    const guiaMax = multiple && p.max ? `Hasta ${p.max}.` : '';
+    const guiaMax = multiple && p.max ? `Puedes elegir hasta ${p.max}.` : '';
     render(
       `
       ${cabecera(i)}
@@ -603,12 +603,12 @@ if (root && dataEl && ej) {
       privacidadHref: cfg.privacidadHref,
       textos: {
         eyebrow: 'Último paso',
-        titulo: 'Tu reflejo está listo.',
+        titulo: 'Tu resumen está listo.',
         texto:
-          'Déjame tu nombre y tu contacto para que Melanie pueda darte seguimiento si lo deseas. Nada de lo que escribiste sale de tu dispositivo: solo se registra qué ejercicio hiciste y la fecha.',
+          'Si lo deseas, deja tu nombre y tu contacto para que la Dra. Acevedo pueda darte seguimiento. Nada de lo que escribiste sale de tu dispositivo: solo se registra qué ejercicio hiciste y la fecha.',
         consentimiento:
           'Autorizo a Growing Souls a recibir mi nombre y mi contacto, junto con el nombre de este ejercicio y la fecha, para poder darme seguimiento.',
-        boton: 'Ver mi reflejo',
+        boton: 'Ver mi resumen',
         saltar: 'Prefiero verlo sin dejar mis datos',
         privacidad: cfg.textos.privacidad,
       },
@@ -734,19 +734,19 @@ if (root && dataEl && ej) {
         ${saludo}
         ${bloques.map(bloqueHtml).join('')}
         <div class="ev__callout ev__callout--soft">
-          <p>Si quieres trabajar esto con alguien, aquí hay un espacio para escucharte. Puedes traer este reflejo a una primera sesión.</p>
+          <p>Si deseas profundizar en esto con acompañamiento profesional, puedes solicitar una cita. También puedes traer este resumen a tu primera sesión.</p>
           <div class="ev__nav ev__nav--center">
             <a class="btn btn--primary" href="${esc(cfg.citaHref)}">Solicitar una cita</a>
             <a class="btn btn--secondary" href="${esc(ej.servicio.href)}">${esc(ej.servicio.label)}</a>
           </div>
         </div>
         <div class="ej__crisis small" role="note">
-          <p>Si este ejercicio te dejó más removido o removida de lo que puedes sostener, no te quedes a solas con eso. Ayuda inmediata, gratuita y en español, a cualquier hora:</p>
+          <p>Si este ejercicio despertó emociones difíciles de manejar, no tienes que atravesarlas a solas. Hay ayuda inmediata, gratuita y en español, a cualquier hora:</p>
           <ul class="ev__crisis ev__crisis--compacta" role="list">${crisisHtml(cfg.crisis)}</ul>
         </div>
         ${
           enviado === 'error'
-            ? `<p class="ev__note small">No pudimos registrar tus datos en este momento. Tu reflejo está aquí igual; si quieres seguimiento, escríbenos por <a href="${esc(cfg.whatsappHref)}" rel="noopener">WhatsApp</a>.</p>`
+            ? `<p class="ev__note small">No pudimos registrar tus datos en este momento. Tu resumen está disponible de todos modos; si deseas seguimiento, escríbenos por <a href="${esc(cfg.whatsappHref)}" rel="noopener">WhatsApp</a>.</p>`
             : enviado === 'demo'
               ? `<p class="ev__note small">Vista previa: el envío de datos está simulado.</p>`
               : ''
@@ -760,7 +760,7 @@ if (root && dataEl && ej) {
       </article>
     `,
       () => {
-        anunciar('Tu reflejo está listo.');
+        anunciar('Tu resumen está listo.');
         stage.querySelector<HTMLButtonElement>('[data-print]')?.addEventListener('click', () => {
           stage.querySelectorAll<HTMLDetailsElement>('details').forEach((d) => (d.open = true));
           window.print();

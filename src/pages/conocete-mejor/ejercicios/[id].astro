@@ -1,0 +1,107 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Button from '../../../components/Button.astro';
+import { ejercicios, intensidades, textosEjercicios } from '../../../data/ejercicios';
+import { site, whatsappHref, cta } from '../../../data/site';
+import '../../../styles/ev.css';
+import '../../../styles/ejercicio.css';
+
+export function getStaticPaths() {
+  return ejercicios.map((ej) => ({ params: { id: ej.id }, props: { ej } }));
+}
+
+const { ej } = Astro.props;
+const intensidad = intensidades[ej.intensidad];
+const escribe = ej.pasos.some((p) => p.tipo === 'texto');
+
+/* Lo que el runner necesita además del ejercicio (que importa directamente, porque incluye funciones). */
+const config = {
+  crisis: site.crisis.lines,
+  whatsappHref,
+  citaHref: cta.href,
+  leadsEndpoint: site.leadsEndpoint,
+  privacidadHref: '/privacidad/',
+  indiceHref: '/conocete-mejor/#ejercicios',
+  textos: { privacidad: textosEjercicios.privacidad, dispositivo: textosEjercicios.dispositivo },
+};
+---
+
+<Base
+  mobileBar={false}
+  title={`${ej.titulo} · Conócete mejor · Growing Souls`}
+  description={`${ej.subtitulo} Ejercicio guiado de reflexión (${ej.duracion}). ${ej.teLlevas} Gratuito y privado; no es terapia ni diagnóstico.`}
+>
+  <section class="ev section" data-ejercicio={ej.id}>
+    <div class="container--narrow ev__wrap">
+      <p class="visually-hidden" aria-live="polite" data-live></p>
+
+      <div class="ev__intro" data-intro>
+        <p class="ev__crumb small"><a href="/conocete-mejor/#ejercicios">Conócete mejor</a> · {ej.camino}</p>
+        <h1 class="ev__title">{ej.titulo}</h1>
+        <p class="ev__lead">{ej.subtitulo}</p>
+        {ej.intro.map((p) => <p class="ev__lead ej__intro-p">{p}</p>)}
+        <dl class="ev__facts">
+          <div>
+            <dt>Tiempo</dt>
+            <dd>{ej.duracion}</dd>
+          </div>
+          <div>
+            <dt>Intensidad</dt>
+            <dd>
+              {intensidad.etiqueta}
+              <span class="ej__dots" aria-hidden="true">
+                {[1, 2, 3].map((k) => <span class={k <= intensidad.nivel ? 'is-on' : ''} />)}
+              </span>
+            </dd>
+          </div>
+          <div>
+            <dt>Formato</dt>
+            <dd>{escribe ? 'Escribes' : 'Eliges'}</dd>
+          </div>
+          <div>
+            <dt>Pasos</dt>
+            <dd>{ej.pasos.length}</dd>
+          </div>
+        </dl>
+        <p class="ev__explora">
+          <span class="ev__k">Te llevas</span>
+          {ej.teLlevas}
+        </p>
+        <p class="ej__antes-titulo">Antes de empezar</p>
+        <ul class="ej__antes" role="list">
+          {ej.antes.map((a) => <li>{a}</li>)}
+        </ul>
+        <div class="ej__borrador small" data-borrador hidden>
+          <span>Hay un borrador guardado en esta pestaña. Al comenzar lo retomas donde lo dejaste.</span>
+          <button type="button" class="ev__link" data-reiniciar>Empezar de nuevo</button>
+        </div>
+        <div class="ev__nav ev__nav--center" data-start-wrap>
+          <Button type="button" variant="primary">Comenzar</Button>
+        </div>
+        <p class="ev__note small muted">
+          Reflexión personal, no terapia ni diagnóstico; pensado para personas adultas. Lo que escribes se queda en tu
+          dispositivo. Si piensas en hacerte daño, llama ahora al <a href="tel:988">988</a>.
+          <a href="/conocete-mejor/#aviso">Más detalles</a>.
+        </p>
+      </div>
+
+      <div class="ev__stage" data-stage hidden></div>
+    </div>
+  </section>
+
+  <script type="application/json" id="ejercicio-data" set:html={JSON.stringify(config)} />
+  <script>
+    import '../../../scripts/ejercicio';
+  </script>
+</Base>
+
+<style is:global>
+  .ej__intro-p {
+    font-size: calc(var(--step-body) * 1.02);
+    max-width: 50ch;
+    text-align: left;
+  }
+  .ej__intro-p + .ej__intro-p {
+    margin-top: calc(var(--space-2) * -1);
+  }
+</style>

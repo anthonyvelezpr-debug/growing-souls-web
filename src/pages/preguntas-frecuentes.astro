@@ -1,0 +1,94 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Accordion from '../components/Accordion.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Verify from '../components/Verify.astro';
+import { gruposFaq, faqSchema } from '../data/faq';
+import { site } from '../data/site';
+
+/*
+ * Todas las preguntas frecuentes en una página, agrupadas por tema, con esquema FAQPage. Es la página que mejor
+ * responde a las preguntas que la gente le hace a Google y a los asistentes de IA sobre una psicóloga en Puerto Rico.
+ */
+const url = `${site.url}/preguntas-frecuentes/`;
+const todas = gruposFaq.flatMap((g) => g.items);
+---
+
+<Base
+  title="Preguntas frecuentes sobre terapia psicológica en Puerto Rico · Growing Souls"
+  description="Respuestas de la Dra. Melanie Acevedo Vélez, psicóloga clínica en Puerto Rico: cómo pedir cita, sesiones en línea, primera sesión, terapia de pareja y talleres."
+  jsonLd={[faqSchema(todas, url)]}
+>
+  <PageHero
+    eyebrow="Preguntas frecuentes"
+    title="Lo que suelen preguntar antes de empezar."
+    subtitle="Respuestas claras sobre Growing Souls, la terapia individual y de pareja, los talleres y los recursos gratuitos. Si tu pregunta no está aquí, escríbeme."
+  />
+
+  <section class="section section--tight">
+    <div class="container--narrow indice" data-reveal>
+      <p class="eyebrow">Temas</p>
+      <ul class="indice__list" role="list">
+        {
+          gruposFaq.map((g) => (
+            <li>
+              <a href={`#${g.id}`}>{g.titulo}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <Verify as="div" note="Aprobación Melanie · respuestas de preguntas frecuentes (modalidad, menores, lugar, confidencialidad, duración de talleres)">
+    {
+      gruposFaq.map((g, i) => (
+        <section class:list={['section', 'grupo', { 'section--sand': i % 2 === 0 }]} id={g.id}>
+          <div class="container--narrow">
+            <h2 class="grupo__title">{g.titulo}</h2>
+            {g.intro && <p class="lead">{g.intro}</p>}
+            <Accordion items={g.items} />
+          </div>
+        </section>
+      ))
+    }
+  </Verify>
+
+  <CtaBand
+    title="¿Tienes otra pregunta?"
+    subtitle="Escríbeme por el formulario o por WhatsApp y te respondo con calma."
+    tone="ivory"
+  />
+</Base>
+
+<style>
+  .indice {
+    display: grid;
+    gap: var(--space-2);
+    justify-items: center;
+    text-align: center;
+  }
+  .indice__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1.4rem;
+    padding: 0;
+  }
+  .indice__list a {
+    font-family: var(--font-serif);
+    font-size: calc(var(--step-body) * 1.1);
+    color: var(--navy);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+  .grupo {
+    scroll-margin-top: calc(var(--nav-height) + 1rem);
+  }
+  .grupo__title {
+    margin-bottom: var(--space-4);
+    text-align: center;
+  }
+</style>

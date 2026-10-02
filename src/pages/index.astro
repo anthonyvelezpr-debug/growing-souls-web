@@ -15,10 +15,12 @@ import JournalCard from '../components/JournalCard.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Button from '../components/Button.astro';
 import Verify from '../components/Verify.astro';
+import Faq from '../components/Faq.astro';
 import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
-import { isPreview } from '../data/site';
+import { isPreview, site } from '../data/site';
 import { ejercicios } from '../data/ejercicios';
+import { faqPortada, faqSchema } from '../data/faq';
 
 /* Tres ejercicios guiados en la portada (uno de cada intensidad, empezando por los más llevaderos), más la puerta a
    los cuestionarios validados. */
@@ -39,8 +41,9 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
 ---
 
 <Base
-  title="Growing Souls · Dra. Melanie Acevedo Vélez, Psicóloga Clínica"
-  description="Un espacio seguro para sentir, comprender y crecer. Psicoterapia individual y de pareja en Puerto Rico, presencial y en línea."
+  title="Psicóloga clínica en Puerto Rico · Dra. Melanie Acevedo Vélez, PsyD · Growing Souls"
+  description="Psicóloga clínica en Puerto Rico. Terapia individual para adultos, terapia de pareja y talleres, presencial o en línea, con la Dra. Melanie Acevedo Vélez, PsyD."
+  jsonLd={[faqSchema(faqPortada, `${site.url}/`)]}
 >
   <link slot="head" rel="preload" as="image" imagesrcset={heroImg.srcSet.attribute} imagesizes={heroSizes} fetchpriority="high" />
   <Hero
@@ -305,10 +308,18 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
     )
   }
 
+  <Faq
+    title="Lo que suelen preguntar antes de empezar."
+    items={faqPortada}
+    tone="ivory"
+    more={{ label: 'Ver todas las preguntas frecuentes', href: '/preguntas-frecuentes/' }}
+  />
+
   <CtaBand
     title="Tal vez llevas algún tiempo pensando en comenzar."
     subtitle="Cuando sientas que es el momento de hablar, aquí hay un espacio para escucharte."
     cta={{ label: 'Solicitar una cita', href: '/agenda/' }}
+    tone="sand"
   />
 </Base>
 

@@ -6,6 +6,27 @@ import Triptych from '../components/Triptych.astro';
 import fotoMirada from '../assets/melanie/05-mirada-abajo-cerca.jpg';
 import CtaBand from '../components/CtaBand.astro';
 import Verify from '../components/Verify.astro';
+import Faq from '../components/Faq.astro';
+import { faqParejas, faqSchema } from '../data/faq';
+import { site } from '../data/site';
+
+const servicio = {
+  '@type': 'Service',
+  '@id': `${site.url}/parejas/#service`,
+  name: 'Terapia de pareja',
+  serviceType: 'Terapia de pareja',
+  description:
+    'Terapia de pareja en Puerto Rico con la Dra. Melanie Acevedo Vélez, formada en el Método Gottman (Nivel 1): comunicación, conflictos que se repiten, confianza e infidelidad, conexión emocional. Presencial o en línea.',
+  url: `${site.url}/parejas/`,
+  provider: { '@id': `${site.url}/#org` },
+  areaServed: { '@type': 'AdministrativeArea', name: 'Puerto Rico' },
+  audience: { '@type': 'Audience', audienceType: 'Parejas' },
+  availableChannel: {
+    '@type': 'ServiceChannel',
+    serviceUrl: `${site.url}/agenda/`,
+    availableLanguage: 'es',
+  },
+};
 
 const situaciones = [
   'Conversaciones que siempre terminan igual.',
@@ -23,8 +44,9 @@ const situaciones = [
 ---
 
 <Base
-  title="Terapia de pareja en Puerto Rico · Growing Souls"
-  description="Comunicación, conflicto, conexión y perdón. Terapia de pareja con la Dra. Melanie Acevedo Vélez, psicóloga clínica."
+  title="Terapia de pareja en Puerto Rico · Método Gottman · Growing Souls"
+  description="Terapia de pareja en Puerto Rico, presencial o en línea, con la Dra. Melanie Acevedo Vélez (Método Gottman). Comunicación, conflictos, confianza e infidelidad."
+  jsonLd={[servicio, faqSchema(faqParejas.items, `${site.url}/parejas/`)]}
 >
   <PageHero
     eyebrow="Terapia de pareja"
@@ -109,11 +131,18 @@ const situaciones = [
     </p>
   </Triptych>
 
+  <Faq
+    title="Preguntas frecuentes sobre la terapia de pareja."
+    items={faqParejas.items}
+    tone="sand"
+    more={{ label: 'Ver todas las preguntas frecuentes', href: '/preguntas-frecuentes/' }}
+  />
+
   <CtaBand
     title="Si algo de esto les suena, podemos explorarlo."
     subtitle="Sin decidir quién tiene la razón. Sin presión."
     cta={{ label: 'Hablemos de relaciones', href: '/agenda/' }}
-    tone="sand"
+    tone="ivory"
   />
 </Base>
 

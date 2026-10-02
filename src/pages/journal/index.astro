@@ -15,6 +15,7 @@ const temasUsados = [...new Set(posts.map((p) => p.data.tema))];
 <Base
   title="Growing Journal · Relaciones, emociones y narrativas"
   description="Reflexiones de la Dra. Melanie Acevedo sobre relaciones, culpa, límites y vulnerabilidad. Sin diagnósticos por Instagram."
+  noindex={posts.length === 0}
 >
   <PageHero
     eyebrow="Growing Journal"

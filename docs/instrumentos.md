@@ -4,7 +4,7 @@ Qué se integró, qué se excluyó y por qué. Antes de añadir un instrumento n
 
 ## Datos que viajan si la persona deja su contacto
 
-Nombre, correo, teléfono, autoevaluación, fecha, puntuación total, rango y consentimientos. Nunca las respuestas individuales. Destino: `PUBLIC_LEADS_ENDPOINT` (variable del build; vacío = sin paso de datos; `demo` = simulado en la vista previa). Carga útil en `src/lib/leads.ts`.
+Nombre, correo, teléfono, autoevaluación, fecha, puntuación total, rango y consentimientos. Nunca las respuestas individuales. Destino: `PUBLIC_LEADS_ENDPOINT` (variable del build; vacío = sin paso de datos; `demo` = simulado en la vista previa). El formulario de cita usa el mismo destino con `source: "cita"` (y, si el destino falla o no existe, cae al correo). Cargas útiles en `src/lib/leads.ts`.
 
 
 ## Integrados

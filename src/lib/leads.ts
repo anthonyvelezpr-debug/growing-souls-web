@@ -27,11 +27,26 @@ export interface LeadPayload {
   idioma: string;
 }
 
+/** Solicitud de cita (formulario de /agenda/). Mismo destino que las autoevaluaciones, distinto `source`. */
+export interface CitaPayload {
+  source: 'cita';
+  fecha: string;
+  nombre: string;
+  email: string;
+  telefono: string;
+  modalidad: string;
+  tipo: string;
+  mensaje: string;
+  consentimiento_contacto: true;
+  pagina: string;
+  idioma: string;
+}
+
 export type LeadResultado = 'ok' | 'demo' | 'error';
 
 const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
-export async function enviarLead(endpoint: string, payload: LeadPayload): Promise<LeadResultado> {
+export async function enviarLead(endpoint: string, payload: LeadPayload | CitaPayload): Promise<LeadResultado> {
   if (!endpoint) return 'error';
   if (endpoint === 'demo') {
     await wait(600);

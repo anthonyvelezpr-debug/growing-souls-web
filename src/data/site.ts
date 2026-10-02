@@ -37,9 +37,10 @@ export const site = {
   formEndpoint: '',
 
   /**
-   * Destino de los contactos de "Conócete mejor" (autoevaluaciones). Se configura con la variable de entorno
+   * Destino de los contactos: autoevaluaciones de "Conócete mejor" y formulario de cita. Se configura con la variable
    * PUBLIC_LEADS_ENDPOINT en el build (en GitHub: Settings → Secrets and variables → Actions → Variables).
-   * Vacío = las autoevaluaciones muestran el resultado sin pedir datos. 'demo' = vista previa sin envío real.
+   * Vacío = las autoevaluaciones muestran el resultado sin pedir datos y la cita abre el correo del visitante.
+   * 'demo' = vista previa sin envío real.
    */
   leadsEndpoint: (import.meta.env.PUBLIC_LEADS_ENDPOINT ?? '').trim(),
 

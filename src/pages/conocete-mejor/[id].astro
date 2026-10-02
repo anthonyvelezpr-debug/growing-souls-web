@@ -555,4 +555,38 @@ const fuenteCorta = ev.fuente.nombre.split(' · ')[0];
   .ev__source {
     max-width: 56ch;
   }
+
+  /* Impresión: solo el resultado, con el nombre del sitio como cabecera. */
+  @media print {
+    header,
+    footer,
+    [data-mbar],
+    .ev__intro,
+    .ev__again,
+    .ev__nav,
+    .skip-link {
+      display: none !important;
+    }
+    .ev {
+      padding: 0;
+    }
+    .ev__result::before {
+      content: 'Growing Souls · Dra. Melanie Acevedo Vélez · growingsoulspr.com';
+      display: block;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #606e77;
+    }
+    .ev__score,
+    .ev__callout,
+    .ev__safety {
+      border-color: #999;
+      background: #fff;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+  }
 </style>

@@ -2,9 +2,16 @@
 import { site } from '../data/site';
 import Button from './Button.astro';
 
+/**
+ * Modos de envío, por prioridad:
+ * - endpoint: formEndpoint fijo (POST clásico del formulario).
+ * - webhook: PUBLIC_LEADS_ENDPOINT, el mismo destino de las autoevaluaciones (JSON, source "cita").
+ * - mailto: sin destino configurado, se abre el correo del visitante con la solicitud lista.
+ */
 const endpoint = site.formEndpoint;
+const webhook = site.leadsEndpoint;
 const email = site.contact.email;
-const mode = endpoint ? 'endpoint' : email ? 'mailto' : 'pending';
+const mode = endpoint ? 'endpoint' : webhook ? 'webhook' : email ? 'mailto' : 'pending';
 ---
 
 <form
@@ -15,7 +22,8 @@ const mode = endpoint ? 'endpoint' : email ? 'mailto' : 'pending';
   data-form
   data-mode={mode}
   data-email={email || undefined}
-  data-todo={mode === 'endpoint' ? undefined : 'form-endpoint'}
+  data-webhook={mode === 'webhook' ? webhook : undefined}
+  data-todo={mode === 'endpoint' || mode === 'webhook' ? undefined : 'form-endpoint'}
 >
   <div class="form__grid">
     <div class="form__field">
@@ -180,11 +188,14 @@ const mode = endpoint ? 'endpoint' : email ? 'mailto' : 'pending';
 </style>
 
 <script>
+  import { enviarLead, normalizarTelefono, type CitaPayload } from '../lib/leads';
+
   const form = document.querySelector<HTMLFormElement>('[data-form]');
   if (form) {
     const status = form.querySelector<HTMLElement>('[data-status]');
     const mode = form.dataset.mode;
     const email = form.dataset.email;
+    const webhook = form.dataset.webhook || '';
 
     /* Enlaces como /agenda/?tipo=taller preseleccionan el tipo de proceso. */
     const wanted = new URLSearchParams(location.search).get('tipo');
@@ -206,7 +217,7 @@ const mode = endpoint ? 'endpoint' : email ? 'mailto' : 'pending';
       status.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     };
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       const nombre = form.querySelector<HTMLInputElement>('#nombre');
       const correo = form.querySelector<HTMLInputElement>('#correo');
       const consent = form.querySelector<HTMLInputElement>('#consentimiento');
@@ -234,6 +245,43 @@ const mode = endpoint ? 'endpoint' : email ? 'mailto' : 'pending';
 
       e.preventDefault();
       const data = new FormData(form);
+
+      /* Webhook: la solicitud viaja en JSON al mismo destino que las autoevaluaciones y se pasa a la página de gracias. */
+      if (mode === 'webhook' && webhook) {
+        const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+        if (submit) {
+          submit.disabled = true;
+          submit.textContent = 'Enviando…';
+        }
+        const payload: CitaPayload = {
+          source: 'cita',
+          fecha: new Date().toISOString(),
+          nombre: String(data.get('nombre') || '').trim(),
+          email: String(data.get('correo') || '').trim().toLowerCase(),
+          telefono: normalizarTelefono(String(data.get('telefono') || '')),
+          modalidad: String(data.get('modalidad') || ''),
+          tipo: String(data.get('tipo') || ''),
+          mensaje: String(data.get('mensaje') || '').trim(),
+          consentimiento_contacto: true,
+          pagina: location.href.split('?')[0],
+          idioma: 'es-PR',
+        };
+        const resultado = await enviarLead(webhook, payload);
+        if (resultado !== 'error') {
+          window.location.href = '/agenda/gracias/';
+          return;
+        }
+        if (submit) {
+          submit.disabled = false;
+          submit.textContent = 'Enviar solicitud';
+        }
+        /* Si el destino no responde, no se pierde la solicitud: se cae al correo. */
+        if (!email) {
+          say('No pudimos enviar la solicitud en este momento. Inténtalo de nuevo en unos minutos.', 'warn');
+          return;
+        }
+      }
+
       const lines = [
         `Nombre: ${data.get('nombre')}`,
         `Correo: ${data.get('correo')}`,
@@ -244,7 +292,7 @@ const mode = endpoint ? 'endpoint' : email ? 'mailto' : 'pending';
         `${data.get('mensaje') || ''}`,
       ];
 
-      if (mode === 'mailto' && email) {
+      if ((mode === 'mailto' || mode === 'webhook') && email) {
         const subject = encodeURIComponent('Solicitud de cita · Growing Souls');
         const body = encodeURIComponent(lines.join('\n'));
         window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;

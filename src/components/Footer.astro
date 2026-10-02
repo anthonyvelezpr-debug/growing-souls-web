@@ -1,6 +1,8 @@
 ---
-import { site, whatsappHref } from '../data/site';
+import { getCollection } from 'astro:content';
+import { site, whatsappHref, isPreview } from '../data/site';
 const year = new Date().getFullYear();
+const hayJournal = (await getCollection('journal', ({ data }) => isPreview || !data.draft)).length > 0;
 ---
 
 <footer class="footer">
@@ -45,7 +47,7 @@ const year = new Date().getFullYear();
         <ul role="list">
           <li><a href="/talleres-y-conferencias/">Talleres y conferencias</a></li>
           <li><a href="/conocete-mejor/">Conócete mejor</a></li>
-          <li><a href="/journal/">Growing Journal</a></li>
+          {hayJournal && <li><a href="/journal/">Growing Journal</a></li>}
           <li><a href="/agenda/">Solicitar una cita</a></li>
         </ul>
       </nav>

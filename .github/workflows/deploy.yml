@@ -24,7 +24,12 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # Destino de los contactos de "Conócete mejor". Se define en Settings → Secrets and variables → Actions →
+      # Variables → New repository variable: PUBLIC_LEADS_ENDPOINT = URL del webhook (CRM, automatización).
+      # Si no existe, las autoevaluaciones muestran el resultado sin pedir datos.
       - run: npm run build
+        env:
+          PUBLIC_LEADS_ENDPOINT: ${{ vars.PUBLIC_LEADS_ENDPOINT }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

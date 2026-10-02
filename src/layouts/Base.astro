@@ -49,7 +49,14 @@ const graph: Record<string, unknown>[] = [
     image: ogImageUrl,
     description: site.description,
     medicalSpecialty: 'Psychiatric',
-    knowsAbout: ['Psicoterapia', 'Terapia de pareja', 'Psicoeducación', 'Talleres y conferencias'],
+    knowsAbout: [
+      'Psicoterapia',
+      'Terapia de pareja',
+      'Terapia cognitivo-conductual',
+      'Método Gottman',
+      'Psicoeducación',
+      'Talleres y conferencias',
+    ],
     founder: { '@id': `${site.url}/#person` },
     areaServed: { '@type': 'AdministrativeArea', name: site.location.areaServed },
     address: {
@@ -74,6 +81,21 @@ const graph: Record<string, unknown>[] = [
     worksFor: { '@id': `${site.url}/#org` },
     url: `${site.url}/melanie/`,
     image: ogImageUrl,
+    /* Formación según su CV (2026). */
+    alumniOf: [
+      { '@type': 'CollegeOrUniversity', name: 'Universidad Albizu' },
+      { '@type': 'CollegeOrUniversity', name: 'Universidad de Puerto Rico, Recinto de Mayagüez' },
+    ],
+    hasCredential: [
+      {
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: 'degree',
+        name: 'Doctorado en Psicología Clínica (PsyD)',
+        recognizedBy: { '@type': 'CollegeOrUniversity', name: 'Universidad Albizu' },
+      },
+    ],
+    knowsAbout: ['Psicología clínica', 'Terapia de pareja', 'Terapia cognitivo-conductual', 'Método Gottman', 'Comunicación asertiva'],
+    knowsLanguage: 'es',
   },
   ...jsonLd,
 ];

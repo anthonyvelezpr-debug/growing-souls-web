@@ -3,9 +3,30 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Verify from '../components/Verify.astro';
+import Faq from '../components/Faq.astro';
+import { faqIndividual, faqSchema } from '../data/faq';
+import { site } from '../data/site';
 
 import ArchPhoto from '../components/ArchPhoto.astro';
 import fotoLibros from '../assets/melanie/01-libros-recorte.png';
+
+const servicio = {
+  '@type': 'Service',
+  '@id': `${site.url}/terapia-individual/#service`,
+  name: 'Psicoterapia individual para adultos',
+  serviceType: 'Psicoterapia individual',
+  description:
+    'Terapia psicológica individual para adultos en Puerto Rico: ansiedad, depresión, estrés, duelo, autoestima, límites y transiciones de vida. Presencial o en línea.',
+  url: `${site.url}/terapia-individual/`,
+  provider: { '@id': `${site.url}/#org` },
+  areaServed: { '@type': 'AdministrativeArea', name: 'Puerto Rico' },
+  audience: { '@type': 'Audience', audienceType: 'Adultos' },
+  availableChannel: {
+    '@type': 'ServiceChannel',
+    serviceUrl: `${site.url}/agenda/`,
+    availableLanguage: 'es',
+  },
+};
 
 const universos = [
   {
@@ -30,8 +51,9 @@ const universos = [
 ---
 
 <Base
-  title="Psicoterapia individual para adultos en Puerto Rico · Growing Souls"
-  description="Ansiedad, estrés, culpa, límites, pérdidas y transiciones. Terapia individual presencial y en línea con la Dra. Melanie Acevedo Vélez."
+  title="Terapia individual para adultos en Puerto Rico · Psicóloga clínica · Growing Souls"
+  description="Terapia psicológica individual en Puerto Rico, presencial o en línea, con la Dra. Melanie Acevedo Vélez, PsyD. Ansiedad, depresión, estrés, duelo y autoestima."
+  jsonLd={[servicio, faqSchema(faqIndividual.items, `${site.url}/terapia-individual/`)]}
 >
   <PageHero
     eyebrow="Terapia individual"
@@ -98,7 +120,14 @@ const universos = [
     </div>
   </section>
 
-  <CtaBand title="Tal vez llevas algún tiempo pensando en comenzar." subtitle="Cuando sientas que es el momento de hablar, aquí hay un espacio para escucharte." tone="sand" />
+  <Faq
+    title="Preguntas frecuentes sobre la terapia individual."
+    items={faqIndividual.items}
+    tone="sand"
+    more={{ label: 'Ver todas las preguntas frecuentes', href: '/preguntas-frecuentes/' }}
+  />
+
+  <CtaBand title="Tal vez llevas algún tiempo pensando en comenzar." subtitle="Cuando sientas que es el momento de hablar, aquí hay un espacio para escucharte." tone="ivory" />
 </Base>
 
 <style>

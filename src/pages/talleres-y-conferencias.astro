@@ -6,7 +6,27 @@ import SectionHeading from '../components/SectionHeading.astro';
 import Offer from '../components/Offer.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Verify from '../components/Verify.astro';
+import Faq from '../components/Faq.astro';
 import { site, whatsappHref } from '../data/site';
+import { faqTalleres, faqSchema } from '../data/faq';
+
+const servicio = {
+  '@type': 'Service',
+  '@id': `${site.url}/talleres-y-conferencias/#service`,
+  name: 'Talleres y conferencias de psicoeducación',
+  serviceType: 'Talleres y conferencias de salud mental',
+  description:
+    'Talleres, conferencias y charlas de psicoeducación en Puerto Rico para empresas, iglesias, asociaciones estudiantiles, organizaciones y comunidades: bienestar emocional, manejo del estrés, comunicación, límites y amor propio. Presenciales o en línea.',
+  url: `${site.url}/talleres-y-conferencias/`,
+  provider: { '@id': `${site.url}/#org` },
+  areaServed: { '@type': 'AdministrativeArea', name: 'Puerto Rico' },
+  audience: { '@type': 'Audience', audienceType: 'Empresas, organizaciones y comunidades' },
+  availableChannel: {
+    '@type': 'ServiceChannel',
+    serviceUrl: `${site.url}/agenda/?tipo=taller`,
+    availableLanguage: 'es',
+  },
+};
 
 import fotoArco from '../assets/talleres/talleres-01-conferencia-arco.jpg';
 import fotoSala from '../assets/talleres/talleres-02-sala-amplia.jpg';
@@ -60,8 +80,9 @@ const temas = [
 ---
 
 <Base
-  title="Talleres y conferencias de psicología en Puerto Rico · Growing Souls"
-  description="Talleres, conferencias y charlas de psicoeducación con la Dra. Melanie Acevedo Vélez para empresas, iglesias, asociaciones estudiantiles, organizaciones y comunidades. Presenciales o en línea."
+  title="Talleres de salud mental y conferencias en Puerto Rico · Growing Souls"
+  description="Talleres y conferencias de psicoeducación en Puerto Rico con la Dra. Melanie Acevedo Vélez, para empresas, iglesias, asociaciones y comunidades. Presencial o en línea."
+  jsonLd={[servicio, faqSchema(faqTalleres.items, `${site.url}/talleres-y-conferencias/`)]}
 >
   <PageHero
     eyebrow="Talleres y conferencias"
@@ -168,11 +189,18 @@ const temas = [
     </div>
   </section>
 
+  <Faq
+    title="Preguntas frecuentes sobre los talleres."
+    items={faqTalleres.items}
+    tone="ivory"
+    more={{ label: 'Ver todas las preguntas frecuentes', href: '/preguntas-frecuentes/' }}
+  />
+
   <CtaBand
     title="¿Un taller para tu equipo o tu comunidad?"
     subtitle="Cuéntame sobre el grupo y te respondo con una propuesta a su medida."
     cta={{ label: 'Solicitar información', href: '/agenda/?tipo=taller' }}
-    tone="ivory"
+    tone="sand"
   />
 </Base>
 

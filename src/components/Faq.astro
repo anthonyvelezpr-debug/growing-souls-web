@@ -1,0 +1,50 @@
+---
+/**
+ * Sección de preguntas frecuentes: encabezado, acordeón y, si se indica, enlace a la página completa.
+ * El esquema FAQPage lo añade cada página con `faqSchema()` en el `jsonLd` de Base.
+ */
+import SectionHeading from './SectionHeading.astro';
+import Accordion from './Accordion.astro';
+import Button from './Button.astro';
+import type { Pregunta } from '../data/faq';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+  items: Pregunta[];
+  tone?: 'ivory' | 'sand';
+  id?: string;
+  /** Enlace al final (p. ej. a la página completa de preguntas). */
+  more?: { label: string; href: string };
+}
+const { eyebrow = 'Preguntas frecuentes', title, lead, items, tone = 'ivory', id, more } = Astro.props;
+---
+
+<section class:list={['section', 'faq', { 'section--sand': tone === 'sand' }]} id={id}>
+  <div class="container--narrow">
+    <SectionHeading eyebrow={eyebrow} title={title}>
+      {lead && <p class="lead">{lead}</p>}
+    </SectionHeading>
+    <Accordion items={items} />
+    {
+      more && (
+        <div class="faq__more" data-reveal>
+          <Button href={more.href} variant="link">
+            {more.label}
+          </Button>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .faq {
+    scroll-margin-top: calc(var(--nav-height) + 1rem);
+  }
+  .faq__more {
+    margin-top: var(--space-5);
+    text-align: center;
+  }
+</style>

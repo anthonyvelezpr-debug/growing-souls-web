@@ -7,6 +7,7 @@ import Verify from '../../components/Verify.astro';
 import { evaluaciones, textos } from '../../data/evaluaciones';
 import { ejercicios, caminos, intensidades, porDondeEmpezar, caminoSugerido, textosEjercicios } from '../../data/ejercicios';
 import { site } from '../../data/site';
+import { faqConocete, faqSchema } from '../../data/faq';
 
 const porId = (id: string) => ejercicios.find((e) => e.id === id)!;
 const hrefEj = (id: string) => `/conocete-mejor/ejercicios/${id}/`;
@@ -14,8 +15,9 @@ const minutos = (d: string) => d.replace(' minutos', ' min');
 ---
 
 <Base
-  title="Conócete mejor · Ejercicios guiados y autoevaluaciones · Growing Souls"
-  description="Ejercicios guiados de reflexión, inspirados en técnicas de psicoterapia, y cuestionarios validados sobre bienestar, ánimo, ansiedad y estrés. Gratuitos, confidenciales y sin diagnósticos."
+  title="Cuestionarios de bienestar, ánimo, ansiedad y estrés · Conócete mejor · Growing Souls"
+  description="Cuestionarios validados y gratuitos (WHO-5, PHQ-9, GAD-7, DASS-21) y ejercicios guiados de reflexión. Confidenciales y sin diagnóstico. Growing Souls, Puerto Rico."
+  jsonLd={[faqSchema(faqConocete.items, `${site.url}/conocete-mejor/`)]}
 >
   <PageHero
     eyebrow="Recursos · Conócete mejor"

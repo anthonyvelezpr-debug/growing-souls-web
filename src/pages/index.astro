@@ -18,9 +18,10 @@ import Verify from '../components/Verify.astro';
 import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
 import { isPreview } from '../data/site';
+import { evaluaciones } from '../data/evaluaciones';
 
 import fotoHero from '../assets/melanie/05-mirada-abajo-cerca.jpg';
-import fotoNotas from '../assets/melanie/02-laptop-cerca.jpg';
+import fotoTaller from '../assets/talleres/talleres-06-portada-arco.jpg';
 import fotoRetrato from '../assets/melanie/06-banquillo-recorte.png';
 import fotoOlivo from '../assets/melanie/03-olivo-cerca.jpg';
 
@@ -73,10 +74,10 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
             label: 'Hablemos de relaciones',
           },
           {
-            title: 'Oficina virtual',
-            text: 'Tu espacio seguro también puede encontrarte donde estés.',
-            href: '/oficina-virtual/',
-            label: 'Conoce la oficina virtual',
+            title: 'Talleres y conferencias',
+            text: 'Psicoeducación para empresas, organizaciones, comunidades y grupos.',
+            href: '/talleres-y-conferencias/',
+            label: 'Conoce los talleres',
           },
         ]}
       />
@@ -171,6 +172,35 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
     </div>
   </section>
 
+  <section class="section conoce">
+    <div class="container">
+      <SectionHeading eyebrow="Conócete mejor" title="¿Cómo te has estado sintiendo?">
+        <p class="lead">
+          Cuatro herramientas breves y gratuitas, basadas en cuestionarios de uso profesional, para mirar con calma tu
+          bienestar, tu ánimo, tu ansiedad y tu estrés. Orientación, no diagnóstico.
+        </p>
+      </SectionHeading>
+      <ul class="conoce__grid" role="list">
+        {
+          evaluaciones.map((ev, i) => (
+            <li data-reveal style={`--reveal-index: ${i + 1}`}>
+              <a class="conoce__card" href={`/conocete-mejor/${ev.id}/`}>
+                <span class="conoce__area">{ev.area}</span>
+                <span class="conoce__meta small muted">
+                  {ev.items.length} preguntas · {ev.duracion.replace("minutos", "min")}
+                </span>
+                <span class="conoce__go" aria-hidden="true">→</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="conoce__cta" data-reveal>
+        <Button href="/conocete-mejor/" variant="link">Ver todas las autoevaluaciones</Button>
+      </div>
+    </div>
+  </section>
+
   <ProgressReveal />
 
   <Manifesto eyebrow="Manifiesto" title="Un espacio seguro para sentir, comprender y crecer." cta={{ label: 'Conoce Growing Souls', href: '/melanie/#growing-souls' }}>
@@ -204,25 +234,25 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
     <div class="container talleres__grid">
       <div class="talleres__figure">
         <ArchPhoto
-          src={fotoNotas}
-          alt="Melanie, sentada en el piso, sostiene su laptop con notas de recordatorio pegadas en la tapa"
-          focus="50% 50%"
-          ratio="2 / 3"
+          src={fotoTaller}
+          alt="Melanie habla frente a un grupo durante un taller; detrás, la pantalla con su presentación sobre amor propio"
+          focus="50% 40%"
           sizes="(min-width: 960px) 34vw, (min-width: 640px) 60vw, 100vw"
         />
       </div>
       <div class="talleres__text" data-reveal style="--reveal-index: 1">
-        <p class="eyebrow">Talleres y charlas</p>
+        <p class="eyebrow">Talleres y conferencias</p>
         <h2>Lo que se trabaja en sesión también se puede aprender en grupo.</h2>
         <p>
           <Verify note="Aprobación Melanie · temas, públicos y formatos de los talleres por confirmar">
-            Melanie da talleres y charlas para grupos, organizaciones y comunidades: espacios prácticos para
-            entender lo que sentimos, poner límites, cuidar la salud emocional y hablar de lo que casi nunca se
-            habla. Presenciales o en línea, adaptados a cada grupo.
+            Melanie ofrece talleres, conferencias y charlas de psicoeducación para empresas, organizaciones,
+            comunidades y grupos: bienestar emocional, manejo del estrés, comunicación, límites y amor propio, con
+            herramientas prácticas y el mismo rigor de la consulta. Presenciales o en línea.
           </Verify>
         </p>
         <div class="talleres__cta">
-          <Button href="/agenda/?tipo=taller" variant="secondary">Solicitar un taller</Button>
+          <Button href="/talleres-y-conferencias/" variant="primary">Conoce los talleres</Button>
+          <Button href="/agenda/?tipo=taller" variant="secondary">Solicitar información</Button>
         </div>
       </div>
     </div>
@@ -332,6 +362,15 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
   }
   .talleres__cta {
     margin-top: var(--space-1);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+  @media (min-width: 960px) {
+    .talleres__cta {
+      justify-content: flex-start;
+    }
   }
   @media (min-width: 960px) {
     .talleres__grid {
@@ -347,6 +386,61 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
     }
     .talleres__text p:not(.eyebrow) {
       max-width: var(--measure);
+    }
+  }
+  /* Conócete mejor: cuatro tarjetas pequeñas, 2×2 en móvil y una fila en desktop. */
+  .conoce__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+    padding: 0;
+  }
+  .conoce__card {
+    display: grid;
+    gap: 0.35rem;
+    justify-items: center;
+    align-content: center;
+    min-height: 7.5rem;
+    padding: var(--space-3) var(--space-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--ivory);
+    text-align: center;
+    text-decoration: none;
+    color: var(--fg);
+    transition:
+      border-color var(--dur-fast) var(--ease),
+      background-color var(--dur-fast) var(--ease);
+  }
+  .conoce__card:hover {
+    border-color: var(--olive);
+    background: var(--sand);
+  }
+  .conoce__area {
+    font-family: var(--font-serif);
+    font-size: calc(var(--step-h3) * 0.85);
+    line-height: 1.15;
+  }
+  .conoce__go {
+    font-family: var(--font-serif);
+    color: var(--olive-deep);
+    transition: transform var(--dur-fast) var(--ease);
+  }
+  .conoce__card:hover .conoce__go {
+    transform: translateX(3px);
+  }
+  .conoce__cta {
+    margin-top: var(--space-5);
+    display: grid;
+    justify-items: center;
+  }
+  @media (min-width: 640px) {
+    .conoce__grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-3);
+    }
+    .conoce__card {
+      min-height: 9rem;
     }
   }
   .areas-cta {

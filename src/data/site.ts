@@ -33,6 +33,16 @@ export const site = {
     whatsappText: 'Hola, me gustaría información para solicitar una cita.',
   },
 
+  /**
+   * Verificación de propiedad en buscadores, sin tocar el código: variables del build (GitHub → repo → Settings →
+   * Secrets and variables → Actions → Variables). PUBLIC_GSC_VERIFICATION = contenido del meta de Google Search
+   * Console; PUBLIC_BING_VERIFICATION = contenido del meta de Bing Webmaster Tools (msvalidate.01).
+   */
+  verification: {
+    google: (import.meta.env.PUBLIC_GSC_VERIFICATION ?? '').trim(),
+    bing: (import.meta.env.PUBLIC_BING_VERIFICATION ?? '').trim(),
+  },
+
   // Endpoint del formulario de cita (prompt 02). Vacío = modo mailto o aviso.
   formEndpoint: '',
 
@@ -55,6 +65,28 @@ export const site = {
     source: 'https://lineapas.assmca.pr.gov/',
   },
 } as const;
+
+/** Nombres legibles de las rutas, para las migas de pan de los datos estructurados. */
+export const nombresRuta: Record<string, string> = {
+  melanie: 'Conóceme',
+  'mision-y-vision': 'Misión y visión',
+  'terapia-individual': 'Terapia individual',
+  parejas: 'Terapia de pareja',
+  'talleres-y-conferencias': 'Talleres y conferencias',
+  recursos: 'Recursos',
+  'conocete-mejor': 'Conócete mejor',
+  ejercicios: 'Ejercicios guiados',
+  'preguntas-frecuentes': 'Preguntas frecuentes',
+  agenda: 'Solicitar una cita',
+  crisis: 'Recursos en crisis',
+  privacidad: 'Privacidad',
+  journal: 'Growing Journal',
+  tema: 'Temas',
+  bienestar: 'Bienestar',
+  animo: 'Estado de ánimo',
+  ansiedad: 'Ansiedad',
+  estres: 'Estrés',
+};
 
 /** Enlace de WhatsApp (click to chat) con el mensaje inicial ya escrito. */
 export const whatsappHref = `https://wa.me/${site.contact.whatsapp}?text=${encodeURIComponent(site.contact.whatsappText)}`;

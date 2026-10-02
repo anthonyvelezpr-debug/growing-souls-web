@@ -5,7 +5,9 @@
  * Estados: intro → pregunta(i) → [seguridad] → [datos] → resultado
  */
 import type { Instrumento } from '../data/evaluaciones';
-import { enviarLead, normalizarTelefono, validar, type LeadPayload } from '../lib/leads';
+import type { LeadPayload } from '../lib/leads';
+import { pasoDatos, type Enviado } from './datos-paso';
+import { crearAnunciar, crearRender, crisisHtml, esc, type LineaCrisis } from './ui';
 
 interface Config {
   instrumento: Instrumento;
@@ -14,7 +16,7 @@ interface Config {
     privacidad: string;
     seguridad: { titulo: string; texto: string; cierre: string };
   };
-  crisis: { label: string; number: string; href: string }[];
+  crisis: LineaCrisis[];
   whatsappHref: string;
   citaHref: string;
   leadsEndpoint: string;
@@ -38,41 +40,8 @@ if (root && dataEl) {
   let seguridadMostrada = false;
   let viaPuntero = false;
 
-  const esc = (s: string) =>
-    s.replace(
-      /[&<>"']/g,
-      (c) =>
-        ({
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;',
-          '"': '&quot;',
-          "'": '&#39;',
-        })[c] as string,
-    );
-
-  const anunciar = (msg: string) => {
-    live.textContent = '';
-    window.setTimeout(() => (live.textContent = msg), 50);
-  };
-
-  /* Pinta la pantalla (con un fundido breve) y, ya en el DOM, ejecuta `after` para enganchar los eventos. */
-  const render = (html: string, after: () => void, focusSel = '[data-focus]') => {
-    const paint = () => {
-      stage.innerHTML = html;
-      stage.classList.remove('is-leaving');
-      after();
-      const f = stage.querySelector<HTMLElement>(focusSel);
-      if (f) f.focus({ preventScroll: true });
-      const top = root.getBoundingClientRect().top + window.scrollY - 96;
-      if (window.scrollY > top) window.scrollTo({ top, behavior: reduced ? 'auto' : 'smooth' });
-    };
-    if (reduced || !stage.innerHTML) paint();
-    else {
-      stage.classList.add('is-leaving');
-      window.setTimeout(paint, 180);
-    }
-  };
+  const anunciar = crearAnunciar(live);
+  const render = crearRender(root, stage);
 
   const puntuar = () => {
     const suma = respuestas.reduce<number>((a, b) => a + (b ?? 0), 0);
@@ -153,22 +122,13 @@ if (root && dataEl) {
 
   /* ---------- Seguridad (ítem de ideas de muerte o de hacerse daño) ---------- */
   const seguridad = (i: number) => {
-    const lineas = cfg.crisis
-      .map(
-        (l) => `
-        <li class="ev__crisis-item">
-          <a class="ev__crisis-number" href="${esc(l.href)}">${esc(l.number)}</a>
-          <span class="ev__crisis-label small">${esc(l.label)}</span>
-        </li>`,
-      )
-      .join('');
     render(
       `
       <div class="ev__safety" role="region" aria-labelledby="ev-safety-title">
         <p class="eyebrow">Un momento</p>
         <h2 class="ev__safety-title" id="ev-safety-title" tabindex="-1" data-focus>${esc(cfg.textos.seguridad.titulo)}</h2>
         <p class="ev__safety-text">${esc(cfg.textos.seguridad.texto)}</p>
-        <ul class="ev__crisis" role="list">${lineas}</ul>
+        <ul class="ev__crisis" role="list">${crisisHtml(cfg.crisis)}</ul>
         <p class="ev__safety-close">${esc(cfg.textos.seguridad.cierre)}</p>
         <div class="ev__nav ev__nav--center">
           <a class="btn btn--secondary" href="/crisis/">Ver recursos de ayuda</a>
@@ -194,125 +154,51 @@ if (root && dataEl) {
 
   /* ---------- Paso de datos ---------- */
   const datos = () => {
-    render(
-      `
-      <form class="ev__form" novalidate data-lead-form>
-        <p class="eyebrow">Último paso</p>
-        <h2 class="ev__form-title" tabindex="-1" data-focus>Tu resultado está listo.</h2>
-        <p class="ev__form-text">
-          Déjame tu nombre y tu contacto para mostrarte el resultado completo y que Melanie pueda darte seguimiento si lo deseas.
-          Solo se envía tu puntuación total y el rango: tus respuestas no salen de tu dispositivo.
-        </p>
-        <div class="ev__fields">
-          <div class="ev__field">
-            <label for="ev-nombre">Nombre</label>
-            <input id="ev-nombre" name="nombre" type="text" autocomplete="name" required aria-describedby="ev-nombre-error" />
-            <p class="ev__error" id="ev-nombre-error" hidden>Escribe tu nombre.</p>
-          </div>
-          <div class="ev__field">
-            <label for="ev-email">Correo electrónico</label>
-            <input id="ev-email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="ev-email-error" />
-            <p class="ev__error" id="ev-email-error" hidden>Revisa el correo; parece incompleto.</p>
-          </div>
-          <div class="ev__field">
-            <label for="ev-telefono">Teléfono</label>
-            <input id="ev-telefono" name="telefono" type="tel" autocomplete="tel" inputmode="tel" required aria-describedby="ev-telefono-error" placeholder="787-000-0000" />
-            <p class="ev__error" id="ev-telefono-error" hidden>Escribe un número de teléfono con al menos 10 dígitos.</p>
-          </div>
-          <div class="ev__check">
-            <input id="ev-consent" name="consentimiento" type="checkbox" required aria-describedby="ev-consent-error" />
-            <label for="ev-consent">Autorizo a Growing Souls a recibir mi nombre, mi contacto y el resultado de esta autoevaluación para mostrármelo y poder darme seguimiento. He leído la <a href="${esc(cfg.privacidadHref)}" target="_blank" rel="noopener">política de privacidad</a>.</label>
-            <p class="ev__error" id="ev-consent-error" hidden>Necesito tu autorización para registrar el resultado.</p>
-          </div>
-          <div class="ev__check">
-            <input id="ev-news" name="comunicaciones" type="checkbox" />
-            <label for="ev-news">Quiero recibir recursos y novedades de Growing Souls por correo o WhatsApp. <span class="muted">(opcional)</span></label>
-          </div>
-          <div class="ev__hp" aria-hidden="true">
-            <label for="ev-website">Deja este campo vacío</label>
-            <input id="ev-website" name="website" type="text" tabindex="-1" autocomplete="off" />
-          </div>
-        </div>
-        <div class="ev__nav ev__nav--center">
-          <button type="submit" class="btn btn--primary" data-submit>Ver mi resultado</button>
-        </div>
-        <p class="ev__privacy small muted">${esc(cfg.textos.privacidad)}</p>
-      </form>
-    `,
-      () => {
-        anunciar('Último paso: deja tu nombre y tu contacto para ver el resultado.');
-
-        const form = stage.querySelector<HTMLFormElement>('[data-lead-form]')!;
-        const showError = (id: string, show: boolean) => {
-          const el = form.querySelector<HTMLElement>(`#${id}-error`);
-          const input = form.querySelector<HTMLInputElement>(`#${id}`);
-          if (el) el.hidden = !show;
-          input?.setAttribute('aria-invalid', String(show));
-        };
-        form.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const nombre = form.querySelector<HTMLInputElement>('#ev-nombre')!.value;
-          const email = form.querySelector<HTMLInputElement>('#ev-email')!.value;
-          const telefono = form.querySelector<HTMLInputElement>('#ev-telefono')!.value;
-          const consent = form.querySelector<HTMLInputElement>('#ev-consent')!.checked;
-          const news = form.querySelector<HTMLInputElement>('#ev-news')!.checked;
-          const hp = form.querySelector<HTMLInputElement>('#ev-website')!.value;
-
-          const errores = {
-            'ev-nombre': !validar.nombre(nombre),
-            'ev-email': !validar.email(email),
-            'ev-telefono': !validar.telefono(telefono),
-            'ev-consent': !consent,
-          };
-          Object.entries(errores).forEach(([id, bad]) => showError(id, bad));
-          if (Object.values(errores).some(Boolean)) {
-            form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
-            return;
-          }
-          /* Trampa para bots y respuestas imposiblemente rápidas: se muestra el resultado sin enviar nada. */
-          if (hp || Date.now() - inicio < 3000) {
-            resultado({ enviado: null });
-            return;
-          }
-
-          const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
-          submit.disabled = true;
-          submit.textContent = 'Un momento…';
-
-          const p = puntuar();
-          const b = banda(p);
-          const payload: LeadPayload = {
-            source: 'autoevaluacion',
-            evaluacion_id: ins.id,
-            evaluacion: ins.titulo,
-            instrumento: ins.fuente.nombre,
-            fecha: new Date().toISOString(),
-            puntuacion: p,
-            puntuacion_max: ins.puntuacion.max,
-            rango: b.etiqueta,
-            nombre: nombre.trim(),
-            email: email.trim().toLowerCase(),
-            telefono: normalizarTelefono(telefono),
-            consentimiento_seguimiento: true,
-            consentimiento_comunicaciones: news,
-            pagina: location.href.split('?')[0],
-            idioma: 'es-PR',
-          };
-          /* El resultado nunca espera más de cuatro segundos por la red. */
-          const envio = enviarLead(cfg.leadsEndpoint, payload);
-          const tope = new Promise<'pendiente'>((r) => setTimeout(() => r('pendiente'), 4000));
-          const estado = await Promise.race([envio, tope]);
-          resultado({
-            enviado: estado === 'pendiente' ? 'ok' : estado,
-            nombre: nombre.trim(),
-          });
-        });
+    pasoDatos({
+      stage,
+      render,
+      anunciar,
+      inicio,
+      endpoint: cfg.leadsEndpoint,
+      privacidadHref: cfg.privacidadHref,
+      textos: {
+        eyebrow: 'Último paso',
+        titulo: 'Tu resultado está listo.',
+        texto:
+          'Déjame tu nombre y tu contacto para mostrarte el resultado completo y que Melanie pueda darte seguimiento si lo deseas. Solo se envía tu puntuación total y el rango: tus respuestas no salen de tu dispositivo.',
+        consentimiento:
+          'Autorizo a Growing Souls a recibir mi nombre, mi contacto y el resultado de esta autoevaluación para mostrármelo y poder darme seguimiento.',
+        boton: 'Ver mi resultado',
+        privacidad: cfg.textos.privacidad,
       },
-    );
+      construirPayload: (c) => {
+        const p = puntuar();
+        const b = banda(p);
+        const payload: LeadPayload = {
+          source: 'autoevaluacion',
+          evaluacion_id: ins.id,
+          evaluacion: ins.titulo,
+          instrumento: ins.fuente.nombre,
+          fecha: new Date().toISOString(),
+          puntuacion: p,
+          puntuacion_max: ins.puntuacion.max,
+          rango: b.etiqueta,
+          nombre: c.nombre,
+          email: c.email,
+          telefono: c.telefono,
+          consentimiento_seguimiento: true,
+          consentimiento_comunicaciones: c.comunicaciones,
+          pagina: location.href.split('?')[0],
+          idioma: 'es-PR',
+        };
+        return payload;
+      },
+      alTerminar: resultado,
+    });
   };
 
   /* ---------- Resultado ---------- */
-  const resultado = ({ enviado, nombre }: { enviado: 'ok' | 'demo' | 'error' | null; nombre?: string }) => {
+  const resultado = ({ enviado, nombre }: { enviado: Enviado; nombre?: string }) => {
     const p = puntuar();
     const b = banda(p);
     const riesgo = hayRiesgo();
@@ -324,15 +210,6 @@ if (root && dataEl) {
         return `<span class="ev__seg ev__seg--${bd.nivel} ${bd === b ? 'is-current' : ''}" style="width:${w}%" title="${esc(bd.etiqueta)}"></span>`;
       })
       .join('');
-    const lineas = cfg.crisis
-      .map(
-        (l) => `
-        <li class="ev__crisis-item">
-          <a class="ev__crisis-number" href="${esc(l.href)}">${esc(l.number)}</a>
-          <span class="ev__crisis-label small">${esc(l.label)}</span>
-        </li>`,
-      )
-      .join('');
     const saludo = nombre ? `${esc(nombre.split(' ')[0])}, ` : '';
     const titulo = nombre ? b.titulo.charAt(0).toLowerCase() + b.titulo.slice(1) : b.titulo;
     render(
@@ -342,7 +219,7 @@ if (root && dataEl) {
           riesgo
             ? `<div class="ev__safety ev__safety--result" role="region" aria-label="Ayuda inmediata">
                 <p class="ev__safety-text"><strong>Antes que nada:</strong> una de tus respuestas habla de pensar en hacerte daño. Si eso está presente ahora, hay ayuda inmediata, gratuita y en español, a cualquier hora.</p>
-                <ul class="ev__crisis" role="list">${lineas}</ul>
+                <ul class="ev__crisis" role="list">${crisisHtml(cfg.crisis)}</ul>
               </div>`
             : ''
         }
@@ -398,7 +275,7 @@ if (root && dataEl) {
               : ''
         }
         <p class="ev__source small muted">
-          Instrumento: ${esc(ins.fuente.nombre)}. ${esc(ins.fuente.autores.replace(/\.$/, ""))}. ${esc(ins.fuente.version)}. ${esc(ins.fuente.licencia)}
+          Instrumento: ${esc(ins.fuente.nombre)}. ${esc(ins.fuente.autores.replace(/\.$/, ''))}. ${esc(ins.fuente.version)}. ${esc(ins.fuente.licencia)}
         </p>
         <p class="ev__again small">
           <a href="${esc(cfg.indiceHref)}">Ver otras autoevaluaciones</a> · <button type="button" class="ev__link" data-restart>Volver a empezar</button> · <button type="button" class="ev__link" data-print>Imprimir o guardar en PDF</button>

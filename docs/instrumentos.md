@@ -21,23 +21,25 @@ Nombre, correo, teléfono, autoevaluación, fecha, puntuación total, rango y co
 - **CSI-4/16 (Funk & Rogge)** — uso libre en contextos clínicos y de investigación, pero sin versión oficial en español; traducirlo sería publicar un instrumento no validado. Fuera hasta tener traducción validada.
 - **MBI, WEMWBS, ISI, DAS, CD-RISC** — licencias de pago o registro obligatorio. No se reproducen.
 
-## Ejercicios de profundidad (2 oct 2026)
+## Ejercicios guiados de reflexión (2 oct 2026; textos revisados el mismo día por pedido de la Dra.)
 
-Diez ejercicios guiados de escritura y reflexión en `src/data/ejercicios.ts`, con páginas en `/conocete-mejor/ejercicios/<id>/` y runner en `src/scripts/ejercicio.ts`. No son instrumentos de medida: son adaptaciones originales de técnicas documentadas, con preguntas y textos propios. No se copia ningún cuestionario ni manual con derechos. Cada página cita el enfoque y las fuentes al pie del reflejo.
+Diez ejercicios guiados de escritura y reflexión en `src/data/ejercicios.ts`, con páginas en `/conocete-mejor/ejercicios/<id>/` y runner en `src/scripts/ejercicio.ts`. No son instrumentos de medida: son adaptaciones originales de técnicas documentadas, con preguntas y textos propios. No se copia ningún cuestionario ni manual con derechos. Cada página cita el enfoque y las fuentes al pie del resumen final.
+
+Tono (pedido de la Dra. Acevedo, 2 oct 2026): profesional, cálido y claro, porque sigue siendo trabajo clínico. Oraciones completas; sin frases tajantes ni efectistas ("lo que nadie te dice", "lo real"); títulos descriptivos.
 
 | id | Título | Técnica de origen | Fuente principal |
 | --- | --- | --- | --- |
-| `ochenta` | Tu discurso de los ochenta | Clarificación de valores (ACT; "80th birthday" / eulogy exercise) | Hayes, Strosahl & Wilson (2012); Harris (2009) |
-| `brecha` | Dónde se te va la vida | Vida valiosa: importancia vs. consistencia por áreas (ACT) | Wilson & Murrell (2004); Lundgren et al. (2012), Bull's-Eye Values Survey (estructura, no ítems) |
-| `futuro` | Carta desde dentro de cinco años | Best possible self | King (2001); Peters et al. (2010) |
-| `frases` | Las frases que te criaron | Creencias tempranas y reglas de vida (TCC / terapia de esquemas); lista de frases propia | Beck (2011); Young, Klosko & Weishaar (2003) |
-| `historia` | Tu vida en seis frases | Re-autoría narrativa | White & Epston (1990); Adler (2012) |
-| `critica` | La voz que te habla por dentro | Autocompasión ("¿qué le dirías a un amigo?"), voz crítica | Neff (2003); Gilbert (2009) |
-| `evitar` | Lo que llevas tiempo sin mirar | Evitación experiencial (ACT) | Hayes et al. (1996) |
-| `ciclo` | Tu paso en el baile | Ciclo negativo (EFT), apego adulto; sin materiales de Gottman ni de "Hold Me Tight" | Johnson (2004); Mikulincer & Shaver (2016) |
-| `carta` | La carta que no vas a enviar | Carta no enviada (Gestalt) + escritura expresiva | Pennebaker & Beall (1986); Frattaroli (2006) |
-| `gracias` | Gracias con nombre | Visita de gratitud | Seligman et al. (2005) |
+| `ochenta` | Lo que es importante para ti | Clarificación de valores (ACT; "80th birthday" / eulogy exercise) | Hayes, Strosahl & Wilson (2012); Harris (2009) |
+| `brecha` | Tus prioridades y tu energía | Vida valiosa: importancia vs. consistencia por áreas (ACT) | Wilson & Murrell (2004); Lundgren et al. (2012), Bull's-Eye Values Survey (estructura, no ítems) |
+| `futuro` | Tu mejor yo posible | Best possible self | King (2001); Peters et al. (2010) |
+| `frases` | Los mensajes que aprendiste al crecer | Creencias tempranas y reglas de vida (TCC / terapia de esquemas); lista de frases propia | Beck (2011); Young, Klosko & Weishaar (2003) |
+| `historia` | Tu historia desde otra perspectiva | Re-autoría narrativa | White & Epston (1990); Adler (2012) |
+| `critica` | Tu diálogo interno | Autocompasión ("¿qué le dirías a un amigo?"), voz crítica | Neff (2003); Gilbert (2009) |
+| `evitar` | Lo que has ido posponiendo | Evitación experiencial (ACT) | Hayes et al. (1996) |
+| `ciclo` | Los patrones de discusión en la pareja | Ciclo negativo (EFT), apego adulto; sin materiales de Gottman ni de "Hold Me Tight" | Johnson (2004); Mikulincer & Shaver (2016) |
+| `carta` | Carta no enviada | Carta no enviada (Gestalt) + escritura expresiva | Pennebaker & Beall (1986); Frattaroli (2006) |
+| `gracias` | Carta de gratitud | Visita de gratitud | Seligman et al. (2005) |
 
-Reglas de seguridad y privacidad: cada intro avisa de la intensidad (suave / media / honda) y de que no es para hacerlo en crisis; el ejercicio de pareja incluye la línea de la Procuradora de las Mujeres (787-722-2977) por si lo que hay no es un ciclo sino violencia; el reflejo de todos cierra con las líneas de crisis. El borrador vive en `sessionStorage` (solo la pestaña) y se puede borrar desde el reflejo. Si hay `PUBLIC_LEADS_ENDPOINT`, el paso de datos aparece antes del reflejo con enlace para verlo sin dejar datos; la carga útil (`source: "ejercicio"`) lleva nombre, contacto, ejercicio, fecha y consentimientos, nunca lo escrito.
+Reglas de seguridad y privacidad: cada intro avisa de la intensidad (ligera / moderada / profunda) y de que no es para hacerlo en crisis; el ejercicio de pareja incluye la línea de la Procuradora de las Mujeres (787-722-2977) por si lo que hay no es un ciclo sino violencia; el resumen final de todos cierra con las líneas de crisis. El borrador vive en `sessionStorage` (solo la pestaña) y se puede borrar desde el resumen. Si hay `PUBLIC_LEADS_ENDPOINT`, el paso de datos aparece antes del resumen con enlace para verlo sin dejar datos; la carga útil (`source: "ejercicio"`) lleva nombre, contacto, ejercicio, fecha y consentimientos, nunca lo escrito.
 
 Pendiente: aprobación de Melanie de los textos (marcados con `Verify` en el índice) y, si quiere, ajustar la lista de frases de `frases` y las opciones de `ciclo` a lo que oye en consulta.

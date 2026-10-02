@@ -15,8 +15,25 @@ interface Props {
   fill?: 'ivory' | 'sand';
   caption?: string;
   tone?: 'ivory' | 'sand';
+  /** Anchos generados y `sizes` de la foto; por defecto, los del arco de cabecera. Permiten servir más resolución a una foto concreta. */
+  widths?: number[];
+  sizes?: string;
 }
-const { eyebrow, title, subtitle, image, alt = '', focus = '50% 20%', zoom = 1, ratio = '4 / 5', fill, caption, tone = 'ivory' } = Astro.props;
+const {
+  eyebrow,
+  title,
+  subtitle,
+  image,
+  alt = '',
+  focus = '50% 20%',
+  zoom = 1,
+  ratio = '4 / 5',
+  fill,
+  caption,
+  tone = 'ivory',
+  widths = [480, 720, 960, 1200],
+  sizes = '(min-width: 960px) 34vw, (min-width: 640px) 60vw, 100vw',
+} = Astro.props;
 ---
 
 <section class:list={['phero', `phero--${tone}`, { 'phero--with-image': !!image }]}>
@@ -36,7 +53,7 @@ const { eyebrow, title, subtitle, image, alt = '', focus = '50% 20%', zoom = 1, 
     {
       image && (
         <div class="phero__photo">
-          <ArchPhoto src={image} alt={alt} focus={focus} zoom={zoom} ratio={ratio} fill={fill} caption={caption} loading="eager" sizes="(min-width: 960px) 34vw, (min-width: 640px) 60vw, 100vw" />
+          <ArchPhoto src={image} alt={alt} focus={focus} zoom={zoom} ratio={ratio} fill={fill} caption={caption} loading="eager" widths={widths} sizes={sizes} />
         </div>
       )
     }

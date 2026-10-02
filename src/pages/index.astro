@@ -249,7 +249,8 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
           src={fotoTaller}
           alt="Melanie habla frente a un grupo durante un taller; detrás, la pantalla con su presentación sobre amor propio"
           focus="50% 40%"
-          sizes="(min-width: 960px) 34vw, (min-width: 640px) 60vw, 100vw"
+          widths={[480, 720, 960, 1200, 1600]}
+          sizes="(min-width: 960px) 34vw, (min-width: 640px) 60vw, 520px"
         />
       </div>
       <div class="talleres__text" data-reveal style="--reveal-index: 1">

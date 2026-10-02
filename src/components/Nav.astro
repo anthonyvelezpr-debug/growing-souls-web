@@ -8,7 +8,7 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
 
 <header class="nav" data-nav>
   <div class="container nav__inner">
-    <a class="nav__brand" href="/" aria-label="Growing Souls, inicio">
+    <a class="nav__brand" href="/" aria-label={`Growing Souls, ${site.person.shortName}. Inicio`}>
       <img
         class="nav__mark"
         src="/images/brand/isotipo-navy-160.png"
@@ -28,8 +28,8 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
         {
           nav.map((item) => (
             <li>
-              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
-                {item.label}
+              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined} title={item.short ? item.label : undefined}>
+                {item.short ?? item.label}
               </a>
             </li>
           ))
@@ -102,6 +102,8 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
     display: inline-flex;
     align-items: center;
     gap: 0.7rem;
+    flex-shrink: 0;
+    white-space: nowrap;
     text-decoration: none;
   }
   .nav__mark {
@@ -132,7 +134,7 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
   }
   .nav__links ul {
     display: flex;
-    gap: clamp(1rem, 2vw, 1.75rem);
+    gap: clamp(0.75rem, 1.6vw, 1.75rem);
   }
   .nav__links a {
     font-size: var(--step-small);
@@ -211,7 +213,7 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
     max-width: 30ch;
   }
 
-  @media (min-width: 1100px) {
+  @media (min-width: 1200px) {
     .nav__links,
     .nav__cta {
       display: block;

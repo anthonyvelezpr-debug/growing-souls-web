@@ -43,8 +43,8 @@ const year = new Date().getFullYear();
       <nav class="footer__col" aria-label="Servicios y recursos">
         <p class="eyebrow">Servicios</p>
         <ul role="list">
-          <li><a href="/oficina-virtual/">Oficina virtual</a></li>
-          <li><a href="/#talleres">Talleres y charlas</a></li>
+          <li><a href="/talleres-y-conferencias/">Talleres y conferencias</a></li>
+          <li><a href="/conocete-mejor/">Conócete mejor</a></li>
           <li><a href="/journal/">Growing Journal</a></li>
           <li><a href="/agenda/">Solicitar una cita</a></li>
         </ul>
@@ -144,8 +144,8 @@ const year = new Date().getFullYear();
     padding-block: var(--space-3) var(--space-6);
     border-top: 1px solid var(--line);
   }
-  /* Hueco para la barra fija de acción en móvil y tablet. */
-  @media (max-width: 959px) {
+  /* Hueco para la barra fija de acción (visible hasta que aparece la barra de navegación de escritorio). */
+  @media (max-width: 1199px) {
     .footer__bottom {
       padding-bottom: calc(var(--space-6) + 4rem + env(safe-area-inset-bottom, 0px));
     }

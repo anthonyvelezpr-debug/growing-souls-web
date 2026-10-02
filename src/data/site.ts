@@ -36,6 +36,13 @@ export const site = {
   // Endpoint del formulario de cita (prompt 02). Vacío = modo mailto o aviso.
   formEndpoint: '',
 
+  /**
+   * Destino de los contactos de "Conócete mejor" (autoevaluaciones). Se configura con la variable de entorno
+   * PUBLIC_LEADS_ENDPOINT en el build (en GitHub: Settings → Secrets and variables → Actions → Variables).
+   * Vacío = las autoevaluaciones muestran el resultado sin pedir datos. 'demo' = vista previa sin envío real.
+   */
+  leadsEndpoint: (import.meta.env.PUBLIC_LEADS_ENDPOINT ?? '').trim(),
+
   crisis: {
     intro:
       'Growing Souls no es un servicio de emergencias. Si estás en peligro o piensas en hacerte daño, comunícate ahora mismo con:',
@@ -51,14 +58,21 @@ export const site = {
 /** Enlace de WhatsApp (click to chat) con el mensaje inicial ya escrito. */
 export const whatsappHref = `https://wa.me/${site.contact.whatsapp}?text=${encodeURIComponent(site.contact.whatsappText)}`;
 
-export const nav = [
-  { label: 'Conoce a Melanie', href: '/melanie/' },
+/** Navegación. `short` es la etiqueta compacta de la barra en desktop; el cajón móvil usa `label`. */
+export interface NavItem {
+  label: string;
+  href: string;
+  short?: string;
+}
+export const nav: readonly NavItem[] = [
+  { label: 'Conoce a Melanie', short: 'Melanie', href: '/melanie/' },
   { label: 'Cómo trabajo', href: '/como-trabajo/' },
   { label: 'Terapia individual', href: '/terapia-individual/' },
   { label: 'Parejas', href: '/parejas/' },
-  { label: 'Oficina virtual', href: '/oficina-virtual/' },
+  { label: 'Talleres y conferencias', short: 'Talleres', href: '/talleres-y-conferencias/' },
+  { label: 'Conócete mejor', href: '/conocete-mejor/' },
   { label: 'Journal', href: '/journal/' },
-] as const;
+];
 
 export const cta = { label: 'Solicitar una cita', href: '/agenda/' } as const;
 

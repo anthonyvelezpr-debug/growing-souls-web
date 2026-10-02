@@ -7,9 +7,14 @@ export default defineConfig({
   site: 'https://growingsoulspr.com',
   output: 'static',
   trailingSlash: 'always',
+  // La antigua página "Oficina virtual" pasó a ser "Talleres y conferencias" (oct 2026). La ruta vieja redirige.
+  redirects: {
+    '/oficina-virtual/': '/talleres-y-conferencias/',
+  },
   integrations: [
     sitemap({
-      filter: (page) => !page.includes('/agenda/gracias/') && !page.includes('/404'),
+      filter: (page) =>
+        !page.includes('/agenda/gracias/') && !page.includes('/404') && !page.includes('/oficina-virtual/'),
     }),
   ],
   build: {

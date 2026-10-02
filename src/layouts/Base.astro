@@ -49,7 +49,7 @@ const graph: Record<string, unknown>[] = [
     image: ogImageUrl,
     description: site.description,
     medicalSpecialty: 'Psychiatric',
-    knowsAbout: ['Psicoterapia', 'Terapia de pareja', 'Telepsicología'],
+    knowsAbout: ['Psicoterapia', 'Terapia de pareja', 'Psicoeducación', 'Talleres y conferencias'],
     founder: { '@id': `${site.url}/#person` },
     areaServed: { '@type': 'AdministrativeArea', name: site.location.areaServed },
     address: {
@@ -61,7 +61,7 @@ const graph: Record<string, unknown>[] = [
     availableService: [
       { '@type': 'Service', name: 'Terapia individual', url: `${site.url}/terapia-individual/` },
       { '@type': 'Service', name: 'Terapia de pareja', url: `${site.url}/parejas/` },
-      { '@type': 'Service', name: 'Telepsicología (oficina virtual)', url: `${site.url}/oficina-virtual/` },
+      { '@type': 'Service', name: 'Talleres y conferencias', url: `${site.url}/talleres-y-conferencias/` },
     ],
   },
   {
@@ -174,7 +174,7 @@ const structuredData = JSON.stringify({ '@context': 'https://schema.org', '@grap
       const markLineStarts = () => {
         dotlists.forEach((list) => {
           let prevTop: number | null = null;
-          for (const li of list.querySelectorAll<HTMLElement>(':scope > li')) {
+          for (const li of list.querySelectorAll<HTMLElement>(':scope > li, :scope > span')) {
             const top = li.offsetTop;
             li.classList.toggle('is-line-start', prevTop === null || top !== prevTop);
             prevTop = top;

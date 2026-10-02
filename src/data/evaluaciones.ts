@@ -88,7 +88,7 @@ export const evaluaciones: Instrumento[] = [
     titulo: '¿Cómo te has sentido estas dos semanas?',
     explora: 'Ánimo, calma, energía, descanso e interés por la vida cotidiana.',
     descripcion:
-      'Cinco afirmaciones sobre cómo te has sentido en los últimos catorce días. Es la mirada más amplia y amable de la colección: un buen punto de partida.',
+      'Cinco afirmaciones sobre cómo te has sentido en los últimos catorce días. Ofrece una mirada general a tu bienestar y es un buen punto de partida.',
     duracion: '2 minutos',
     periodo: 'las dos últimas semanas',
     instruccion:
@@ -115,7 +115,7 @@ export const evaluaciones: Instrumento[] = [
         etiqueta: 'Bienestar bajo',
         titulo: 'Tu bienestar ha estado bajo estas dos semanas.',
         texto:
-          'Una puntuación como esta indica que, la mayor parte del tiempo, te has sentido con poco ánimo, poca calma o poca energía. No dice por qué ni qué significa en tu caso. Sí es una señal clara para hablarlo con un profesional: no para alarmarte, sino para no cargar con esto sin apoyo.',
+          'Una puntuación como esta indica que, la mayor parte del tiempo, te has sentido con poco ánimo, poca calma o poca energía. No dice por qué ni qué significa en tu caso. Sí es una señal para conversarlo con un profesional, no para alarmarte, sino para que cuentes con apoyo.',
         nivel: 'alto',
         evaluar: true,
       },
@@ -140,8 +140,8 @@ export const evaluaciones: Instrumento[] = [
     recomendaciones: [
       'Protege el descanso: acostarte y levantarte a horas parecidas ayuda más de lo que parece.',
       'Mueve el cuerpo un poco cada día, aunque sea una caminata corta.',
-      'Busca una conversación real con alguien de confianza esta semana.',
-      'Haz espacio, aunque sea breve, para algo que te interese de verdad.',
+      'Busca un momento esta semana para conversar con calma con alguien de confianza.',
+      'Dedica un espacio, aunque sea breve, a algo que te guste o te interese.',
     ],
     fuente: {
       nombre: 'WHO-5 · Índice de Bienestar de la OMS',
@@ -213,7 +213,7 @@ export const evaluaciones: Instrumento[] = [
         etiqueta: 'Moderadamente grave',
         titulo: 'Tus respuestas apuntan a síntomas marcados de ánimo bajo.',
         texto:
-          'Lo que describes ha estado presente la mayor parte de los días y probablemente está pesando en tu rutina. Este resultado amerita una evaluación profesional más completa. Pedirla no es exagerar: es la manera más corta de empezar a sentirte mejor.',
+          'Lo que describes ha estado presente la mayor parte de los días y probablemente está pesando en tu rutina. Este resultado amerita una evaluación profesional más completa. Buscar ayuda es un paso de cuidado y suele ser el camino más directo para empezar a sentirte mejor.',
         nivel: 'alto',
         evaluar: true,
       },
@@ -229,8 +229,8 @@ export const evaluaciones: Instrumento[] = [
     ],
     recomendaciones: [
       'Mantén, aunque cueste, una rutina mínima: hora de levantarte, comidas y algo de luz natural.',
-      'Reduce lo que esperas de ti esta semana; haz menos cosas, pero hazlas.',
-      'Dile a una persona de confianza cómo has estado. Ponerlo en palabras ya alivia.',
+      'Ajusta lo que esperas de ti esta semana: es preferible hacer menos cosas y poder completarlas.',
+      'Cuéntale a una persona de confianza cómo te has sentido; expresarlo suele traer alivio.',
       'Si notas que el ánimo bajo lleva más de dos semanas, consulta con un profesional.',
     ],
     fuente: {
@@ -278,7 +278,7 @@ export const evaluaciones: Instrumento[] = [
         etiqueta: 'Leve',
         titulo: 'Tus respuestas apuntan a una ansiedad leve.',
         texto:
-          'Algunas señales han aparecido varios días: quizás te cuesta relajarte o la preocupación se queda más tiempo del que quisieras. Suele ayudar observar qué la dispara y darle al cuerpo pausas reales.',
+          'Algunas señales han aparecido varios días: quizás te cuesta relajarte o la preocupación se queda más tiempo del que quisieras. Suele ayudar observar qué la desencadena y darle al cuerpo pausas para descansar.',
         nivel: 'leve',
       },
       {
@@ -295,7 +295,7 @@ export const evaluaciones: Instrumento[] = [
         etiqueta: 'Grave',
         titulo: 'Tus respuestas apuntan a una ansiedad intensa.',
         texto:
-          'Lo que describes ha estado presente casi todos los días. Vivir así cansa mucho, y no tiene por qué seguir igual: la ansiedad responde bien a la terapia. Este resultado amerita una evaluación profesional más completa.',
+          'Lo que describes ha estado presente casi todos los días. Vivir así resulta agotador y no tiene por qué continuar igual: la ansiedad suele responder bien a la terapia. Este resultado amerita una evaluación profesional más completa.',
         nivel: 'alto',
         evaluar: true,
       },
@@ -322,7 +322,7 @@ export const evaluaciones: Instrumento[] = [
     titulo: '¿Cuánto te ha pesado la tensión esta semana?',
     explora: 'Dificultad para relajarte, nervios, irritabilidad e impaciencia.',
     descripcion:
-      'Siete afirmaciones sobre la última semana, tomadas de la escala de estrés del DASS-21. Breve, directa y pensada para adultos.',
+      'Siete afirmaciones sobre la última semana, tomadas de la escala de estrés del DASS-21. Es breve y está pensada para personas adultas.',
     duracion: '2 minutos',
     periodo: 'la última semana',
     instruccion:
@@ -374,7 +374,7 @@ export const evaluaciones: Instrumento[] = [
         etiqueta: 'Severo',
         titulo: 'Tu nivel de estrés ha estado alto.',
         texto:
-          'Lo que describes se parece a vivir en alerta la mayor parte del tiempo. Nadie sostiene eso indefinidamente sin desgaste. Este resultado amerita una evaluación profesional más completa y, sobre todo, un plan para repartir el peso.',
+          'Lo que describes se parece a vivir en alerta la mayor parte del tiempo. Sostener esa tensión durante mucho tiempo produce desgaste. Este resultado amerita una evaluación profesional más completa y, sobre todo, un plan para repartir el peso.',
         nivel: 'alto',
         evaluar: true,
       },
@@ -390,9 +390,9 @@ export const evaluaciones: Instrumento[] = [
     ],
     recomendaciones: [
       'Pon por escrito todo lo que estás cargando y marca qué depende de ti y qué no.',
-      'Protege una pausa real al día, sin pantalla, aunque sean diez minutos.',
+      'Reserva una pausa al día sin pantallas, aunque sean diez minutos.',
       'Muévete: caminar, estirar o cualquier actividad que descargue el cuerpo.',
-      'Di que no a una cosa esta semana. Una sola. Observa qué pasa.',
+      'Practica decir que no a un compromiso esta semana y observa cómo te sientes.',
     ],
     fuente: {
       nombre: 'DASS-21 · escala de estrés',

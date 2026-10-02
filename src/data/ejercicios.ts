@@ -1,12 +1,15 @@
 /**
- * "Conócete mejor" · Ejercicios de profundidad.
+ * "Conócete mejor" · Ejercicios guiados de reflexión.
  *
  * Diez ejercicios guiados de escritura y reflexión, originales, inspirados en técnicas documentadas de la psicoterapia
  * (clarificación de valores de ACT, escritura expresiva, terapia narrativa, autocompasión, ciclo negativo de EFT,
  * carta de gratitud, "mejor yo posible"). Fuentes y límites en docs/instrumentos.md.
  *
+ * Tono (pedido de la Dra. Acevedo, 2 oct 2026): profesional, cálido y claro. Oraciones completas, sin frases
+ * tajantes ni efectistas ("lo que nadie te dice", "lo real"), sin dramatizar. Es trabajo clínico y se nota.
+ *
  * Reglas:
- * - No son terapia ni diagnóstico. Son espejos: la persona escribe y, al final, lee sus propias palabras ordenadas.
+ * - No son terapia ni diagnóstico. La persona escribe y, al final, lee un resumen con sus propias palabras.
  * - Lo que se escribe no sale del dispositivo. Si hay un destino de contactos configurado, solo viaja qué ejercicio
  *   se hizo y la fecha, nunca el contenido.
  * - Cada paso puede tener un título dinámico (función) para hablarle a la persona con lo que ya escribió.
@@ -77,7 +80,7 @@ export interface Dominio {
   descripcion: string;
 }
 
-/** Bloques del reflejo final. El runner los pinta; aquí solo se decide qué decir. */
+/** Bloques del resumen final. El runner los pinta; aquí solo se decide qué decir. */
 export type Bloque =
   | { tipo: 'titulo'; texto: string; eyebrow?: string }
   | { tipo: 'frase'; texto: string; etiqueta?: string; destacada?: boolean }
@@ -94,13 +97,13 @@ export type Bloque =
 
 export interface Ejercicio {
   id: string;
-  /** Camino al que pertenece en el índice. */
+  /** Grupo al que pertenece en el índice. */
   camino: Camino;
   titulo: string;
   subtitulo: string;
   /** Texto de la tarjeta. */
   descripcion: string;
-  /** Con qué se va la persona. */
+  /** Con qué termina la persona. */
   teLlevas: string;
   duracion: string;
   intensidad: Intensidad;
@@ -114,22 +117,32 @@ export interface Ejercicio {
   servicio: { label: string; href: string };
 }
 
-export type Camino = 'Lo que importa' | 'De dónde vienes' | 'Contigo' | 'Con los demás';
+export type Camino = 'Valores y propósito' | 'Tu historia' | 'Tu relación contigo' | 'Tus relaciones';
 
 export const caminos: { nombre: Camino; texto: string }[] = [
-  { nombre: 'Lo que importa', texto: 'Valores, prioridades y hacia dónde va tu vida.' },
-  { nombre: 'De dónde vienes', texto: 'Lo que aprendiste antes de poder elegir, y la historia que te cuentas.' },
-  { nombre: 'Contigo', texto: 'Cómo te hablas y lo que prefieres no mirar.' },
-  { nombre: 'Con los demás', texto: 'Lo que no se dijo, lo que se repite y lo que nunca agradeciste.' },
+  { nombre: 'Valores y propósito', texto: 'Identifica lo que es importante para ti y cómo se refleja en tu día a día.' },
+  {
+    nombre: 'Tu historia',
+    texto: 'Explora los mensajes que aprendiste al crecer y la manera en que cuentas tu propia historia.',
+  },
+  { nombre: 'Tu relación contigo', texto: 'Observa cómo te hablas y aquello que te cuesta enfrentar.' },
+  {
+    nombre: 'Tus relaciones',
+    texto: 'Reflexiona sobre tu relación de pareja, lo que no has podido expresar y la gratitud hacia otras personas.',
+  },
 ];
 
 export const intensidades: Record<Intensidad, { etiqueta: string; texto: string; nivel: number }> = {
-  suave: { etiqueta: 'Suave', texto: 'Ligero y, sobre todo, agradable.', nivel: 1 },
-  media: { etiqueta: 'Media', texto: 'Pide honestidad; no suele doler.', nivel: 2 },
-  honda: { etiqueta: 'Honda', texto: 'Puede remover. Hazlo con tiempo.', nivel: 3 },
+  suave: { etiqueta: 'Ligera', texto: 'Ejercicio breve y agradable.', nivel: 1 },
+  media: { etiqueta: 'Moderada', texto: 'Invita a una reflexión honesta; suele ser llevadero.', nivel: 2 },
+  honda: {
+    etiqueta: 'Profunda',
+    texto: 'Puede despertar emociones intensas. Te recomendamos hacerlo con tiempo y en un momento tranquilo.',
+    nivel: 3,
+  },
 };
 
-/* ---------- Ayudantes para leer respuestas en los reflejos ---------- */
+/* ---------- Ayudantes para leer respuestas en los resúmenes ---------- */
 const t = (r: Respuestas, id: string) => (typeof r[id] === 'string' ? (r[id] as string).trim() : '');
 const l = (r: Respuestas, id: string) => (Array.isArray(r[id]) ? (r[id] as string[]) : []);
 const n = (r: Respuestas, id: string) => (typeof r[id] === 'number' ? (r[id] as number) : 0);
@@ -188,96 +201,92 @@ const TERAPIA_INDIVIDUAL = { label: 'Terapia individual', href: '/terapia-indivi
 const TERAPIA_PAREJA = { label: 'Terapia de pareja', href: '/parejas/' };
 
 /* =====================================================================================================
-   LO QUE IMPORTA
+   VALORES Y PROPÓSITO
    ===================================================================================================== */
 
 const ochenta: Ejercicio = {
   id: 'ochenta',
-  camino: 'Lo que importa',
-  titulo: 'Tu discurso de los ochenta',
-  subtitulo: 'Lo que quisieras que dijeran de ti. Y lo que dirían hoy.',
+  camino: 'Valores y propósito',
+  titulo: 'Lo que es importante para ti',
+  subtitulo: 'Clarificación de valores a partir de una escena: tu cumpleaños número ochenta.',
   descripcion:
-    'Imagina tu cumpleaños número ochenta y escribe los tres discursos que quisieras escuchar. Después, los que escucharías hoy. La distancia entre ambos es tu brújula.',
-  teLlevas: 'Tus valores en tus propias palabras y un primer paso concreto para esta semana.',
+    'Imaginarás la celebración de tu cumpleaños número ochenta y escribirás lo que te gustaría que dijeran de ti tres personas importantes. Luego compararás esa imagen con tu vida actual para identificar tus valores y un paso concreto.',
+  teLlevas: 'Tus valores personales expresados en tus propias palabras y una acción concreta para esta semana.',
   duracion: '20 a 25 minutos',
   intensidad: 'honda',
   enfoque:
-    'Ejercicio clásico de clarificación de valores, usado en la terapia de aceptación y compromiso (ACT). Versión original de Growing Souls.',
+    'Ejercicio de clarificación de valores utilizado en la terapia de aceptación y compromiso (ACT). Adaptación original de Growing Souls.',
   fuentes: [
     { nombre: 'Hayes, Strosahl y Wilson (2012), Acceptance and Commitment Therapy, 2.ª ed.' },
     { nombre: 'Harris, R. (2009), ACT Made Simple' },
   ],
   intro: [
-    'Hay una pregunta que casi nadie se hace en voz alta: ¿para qué estoy viviendo como vivo? Este ejercicio no la responde con ideas. La responde con una escena.',
-    'Vas a imaginar tu cumpleaños número ochenta. Tres personas se levantan a hablar de ti. Primero escribirás lo que quisieras que dijeran. Después, lo más difícil: lo que dirían hoy, con tu vida tal como es. No hace falta que nadie lo lea.',
+    'Los valores son las cualidades que deseas que guíen tu manera de vivir y de relacionarte. A veces los tenemos claros; otras veces, la rutina hace que perdamos de vista lo que es importante para nosotros.',
+    'En este ejercicio imaginarás la celebración de tu cumpleaños número ochenta, en la que tres personas hablan de ti. Primero escribirás lo que te gustaría que dijeran y, después, lo que podrían decir hoy, considerando tu vida tal como es en este momento. Lo que escribas es solo para ti.',
   ],
   antes: [
-    'Busca veinte minutos sin interrupciones.',
-    'Escribe rápido y sin corregir: lo que sale primero suele ser lo verdadero.',
-    'Si en algún punto te emocionas, no es señal de que lo estés haciendo mal.',
+    'Reserva unos veinte minutos sin interrupciones.',
+    'Escribe con naturalidad y sin preocuparte por la redacción; no hay respuestas correctas.',
+    'Es normal que surjan emociones durante el ejercicio. Si necesitas una pausa, puedes tomarla.',
   ],
   pasos: [
     {
       tipo: 'pausa',
       id: 'escena',
-      titulo: 'Tu cumpleaños número ochenta.',
+      titulo: 'Imagina la celebración.',
       texto:
-        'Cierra los ojos un momento e imagina el lugar. Puede ser una casa, un patio, un salón. Hay comida, hay música de fondo, hay gente que te quiere. Mira quiénes están. Alguien pide silencio: van a hablar de ti.',
+        'Tómate un momento para imaginar el lugar: puede ser una casa, un patio o un salón. Hay comida, música y personas que te quieren. Observa quiénes están. En un momento, alguien pide la palabra para hablar de ti.',
       respiracion: true,
     },
     {
       tipo: 'texto',
       id: 'familia',
-      titulo: 'Se levanta alguien de tu familia.',
-      guia: 'Escribe lo que, en el fondo, quisieras que dijera de ti. No lo que diría hoy: lo que te gustaría haber sido para esa persona.',
-      placeholder: 'Puede ser tu pareja, un hijo, una hija, tu hermana, tu madre…',
+      titulo: 'Habla una persona de tu familia.',
+      guia: 'Escribe lo que te gustaría que dijera de ti: lo que significaste para ella y cómo te recuerda.',
+      placeholder: 'Puede ser tu pareja, un hijo o una hija, tu madre, tu hermana…',
       min: 120,
       filas: 6,
-      ayudas: [
-        'Cuando las cosas se pusieron difíciles, tú…',
-        'Lo que aprendí de ti sin que me lo enseñaras fue…',
-        'Contigo siempre supe que…',
-      ],
+      ayudas: ['En los momentos difíciles, tú…', 'Algo que aprendí de ti fue…', 'Contigo siempre supe que…'],
     },
     {
       tipo: 'texto',
       id: 'amistad',
-      titulo: 'Ahora habla una amiga o un amigo de toda la vida.',
-      guia: 'Alguien que te conoció en varias épocas y te vio cambiar.',
+      titulo: 'Ahora habla una amistad de muchos años.',
+      guia: 'Alguien que te ha acompañado en distintas etapas de tu vida.',
       min: 100,
       filas: 6,
-      ayudas: ['Lo que nunca cambió en ti fue…', 'Las veces que más te necesité…', 'Lo que la gente no sabe de ti es…'],
+      ayudas: ['Lo que siempre he admirado de ti es…', 'Cuando te necesité…', 'Algo que quizás pocos saben de ti es…'],
     },
     {
       tipo: 'texto',
       id: 'trabajo',
-      titulo: 'Y por último, alguien de tu trabajo, de tu comunidad o alguien a quien ayudaste.',
-      guia: 'Lo que quisieras que quedara de tu paso por ahí.',
+      titulo: 'Por último, habla alguien de tu trabajo, de tu comunidad o alguien a quien ayudaste.',
+      guia: 'Escribe lo que te gustaría que esa persona recordara de ti.',
       min: 80,
       filas: 5,
-      ayudas: ['Trabajar contigo era…', 'Lo que hiciste por mí sin tener que hacerlo…', 'Dejaste…'],
+      ayudas: ['Trabajar contigo fue…', 'Lo que hiciste por mí…', 'Tu aporte fue…'],
     },
     {
       tipo: 'nota',
       id: 'giro',
-      titulo: 'Ahora viene la parte que casi nadie quiere hacer.',
+      titulo: 'Ahora, una mirada al presente.',
       texto:
-        'Imagina que esas mismas tres personas hablaran hoy. No en tu cumpleaños ochenta: hoy, con tu vida exactamente como es, con tu agenda de esta semana y tus silencios de este mes. Sin crueldad y sin adornos. Con honestidad.',
+        'Imagina que esas mismas tres personas hablaran hoy de ti, considerando tu vida tal como es en este momento: tus rutinas, tus prioridades y tu manera de relacionarte. Responde con honestidad y también con amabilidad hacia ti.',
     },
     {
       tipo: 'texto',
       id: 'hoy',
       titulo: '¿Qué dirían hoy?',
-      guia: 'Con la misma honestidad con la que escribiste lo otro. Lo bueno que ya está también cuenta.',
+      guia: 'Incluye también lo positivo que ya está presente en tu vida.',
       min: 100,
       filas: 6,
-      ayudas: ['Últimamente está…', 'Lo que casi no hace ya es…', 'Lo que sí sigue haciendo, pase lo que pase, es…'],
+      ayudas: ['Últimamente…', 'Algo que ha ido quedando en segundo plano es…', 'Algo que mantiene, pase lo que pase, es…'],
     },
     {
       tipo: 'opciones',
       id: 'valores',
-      titulo: 'Vuelve a leer los tres discursos que quisieras escuchar. ¿Qué valores están escondidos ahí?',
-      guia: 'Elige hasta cinco. No los que suenan bien: los que de verdad aparecen en lo que escribiste.',
+      titulo: 'Vuelve a leer lo que te gustaría escuchar. ¿Qué valores aparecen en esas palabras?',
+      guia: 'Elige los que mejor reflejan lo que escribiste.',
       multiple: true,
       max: 5,
       min: 1,
@@ -292,16 +301,16 @@ const ochenta: Ejercicio = {
         'Justicia',
         'Humor',
         'Creatividad',
-        'Aprender siempre',
+        'Aprendizaje',
         'Fe o espiritualidad',
         'Libertad',
-        'Cuidar el cuerpo',
-        'Servir a otros',
+        'Cuidado del cuerpo',
+        'Servicio a otros',
         'Constancia',
         'Paciencia',
         'Familia',
         'Amistad',
-        'Proteger a los míos',
+        'Protección de los míos',
         'Alegría',
         'Trabajo bien hecho',
         'Perdón',
@@ -312,14 +321,14 @@ const ochenta: Ejercicio = {
     {
       tipo: 'escala',
       id: 'distancia',
-      titulo: '¿Qué tan lejos está tu vida de hoy de esos discursos?',
-      etiquetas: ['Es la misma vida', 'Son dos vidas distintas'],
+      titulo: '¿Qué tanta diferencia notas entre tu vida actual y lo que te gustaría escuchar?',
+      etiquetas: ['Muy poca diferencia', 'Mucha diferencia'],
     },
     {
       tipo: 'texto',
       id: 'centimetro',
-      titulo: 'Una sola cosa, esta semana, que mueva tu vida un centímetro hacia esos discursos.',
-      guia: 'Pequeña, concreta y con día. No «ser mejor padre»: «el jueves, cenar sin teléfono».',
+      titulo: 'Escribe una acción pequeña que puedas realizar esta semana para acercarte a esos valores.',
+      guia: 'Que sea concreta y con un día definido. Por ejemplo: «El jueves cenaré sin el teléfono».',
       min: 15,
       filas: 3,
     },
@@ -328,26 +337,30 @@ const ochenta: Ejercicio = {
     const dist = n(r, 'distancia');
     const lectura =
       dist <= 3
-        ? 'Estás más cerca de lo que creías. Lo que toca no es cambiar de vida: es sostener la que tienes y cuidarla de lo que la erosiona.'
+        ? 'Tu vida actual parece estar bastante alineada con lo que valoras. El reto puede ser sostener lo que ya has construido y cuidarlo en las etapas de más exigencia.'
         : dist <= 6
-          ? 'Hay una brecha, y ya la sabías. La diferencia es que ahora tiene palabras, y con palabras se puede trabajar.'
-          : 'Sentir esa distancia duele. También es lo más útil que ha pasado en estos veinte minutos: ahora sabes hacia dónde mirar, y eso no se puede desaprender.';
+          ? 'Notas cierta diferencia entre tu vida actual y lo que valoras, algo muy común. Ponerla en palabras es un primer paso para trabajar en ella de forma gradual.'
+          : 'Notas una diferencia importante entre tu vida actual y lo que valoras. Puede resultar incómodo reconocerlo y, a la vez, es información valiosa: te orienta sobre hacia dónde dirigir tus próximos pasos.';
     return [
-      { tipo: 'titulo', eyebrow: 'Tu reflejo', texto: 'Esto es lo que quieres que digan de ti.' },
+      { tipo: 'titulo', eyebrow: 'Tu resumen', texto: 'Lo que te gustaría que dijeran de ti' },
       {
         tipo: 'citas',
         items: [
-          { etiqueta: 'Alguien de tu familia', texto: t(r, 'familia') },
-          { etiqueta: 'Una amistad de toda la vida', texto: t(r, 'amistad') },
+          { etiqueta: 'Una persona de tu familia', texto: t(r, 'familia') },
+          { etiqueta: 'Una amistad de muchos años', texto: t(r, 'amistad') },
           { etiqueta: 'Alguien de tu trabajo o tu comunidad', texto: t(r, 'trabajo') },
         ],
       },
-      { tipo: 'parrafo', texto: 'Y esto es lo que, según tú, dirían hoy.' },
+      { tipo: 'parrafo', texto: 'Y esto es lo que, según tú, dirían hoy:' },
       { tipo: 'frase', texto: t(r, 'hoy') },
-      { tipo: 'medida', etiqueta: 'La distancia que sentiste', valor: dist, max: 10, texto: lectura },
-      { tipo: 'chips', etiqueta: 'Tus valores, en tus palabras', items: l(r, 'valores') },
-      { tipo: 'frase', etiqueta: 'Tu centímetro de esta semana', texto: t(r, 'centimetro'), destacada: true },
-      { tipo: 'cierre', texto: 'Nadie llega a los ochenta con la vida de los discursos. Se llega con centímetros.' },
+      { tipo: 'medida', etiqueta: 'La diferencia que percibes', valor: dist, max: 10, texto: lectura },
+      { tipo: 'chips', etiqueta: 'Tus valores', items: l(r, 'valores') },
+      { tipo: 'frase', etiqueta: 'Tu acción para esta semana', texto: t(r, 'centimetro'), destacada: true },
+      {
+        tipo: 'cierre',
+        texto:
+          'Los valores se practican en las decisiones de cada día. Una acción pequeña y sostenida en el tiempo puede marcar una diferencia importante.',
+      },
     ];
   },
   servicio: TERAPIA_INDIVIDUAL,
@@ -357,13 +370,13 @@ const DOMINIOS_VIDA: Dominio[] = [
   {
     id: 'familia',
     nombre: 'Familia',
-    descripcion: 'Padres, hijos, hermanos; la familia que tienes o la que elegiste.',
+    descripcion: 'Padres, hijos, hermanos; la familia de origen o la que has formado.',
   },
-  { id: 'pareja', nombre: 'Pareja e intimidad', descripcion: 'La relación que tienes, o el espacio para tenerla.' },
-  { id: 'amistades', nombre: 'Amistades', descripcion: 'Las personas con las que no tienes que explicarte.' },
+  { id: 'pareja', nombre: 'Pareja e intimidad', descripcion: 'Tu relación de pareja, o el espacio para tenerla.' },
+  { id: 'amistades', nombre: 'Amistades', descripcion: 'Las personas con quienes te sientes en confianza.' },
   { id: 'trabajo', nombre: 'Trabajo o vocación', descripcion: 'Lo que haces para vivir y lo que te gustaría aportar.' },
-  { id: 'salud', nombre: 'Salud y cuerpo', descripcion: 'Dormir, moverte, comer, ir al médico, descansar.' },
-  { id: 'crecer', nombre: 'Crecer y aprender', descripcion: 'Leer, estudiar, formarte, entenderte.' },
+  { id: 'salud', nombre: 'Salud y cuerpo', descripcion: 'Dormir, moverte, alimentarte, ir al médico, descansar.' },
+  { id: 'crecer', nombre: 'Crecimiento y aprendizaje', descripcion: 'Leer, estudiar, formarte, conocerte.' },
   {
     id: 'sentido',
     nombre: 'Fe, sentido o espiritualidad',
@@ -371,12 +384,12 @@ const DOMINIOS_VIDA: Dominio[] = [
   },
   {
     id: 'juego',
-    nombre: 'Juego, descanso y creatividad',
-    descripcion: 'Lo que haces por puro gusto, sin que produzca nada.',
+    nombre: 'Descanso, recreación y creatividad',
+    descripcion: 'Lo que haces por disfrute, sin que tenga que producir algo.',
   },
 ];
 
-/** Brecha importancia − energía por dominio, de mayor a menor. */
+/** Diferencia importancia − energía por área, de mayor a menor. */
 const brechas = (r: Respuestas) => {
   const imp = d(r, 'importancia');
   const ene = d(r, 'energia');
@@ -390,41 +403,41 @@ const brechas = (r: Respuestas) => {
 
 const brecha: Ejercicio = {
   id: 'brecha',
-  camino: 'Lo que importa',
-  titulo: 'Dónde se te va la vida',
-  subtitulo: 'Lo que dices que importa frente a lo que recibe tu energía.',
+  camino: 'Valores y propósito',
+  titulo: 'Tus prioridades y tu energía',
+  subtitulo: 'Compara la importancia de cada área de tu vida con la atención que recibe.',
   descripcion:
-    'Puntúa cuánto importa cada área de tu vida y cuánta energía recibe de verdad en una semana normal. Verás las dos cosas juntas, y la brecha más grande.',
-  teLlevas: 'Un mapa claro de la distancia entre tus prioridades y tu semana, y un movimiento concreto.',
+    'Valorarás del 0 al 10 cuánto importa cada área de tu vida y cuánta energía le dedicas en una semana típica. Al final verás ambas valoraciones juntas y el área con mayor diferencia.',
+  teLlevas: 'Una visión clara de cómo distribuyes tu energía y una acción concreta para equilibrarla.',
   duracion: '10 a 12 minutos',
   intensidad: 'media',
   enfoque:
-    'Basado en los ejercicios de «vida valiosa» de la terapia de aceptación y compromiso (ACT). Áreas y preguntas propias.',
+    'Basado en los ejercicios de valores por áreas de vida de la terapia de aceptación y compromiso (ACT). Áreas y preguntas propias de Growing Souls.',
   fuentes: [
     { nombre: 'Wilson, K. G. y Murrell, A. R. (2004), Values work in ACT' },
     { nombre: 'Lundgren, T. et al. (2012), The Bull’s-Eye Values Survey' },
   ],
   intro: [
-    'Casi nadie vive según sus prioridades. Vivimos según lo que grita más fuerte: el trabajo, el teléfono, las urgencias de otros. Y lo que de verdad importa, como casi nunca grita, espera.',
-    'Este ejercicio te pide dos cosas muy simples: cuánto importa cada área de tu vida y cuánto recibe. La verdad está en la resta.',
+    'Con frecuencia, nuestro tiempo y nuestra energía se dirigen hacia lo más urgente, como el trabajo, las responsabilidades o las necesidades de otras personas, y no siempre hacia lo que consideramos más importante.',
+    'Este ejercicio te ayuda a observar esa relación con dos preguntas sencillas: cuánto importa cada área de tu vida y cuánta energía recibe. Comparar ambas respuestas puede orientarte sobre dónde hacer ajustes.',
   ],
   antes: [
-    'Responde por una semana normal, no por la ideal ni por la peor.',
-    'Energía no es solo tiempo: es atención, cuidado, presencia.',
+    'Responde pensando en una semana típica, no en la ideal ni en la más difícil.',
+    'Por energía nos referimos al tiempo, la atención y el cuidado que le dedicas a cada área.',
   ],
   pasos: [
     {
       tipo: 'dominios',
       id: 'importancia',
       titulo: '¿Cuánto importa cada área en tu vida?',
-      guia: 'No lo que debería importar: lo que importa. De 0 (nada) a 10 (es central).',
+      guia: 'Responde según lo que es importante para ti, no según lo que crees que debería serlo. Del 0 (nada) al 10 (es fundamental).',
       dominios: DOMINIOS_VIDA,
     },
     {
       tipo: 'dominios',
       id: 'energia',
-      titulo: 'En una semana normal, ¿cuánta de tu energía va de verdad a cada área?',
-      guia: 'Energía: tiempo, atención, cuidado. De 0 (nada) a 10 (casi toda).',
+      titulo: 'En una semana típica, ¿cuánta energía le dedicas a cada área?',
+      guia: 'Tiempo, atención y cuidado. Del 0 (ninguna) al 10 (la mayor parte).',
       dominios: DOMINIOS_VIDA,
     },
     {
@@ -433,17 +446,17 @@ const brecha: Ejercicio = {
       titulo: (r) => {
         const b = brechas(r)[0];
         return b.brecha > 0
-          ? `Tu brecha más grande está en ${b.dominio.nombre.toLowerCase()}: le das ${b.importa} de importancia y ${b.recibe} de energía. ¿Qué se lleva la energía que no llega ahí?`
-          : 'Tus prioridades y tu semana van bastante parejas. Aun así, ¿qué se lleva la energía que a veces no llega a lo que importa?';
+          ? `La mayor diferencia está en ${b.dominio.nombre.toLowerCase()}: le das ${b.importa} de importancia y ${b.recibe} de energía. ¿Qué suele ocupar esa energía?`
+          : 'Tus prioridades y tu semana están bastante alineadas. Aun así, ¿qué suele ocupar la energía que a veces no llega a lo importante?';
       },
       opciones: [
-        'El trabajo que nunca termina',
-        'El teléfono y las redes',
-        'Preocuparme y darle vueltas a todo',
-        'Cuidar a otros antes que a mí',
-        'El cansancio: no me queda nada',
-        'Discusiones y tensiones',
-        'No sé; se va sin que me dé cuenta',
+        'El trabajo y las responsabilidades',
+        'El teléfono y las redes sociales',
+        'La preocupación constante',
+        'Atender a otras personas antes que a mí',
+        'El cansancio',
+        'Discusiones o tensiones',
+        'No estoy seguro o segura',
       ],
       otra: true,
     },
@@ -452,9 +465,9 @@ const brecha: Ejercicio = {
       id: 'movimiento',
       titulo: (r) => {
         const b = brechas(r)[0];
-        return `¿Qué haría distinto esta semana una persona para quien ${b.dominio.nombre.toLowerCase()} importa ${b.importa} de 10?`;
+        return `¿Qué podrías hacer esta semana para dedicarle un poco más de energía a ${b.dominio.nombre.toLowerCase()}?`;
       },
-      guia: 'Una acción concreta, con día y hora si puedes.',
+      guia: 'Una acción concreta, con día y hora si es posible.',
       min: 15,
       filas: 3,
     },
@@ -466,26 +479,27 @@ const brecha: Ejercicio = {
     const mejor = [...bs].sort((a, b) => a.brecha - b.brecha)[0];
     const lectura =
       mayor.brecha <= 1
-        ? 'Tus prioridades y tu semana van bastante alineadas. Eso es raro y vale la pena cuidarlo.'
-        : `La brecha más grande está en ${mayor.dominio.nombre.toLowerCase()}: ${mayor.importa} de importancia frente a ${mayor.recibe} de energía.${
+        ? 'Tus prioridades y la energía que les dedicas están bastante alineadas. Es un buen punto de partida que vale la pena cuidar.'
+        : `La mayor diferencia está en ${mayor.dominio.nombre.toLowerCase()}: ${mayor.importa} de importancia frente a ${mayor.recibe} de energía.${
             segunda && segunda.brecha > 1
               ? ` Le sigue ${segunda.dominio.nombre.toLowerCase()} (${segunda.importa} frente a ${segunda.recibe}).`
               : ''
-          } El área mejor cuidada en proporción: ${mejor.dominio.nombre.toLowerCase()}.`;
+          } El área con mejor equilibrio es ${mejor.dominio.nombre.toLowerCase()}.`;
     return [
-      { tipo: 'titulo', eyebrow: 'Tu reflejo', texto: 'Lo que importa y lo que recibe.' },
+      { tipo: 'titulo', eyebrow: 'Tu resumen', texto: 'La importancia de cada área y la energía que recibe' },
       {
         tipo: 'barras',
-        series: ['Importa', 'Recibe'],
+        series: ['Importancia', 'Energía'],
         max: 10,
         items: bs.map((b) => ({ nombre: b.dominio.nombre, a: b.importa, b: b.recibe })),
       },
       { tipo: 'parrafo', texto: lectura },
-      { tipo: 'frase', etiqueta: 'Lo que se lleva la energía', texto: t(r, 'ladron') },
-      { tipo: 'frase', etiqueta: 'Tu movimiento de esta semana', texto: t(r, 'movimiento'), destacada: true },
+      { tipo: 'frase', etiqueta: 'Lo que suele ocupar tu energía', texto: t(r, 'ladron') },
+      { tipo: 'frase', etiqueta: 'Tu acción para esta semana', texto: t(r, 'movimiento'), destacada: true },
       {
         tipo: 'cierre',
-        texto: 'No se trata de equilibrarlo todo. Se trata de que lo que más importa no sea lo que menos recibe.',
+        texto:
+          'El objetivo no es dedicarle lo mismo a todas las áreas, sino procurar que lo que más valoras reciba la atención que necesita.',
       },
     ];
   },
@@ -494,12 +508,12 @@ const brecha: Ejercicio = {
 
 const futuro: Ejercicio = {
   id: 'futuro',
-  camino: 'Lo que importa',
-  titulo: 'Carta desde dentro de cinco años',
-  subtitulo: 'Tu yo del futuro te escribe. Y te pide algo.',
+  camino: 'Valores y propósito',
+  titulo: 'Tu mejor yo posible',
+  subtitulo: 'Una carta escrita desde dentro de cinco años, imaginando que las cosas salieron bien.',
   descripcion:
-    'Imagina que han pasado cinco años y las cosas salieron tan bien como podían salir. Esa persona te escribe hoy: qué cambió, qué soltó, qué te pide que empieces.',
-  teLlevas: 'Una carta para releer dentro de un año y la petición concreta de tu yo futuro.',
+    'Imaginarás que han pasado cinco años y que las cosas salieron tan bien como era posible. Desde ese momento, te escribirás una carta sobre lo que cambió, lo que dejaste atrás y lo que te gustaría empezar hoy.',
+  teLlevas: 'Una carta para releer dentro de un año y una meta concreta para empezar ahora.',
   duracion: '15 minutos',
   intensidad: 'media',
   enfoque:
@@ -509,50 +523,53 @@ const futuro: Ejercicio = {
     { nombre: 'Peters, M. L. et al. (2010), Manipulating optimism: best possible self' },
   ],
   intro: [
-    'El futuro no se predice. Se ensaya. Cuando te imaginas con detalle una versión de tu vida que salió bien, no estás soñando: estás ordenando qué importa, qué estorba y por dónde se empieza.',
-    'Vas a escribir desde dentro de cinco años, como si ya hubiera pasado. No la versión perfecta: la que podría ocurrir de verdad si trabajas en ello y la vida acompaña un poco.',
+    'Imaginar con detalle una versión posible y satisfactoria de tu vida ayuda a aclarar metas, identificar obstáculos y reconocer por dónde empezar. Diversos estudios asocian este ejercicio con un mayor optimismo y bienestar.',
+    'Escribirás desde dentro de cinco años, como si ya hubiera ocurrido. No se trata de una versión perfecta, sino de una posible: la que podría darse si trabajas en ello y las circunstancias acompañan.',
   ],
-  antes: ['Escribe en pasado, como quien cuenta lo que ya ocurrió.', 'Sé concreto: nombres, lugares, rutinas.'],
+  antes: [
+    'Escribe en pasado, como quien cuenta algo que ya ocurrió.',
+    'Procura ser concreto o concreta: personas, lugares y rutinas.',
+  ],
   pasos: [
     {
       tipo: 'opciones',
       id: 'cambio',
-      titulo: 'Han pasado cinco años y las cosas salieron tan bien como podían salir. ¿Qué cambió más?',
+      titulo: 'Han pasado cinco años y las cosas salieron bien. ¿Qué áreas de tu vida cambiaron más?',
       multiple: true,
       max: 3,
       min: 1,
       opciones: [
         'Mi salud',
-        'Mi pareja',
+        'Mi relación de pareja',
         'Mi trabajo',
-        'Mi dinero',
+        'Mis finanzas',
         'Mi familia',
         'Mis amistades',
         'Mi paz interior',
         'Un proyecto propio',
-        'Dónde vivo',
-        'Cómo me trato',
+        'El lugar donde vivo',
+        'La manera en que me trato',
       ],
     },
     {
       tipo: 'nota',
       id: 'voz',
-      titulo: 'Ahora cambia de voz.',
+      titulo: 'Ahora escribirás desde el futuro.',
       texto:
-        'Quien escribe es tu yo de dentro de cinco años. Habla con cariño y sin adornos, como se le habla a alguien que uno conoce bien. Tiene algo que contarte y algo que pedirte.',
+        'Quien escribe es tu yo de dentro de cinco años. Habla con cariño y con sinceridad, como se le habla a alguien que se conoce bien. Tiene algo que contarte y algo que pedirte.',
     },
     {
       tipo: 'texto',
       id: 'carta',
       titulo: 'Querido yo de hoy:',
-      guia: 'Cuéntale qué cambió, qué tuviste que soltar para llegar aquí, qué te daba miedo y resultó bien, y qué te pide que empieces ahora.',
+      guia: 'Cuéntale qué cambió, qué tuviste que dejar atrás para llegar ahí, qué te preocupaba y salió bien, y qué te pide que empieces ahora.',
       min: 300,
       filas: 12,
       minutos: 10,
       ayudas: [
         'Lo primero que cambió fue…',
-        'Tuve que soltar…',
-        'Lo que te daba miedo y salió bien fue…',
+        'Tuve que dejar atrás…',
+        'Algo que me preocupaba y salió bien fue…',
         'Te pido que empieces ahora con…',
       ],
     },
@@ -560,20 +577,20 @@ const futuro: Ejercicio = {
       tipo: 'marcar',
       id: 'peticion',
       de: 'carta',
-      titulo: 'Lee la carta despacio. Toca la frase donde tu yo futuro te pide algo.',
+      titulo: 'Lee la carta con calma y selecciona la frase en la que tu yo futuro te pide algo.',
     },
     {
       tipo: 'texto',
       id: 'soltar',
-      titulo: 'Lo que tuviste que soltar para llegar ahí:',
-      guia: 'Una cosa. Un hábito, una idea sobre ti, una relación, un miedo.',
+      titulo: '¿Qué tuviste que dejar atrás para llegar ahí?',
+      guia: 'Escribe una cosa: un hábito, una idea sobre ti, una relación o un temor.',
       min: 10,
       filas: 3,
     },
   ],
   reflejo: (r) => [
-    { tipo: 'titulo', eyebrow: 'Tu reflejo', texto: 'Lo que te escribió tu yo de dentro de cinco años.' },
-    { tipo: 'chips', etiqueta: 'Lo que más cambió', items: l(r, 'cambio') },
+    { tipo: 'titulo', eyebrow: 'Tu resumen', texto: 'La carta de tu yo de dentro de cinco años' },
+    { tipo: 'chips', etiqueta: 'Las áreas que más cambiaron', items: l(r, 'cambio') },
     {
       tipo: 'carta',
       titulo: 'Querido yo de hoy:',
@@ -582,50 +599,54 @@ const futuro: Ejercicio = {
       firma: 'Tú, dentro de cinco años',
     },
     { tipo: 'frase', etiqueta: 'Lo que te pide', texto: t(r, 'peticion'), destacada: true },
-    { tipo: 'frase', etiqueta: 'Lo que soltaste para llegar', texto: t(r, 'soltar') },
+    { tipo: 'frase', etiqueta: 'Lo que dejaste atrás para llegar', texto: t(r, 'soltar') },
     {
       tipo: 'parrafo',
-      texto: `Guarda esta carta (abajo puedes imprimirla). Léela de nuevo el ${fechaLarga(enAnios(1))}. Vas a saber si le hiciste caso.`,
+      texto: `Te sugerimos guardar esta carta (puedes imprimirla más abajo) y releerla el ${fechaLarga(enAnios(1))}. Será una buena oportunidad para observar tu progreso.`,
     },
-    { tipo: 'cierre', texto: 'El futuro no se predice. Se ensaya.' },
+    {
+      tipo: 'cierre',
+      texto: 'Imaginar el futuro con detalle no lo garantiza, pero sí ayuda a orientar las decisiones del presente.',
+    },
   ],
   servicio: TERAPIA_INDIVIDUAL,
 };
 
 /* =====================================================================================================
-   DE DÓNDE VIENES
+   TU HISTORIA
    ===================================================================================================== */
 
 const frases: Ejercicio = {
   id: 'frases',
-  camino: 'De dónde vienes',
-  titulo: 'Las frases que te criaron',
-  subtitulo: 'Las reglas que te dieron antes de que pudieras elegir.',
+  camino: 'Tu historia',
+  titulo: 'Los mensajes que aprendiste al crecer',
+  subtitulo: 'Frases que escuchaste en tu infancia y la influencia que pueden tener hoy.',
   descripcion:
-    'Antes de tener opinión propia ya tenías reglas: te las dijeron en casa, en la escuela, en la iglesia. Algunas te protegieron. Otras todavía te gobiernan sin que lo notes.',
-  teLlevas: 'La frase que sigue mandando en tu vida adulta, lo que te ha costado y una versión reescrita por ti.',
+    'Durante la infancia aprendemos mensajes sobre las emociones, las relaciones y nuestro valor personal. Algunos nos protegieron; otros pueden seguir influyendo en nuestras decisiones. Aquí podrás identificarlos y reformular uno de ellos.',
+  teLlevas:
+    'El mensaje que más influye en tu vida adulta, su efecto en ti y una versión reformulada con tus propias palabras.',
   duracion: '15 a 20 minutos',
   intensidad: 'honda',
   enfoque:
-    'Trabajo con creencias tempranas y reglas de vida, común a la terapia cognitivo-conductual y a la terapia de esquemas. Las frases son de Growing Souls, no de ningún cuestionario.',
+    'Trabajo con creencias tempranas y reglas de vida, común a la terapia cognitivo-conductual y a la terapia de esquemas. Las frases son de Growing Souls y no provienen de ningún cuestionario.',
   fuentes: [
     { nombre: 'Beck, J. S. (2011), Cognitive Behavior Therapy: Basics and Beyond, 2.ª ed.' },
     { nombre: 'Young, J. E., Klosko, J. S. y Weishaar, M. E. (2003), Schema Therapy' },
   ],
   intro: [
-    'Nadie te preguntó. Cuando tenías cinco años, siete, diez, alguien te dijo cómo eran las cosas: qué se siente y qué no, qué se dice y qué se calla, qué vale y qué no. Lo aprendiste tan temprano que hoy no parece aprendido: parece tu carácter.',
-    'Este ejercicio te pone delante esas frases. No para culpar a nadie: las personas que te criaron fueron criadas con frases también. Para que puedas elegir, por fin, cuáles conservar.',
+    'Desde muy temprano, las personas que nos crían nos transmiten ideas sobre lo que se siente y lo que se expresa, sobre cómo comportarnos y sobre lo que vale. Muchas de esas ideas se aprenden tan pronto que, con el tiempo, parecen parte de nuestra personalidad.',
+    'Este ejercicio te invita a identificar algunos de esos mensajes. El propósito no es buscar culpables, ya que quienes nos criaron también aprendieron sus propios mensajes. El propósito es que puedas decidir, con más conciencia, cuáles deseas conservar.',
   ],
   antes: [
-    'Puede remover. Hazlo con tiempo y, si puedes, con un cuaderno al lado.',
-    'No hay respuestas correctas. Hay respuestas tuyas.',
+    'Puede despertar recuerdos o emociones intensas. Hazlo con tiempo y, si lo deseas, con un cuaderno a la mano.',
+    'No hay respuestas correctas; lo importante es que sean tuyas.',
   ],
   pasos: [
     {
       tipo: 'opciones',
       id: 'oidas',
-      titulo: '¿Cuáles de estas frases escuchaste creciendo?',
-      guia: 'Marca todas las que reconozcas, aunque no fueran con esas palabras exactas.',
+      titulo: '¿Cuáles de estas frases escuchaste al crecer?',
+      guia: 'Marca las que reconozcas, aunque no fueran exactamente con esas palabras.',
       multiple: true,
       min: 1,
       otra: true,
@@ -657,7 +678,7 @@ const frases: Ejercicio = {
     {
       tipo: 'opciones',
       id: 'fuentes',
-      titulo: '¿De quién venían, sobre todo?',
+      titulo: '¿De quién provenían principalmente?',
       multiple: true,
       min: 1,
       opciones: [
@@ -668,58 +689,54 @@ const frases: Ejercicio = {
         'La escuela',
         'La iglesia',
         'Otros adultos de la familia',
-        'El barrio, la calle',
+        'El vecindario o la comunidad',
       ],
     },
     {
       tipo: 'opciones',
       id: 'vigente',
-      titulo: 'De las que marcaste, ¿cuál sigue mandando hoy?',
-      guia: 'La que más se parece a cómo te hablas cuando nadie te oye.',
+      titulo: 'De las frases que marcaste, ¿cuál sigue influyendo más en ti hoy?',
+      guia: 'La que más se parece a la manera en que te hablas a ti mismo o a ti misma.',
       desde: 'oidas',
     },
     {
       tipo: 'texto',
       id: 'hoy',
-      titulo: (r) => `${comillas(t(r, 'vigente'))} ¿Cómo se ve esa frase en tu vida adulta?`,
-      guia: 'Dónde aparece: en el trabajo, en pareja, con tus hijos, contigo. Un ejemplo reciente.',
+      titulo: (r) => `${comillas(t(r, 'vigente'))} ¿Cómo se manifiesta esta frase en tu vida adulta?`,
+      guia: 'Piensa en dónde aparece: en el trabajo, en la pareja, con tus hijos o contigo. Puedes describir un ejemplo reciente.',
       min: 60,
       filas: 5,
-      ayudas: [
-        'La última vez que la obedecí fue…',
-        'Se nota en que yo nunca…',
-        'Con mi pareja (o mis hijos) se ve cuando…',
-      ],
+      ayudas: ['La última vez que la noté fue…', 'Se nota en que yo suelo…', 'En mis relaciones se ve cuando…'],
     },
     {
       tipo: 'texto',
       id: 'precio',
-      titulo: '¿Qué te ha costado obedecerla?',
-      guia: 'En salud, en relaciones, en cosas que no hiciste, en cosas que no dijiste.',
+      titulo: '¿Cómo te ha afectado seguir esa frase?',
+      guia: 'En tu salud, en tus relaciones, en lo que has dejado de hacer o de decir.',
       min: 30,
       filas: 4,
     },
     {
       tipo: 'texto',
       id: 'protegio',
-      titulo: '¿Y de qué te protegió, en algún momento?',
-      guia: 'Casi todas las reglas nacieron para protegerte de algo. Reconocerlo no es justificarlas.',
+      titulo: '¿De qué te protegió en algún momento?',
+      guia: 'Muchas de estas reglas surgieron para protegernos de algo. Reconocerlo no significa justificarlas.',
       min: 20,
       filas: 4,
     },
     {
       tipo: 'pausa',
       id: 'respira',
-      titulo: 'Esto pesa.',
-      texto: 'Antes de seguir, respira tres veces con calma. Lo que viene es lo que te vas a llevar.',
+      titulo: 'Una pausa antes de continuar.',
+      texto: 'Respira con calma tres veces. A continuación, reformularás el mensaje con tus propias palabras.',
       respiracion: true,
     },
     {
       tipo: 'texto',
       id: 'reescrita',
       titulo: (r) =>
-        `Imagina a un niño o una niña de seis años que quieres mucho. Reescribe ${comillas(t(r, 'vigente'))} como se lo dirías a esa criatura.`,
-      guia: 'Misma situación, misma intención de cuidar. Otras palabras.',
+        `Imagina a un niño o una niña de seis años a quien quieres mucho. Reformula ${comillas(t(r, 'vigente'))} tal como se lo dirías, con cuidado y respeto.`,
+      guia: 'La misma situación y la misma intención de cuidar, con otras palabras.',
       min: 15,
       filas: 3,
     },
@@ -727,23 +744,32 @@ const frases: Ejercicio = {
   reflejo: (r) => {
     const oidas = l(r, 'oidas');
     return [
-      { tipo: 'titulo', eyebrow: 'Tu reflejo', texto: `Creciste con ${enPalabras(oidas.length)} de estas frases.` },
-      { tipo: 'chips', etiqueta: 'Las que reconociste', items: oidas },
-      { tipo: 'chips', etiqueta: 'De quién venían', items: l(r, 'fuentes') },
-      { tipo: 'frase', etiqueta: 'La que sigue mandando', texto: comillas(t(r, 'vigente')) },
-      { tipo: 'frase', etiqueta: 'Cómo se ve hoy', texto: t(r, 'hoy') },
+      {
+        tipo: 'titulo',
+        eyebrow: 'Tu resumen',
+        texto:
+          oidas.length === 1 ? 'Reconociste una de estas frases' : `Reconociste ${enPalabras(oidas.length)} de estas frases`,
+      },
+      { tipo: 'chips', etiqueta: 'Las frases que reconociste', items: oidas },
+      { tipo: 'chips', etiqueta: 'De quién provenían', items: l(r, 'fuentes') },
+      { tipo: 'frase', etiqueta: 'La que más influye hoy', texto: comillas(t(r, 'vigente')) },
+      { tipo: 'frase', etiqueta: 'Cómo se manifiesta hoy', texto: t(r, 'hoy') },
       {
         tipo: 'columnas',
-        izquierda: { titulo: 'Lo que te ha costado', texto: t(r, 'precio') },
-        derecha: { titulo: 'De lo que te protegió', texto: t(r, 'protegio') },
+        izquierda: { titulo: 'Cómo te ha afectado', texto: t(r, 'precio') },
+        derecha: { titulo: 'De qué te protegió', texto: t(r, 'protegio') },
       },
-      { tipo: 'frase', etiqueta: 'La regla, reescrita por ti', texto: comillas(t(r, 'reescrita')), destacada: true },
+      { tipo: 'frase', etiqueta: 'Tu versión reformulada', texto: comillas(t(r, 'reescrita')), destacada: true },
       {
         tipo: 'aviso',
         texto:
-          'Si marcaste muchas, no significa que algo esté mal contigo. Significa que te criaron personas que también fueron criadas con frases.',
+          'Haber reconocido varias frases no significa que algo esté mal contigo. Refleja que las personas que te criaron también crecieron con sus propios mensajes.',
       },
-      { tipo: 'cierre', texto: 'Las frases que te criaron no se borran. Se les responde. Hoy le respondiste a una.' },
+      {
+        tipo: 'cierre',
+        texto:
+          'Estos mensajes no cambian de un día para otro, pero es posible responderles de una manera más compasiva. Hoy diste un primer paso con uno de ellos.',
+      },
     ];
   },
   servicio: TERAPIA_INDIVIDUAL,
@@ -751,71 +777,75 @@ const frases: Ejercicio = {
 
 const historia: Ejercicio = {
   id: 'historia',
-  camino: 'De dónde vienes',
-  titulo: 'Tu vida en seis frases',
-  subtitulo: 'Los mismos hechos. Otro narrador.',
+  camino: 'Tu historia',
+  titulo: 'Tu historia desde otra perspectiva',
+  subtitulo: 'Los mismos hechos, contados desde tres miradas distintas.',
   descripcion:
-    'Cuenta tu vida en seis frases, las primeras que salgan. Después cuéntala desde lo que sobreviviste. Y después como la contaría alguien que te quiere. Mismos hechos; tres historias.',
-  teLlevas: 'Tres versiones de tu historia y la frase que te cuesta creer.',
+    'Escribirás tu historia en seis frases. Luego la contarás de nuevo desde lo que superaste y aprendiste, y después como la contaría una persona que te quiere. Los hechos no cambian; cambia la manera de narrarlos.',
+  teLlevas: 'Tres versiones de tu historia y la frase que más te cuesta reconocer sobre ti.',
   duracion: '15 minutos',
   intensidad: 'honda',
   enfoque:
-    'Inspirado en la terapia narrativa (White y Epston): la historia que cuentas sobre ti no es la única posible con los mismos hechos.',
+    'Inspirado en la terapia narrativa (White y Epston): la manera en que contamos nuestra historia influye en cómo nos vemos, y los mismos hechos admiten más de una lectura.',
   fuentes: [
     { nombre: 'White, M. y Epston, D. (1990), Narrative Means to Therapeutic Ends' },
     { nombre: 'Adler, J. M. (2012), Living into the story: agency and coherence in narrative identity' },
   ],
   intro: [
-    'Todos cargamos una versión de nuestra vida. Suele ser corta, suele estar contada desde lo que faltó, y la repetimos tanto que parece la única.',
-    'Aquí vas a escribirla tres veces. No cambia ni un hecho. Cambia quién narra.',
+    'Todas las personas tenemos una versión de nuestra propia historia. A menudo es breve, se centra en lo que faltó o en lo que salió mal y, de tanto repetirla, puede parecer la única posible.',
+    'En este ejercicio escribirás tu historia tres veces. Los hechos se mantienen; lo que cambia es la perspectiva desde la que se cuentan.',
   ],
   antes: [
-    'Seis frases, no más. La limitación es parte del ejercicio.',
-    'No busques escribir bonito. Busca escribir verdad.',
+    'Escribe seis frases en cada versión; el límite forma parte del ejercicio.',
+    'No hace falta escribir bonito. Lo importante es que lo que escribas se sienta auténtico para ti.',
   ],
   pasos: [
     {
       tipo: 'texto',
       id: 'v1',
-      titulo: 'Cuenta tu vida en seis frases.',
-      guia: 'Las primeras que salgan. Sin pensar demasiado.',
+      titulo: 'Cuenta tu historia en seis frases.',
+      guia: 'Escribe las primeras que surjan, sin pensarlo demasiado.',
       min: 80,
       filas: 6,
     },
     {
       tipo: 'opciones',
       id: 'tono',
-      titulo: 'Léela. ¿Desde dónde está contada?',
+      titulo: 'Léela de nuevo. ¿Desde qué lugar está contada?',
       opciones: [
         'Desde lo que me pasó',
         'Desde lo que me faltó',
         'Desde lo que logré',
         'Desde lo que me hicieron',
-        'Desde lo que sobreviví',
+        'Desde lo que superé',
         'No sabría decir',
       ],
     },
     {
       tipo: 'nota',
       id: 'giro',
-      titulo: 'Toda historia se puede contar desde otro lugar.',
+      titulo: 'Una misma historia puede contarse desde distintos lugares.',
       texto:
-        'Sin cambiar un solo hecho. La misma infancia, la misma pérdida, el mismo trabajo. Lo que cambia es qué se pone en el centro: lo que te pasó, o lo que hiciste con lo que te pasó.',
+        'Sin cambiar ningún hecho: la misma infancia, la misma pérdida, el mismo trabajo. Lo que puede cambiar es lo que se coloca en el centro: lo que te ocurrió, o lo que hiciste con lo que te ocurrió.',
     },
     {
       tipo: 'texto',
       id: 'v2',
-      titulo: 'Cuenta la misma vida en seis frases, desde lo que sobreviviste y lo que aprendiste.',
-      guia: 'Mismos hechos. Otro centro.',
+      titulo: 'Cuenta la misma historia en seis frases, desde lo que superaste y aprendiste.',
+      guia: 'Los mismos hechos, con otro énfasis.',
       min: 80,
       filas: 6,
-      ayudas: ['Cuando pasó aquello, lo que hice fue…', 'Nadie me enseñó, y aun así…', 'Sigo aquí porque…'],
+      ayudas: [
+        'Cuando ocurrió aquello, lo que hice fue…',
+        'Aunque no tenía todas las herramientas, …',
+        'Hoy sigo adelante porque…',
+      ],
     },
     {
       tipo: 'texto',
       id: 'v3',
-      titulo: 'Y ahora como la contaría alguien que te quiere y te conoce bien.',
-      guia: 'En tercera persona, si te ayuda: «Ella…», «Él…».',
+      titulo: 'Ahora cuéntala como lo haría una persona que te quiere y te conoce bien.',
+      guia: 'Si te ayuda, escríbela en tercera persona: «Ella…», «Él…».',
       min: 60,
       filas: 6,
     },
@@ -823,74 +853,83 @@ const historia: Ejercicio = {
       tipo: 'marcar',
       id: 'clave',
       de: 'v3',
-      titulo: 'Lee esa última versión. Toca la frase que más te cuesta creer.',
+      titulo: 'Lee esta última versión y selecciona la frase que más te cuesta creer sobre ti.',
     },
   ],
   reflejo: (r) => {
     const tono = t(r, 'tono');
     const lecturas: Record<string, string> = {
       'Desde lo que me pasó':
-        'La primera versión está contada desde lo que te pasó. Es la más común: la vida como algo que ocurre.',
+        'Tu primera versión está contada desde lo que te ocurrió, una manera muy común de narrar la propia vida.',
       'Desde lo que me faltó':
-        'La primera versión está contada desde lo que faltó. Es la que más pesa, y la que más se repite.',
+        'Tu primera versión está contada desde lo que faltó. Es una perspectiva frecuente que suele pesar; las otras dos versiones pueden ayudarte a equilibrarla.',
       'Desde lo que logré':
-        'La primera versión está contada desde lo que lograste. Fíjate en si en la tercera aparece algo que los logros no cuentan.',
+        'Tu primera versión está contada desde tus logros. Observa si la tercera versión incluye aspectos de ti que los logros no reflejan.',
       'Desde lo que me hicieron':
-        'La primera versión está contada desde lo que te hicieron. Es verdad, y no es toda la verdad: la tercera versión lo sabe.',
-      'Desde lo que sobreviví':
-        'Ya la primera versión estaba contada desde lo que sobreviviste. La tercera te deja ver lo que, además, construiste.',
+        'Tu primera versión está contada desde lo que otras personas te hicieron. Esa experiencia es válida y, a la vez, no es lo único que te define; la tercera versión puede ayudarte a verlo.',
+      'Desde lo que superé':
+        'Tu primera versión ya estaba contada desde lo que superaste. La tercera te permite ver, además, lo que has construido.',
       'No sabría decir':
-        'No supiste decir desde dónde estaba contada la primera. A veces es la señal de que la historia todavía no es tuya del todo.',
+        'No te fue fácil identificar desde dónde estaba contada la primera versión. Es frecuente y puede indicar un tema que vale la pena seguir explorando.',
     };
     return [
-      { tipo: 'titulo', eyebrow: 'Tu reflejo', texto: 'Tres veces tu vida.' },
+      { tipo: 'titulo', eyebrow: 'Tu resumen', texto: 'Tu historia, en tres versiones' },
       {
         tipo: 'citas',
         items: [
-          { etiqueta: 'Como salió primero', texto: t(r, 'v1') },
-          { etiqueta: 'Desde lo que sobreviviste', texto: t(r, 'v2') },
+          { etiqueta: 'Tu primera versión', texto: t(r, 'v1') },
+          { etiqueta: 'Desde lo que superaste', texto: t(r, 'v2') },
           { etiqueta: 'Como la contaría alguien que te quiere', texto: t(r, 'v3') },
         ],
       },
       { tipo: 'parrafo', texto: lecturas[tono] ?? '' },
-      { tipo: 'frase', etiqueta: 'La frase que te cuesta creer', texto: t(r, 'clave'), destacada: true },
-      { tipo: 'parrafo', texto: 'Ahí hay trabajo. Y ahí hay algo verdadero que otra persona ve y tú todavía no.' },
-      { tipo: 'cierre', texto: 'No eliges lo que te pasó. Eliges quién narra.' },
+      { tipo: 'frase', etiqueta: 'La frase que más te cuesta creer', texto: t(r, 'clave'), destacada: true },
+      {
+        tipo: 'parrafo',
+        texto:
+          'Esa frase puede ser un buen punto de partida para seguir reflexionando: muestra algo que otra persona reconoce en ti y que quizás todavía te cuesta ver.',
+      },
+      {
+        tipo: 'cierre',
+        texto: 'No podemos cambiar lo que ocurrió, pero sí la manera en que lo comprendemos y lo contamos.',
+      },
     ];
   },
   servicio: TERAPIA_INDIVIDUAL,
 };
 
 /* =====================================================================================================
-   CONTIGO
+   TU RELACIÓN CONTIGO
    ===================================================================================================== */
 
 const critica: Ejercicio = {
   id: 'critica',
-  camino: 'Contigo',
-  titulo: 'La voz que te habla por dentro',
-  subtitulo: 'Lo que te dices, de dónde lo aprendiste y lo que le dirías a alguien que quieres.',
+  camino: 'Tu relación contigo',
+  titulo: 'Tu diálogo interno',
+  subtitulo: 'Cómo te hablas, de dónde viene esa voz y cómo responderle con compasión.',
   descripcion:
-    'Esa voz que te juzga antes que nadie: qué dice, cuándo sube, de qué cree que te protege. Y la prueba más simple: ¿le dirías eso a alguien que quieres?',
-  teLlevas: 'Las frases de tu crítica interna, de qué te protege y una frase justa para responderle.',
+    'Muchas personas tienen una voz interna muy exigente. Aquí identificarás lo que te dice, en qué momentos aparece y de qué intenta protegerte, y practicarás una manera más compasiva de responderle.',
+  teLlevas: 'Las frases de tu voz crítica, lo que intentan proteger y una respuesta más compasiva hacia ti.',
   duracion: '12 a 15 minutos',
   intensidad: 'media',
   enfoque:
-    'Basado en la investigación sobre autocompasión (Kristin Neff) y en el trabajo con la voz crítica interna. Preguntas propias.',
+    'Basado en la investigación sobre autocompasión (Kristin Neff) y en el trabajo con la autocrítica de la terapia centrada en la compasión (Paul Gilbert). Preguntas propias de Growing Souls.',
   fuentes: [
     { nombre: 'Neff, K. D. (2003), Self-compassion: an alternative conceptualization' },
     { nombre: 'Gilbert, P. (2009), The Compassionate Mind' },
   ],
   intro: [
-    'Hay una voz que te habla antes de que hable nadie. Te dice que no fue suficiente, que siempre es lo mismo contigo, que a ver qué van a pensar. Lleva tanto tiempo ahí que ya no la oyes como una voz: la oyes como la verdad.',
-    'Este ejercicio la pone en el papel para que puedas mirarla. No para callarla. Para dejar de ser la única que habla.',
+    'Muchas personas tienen una voz interna que critica con dureza: señala errores, compara y exige más. Cuando lleva mucho tiempo presente, es fácil confundirla con una descripción objetiva de quiénes somos.',
+    'Este ejercicio te ayuda a observar esa voz con más distancia. El objetivo no es eliminarla, sino aprender a responderle también desde la comprensión y la compasión.',
   ],
-  antes: ['Sé literal: escribe las frases como suenan por dentro, aunque sean duras.'],
+  antes: [
+    'Escribe las frases tal como suenan en tu mente, aunque sean duras. Reconocerlas forma parte del proceso.',
+  ],
   pasos: [
     {
       tipo: 'opciones',
       id: 'frases',
-      titulo: '¿Qué te dice esa voz? Marca las que reconozcas.',
+      titulo: '¿Qué te dice esa voz? Marca las frases que reconozcas.',
       multiple: true,
       min: 1,
       otra: true,
@@ -914,7 +953,7 @@ const critica: Ejercicio = {
     {
       tipo: 'opciones',
       id: 'cuando',
-      titulo: '¿Cuándo sube de volumen?',
+      titulo: '¿En qué momentos se hace más fuerte?',
       multiple: true,
       min: 1,
       opciones: [
@@ -924,7 +963,7 @@ const critica: Ejercicio = {
         'Cuando pido ayuda',
         'Frente al espejo',
         'Cuando digo que no',
-        'Cuando me va bien',
+        'Cuando las cosas me salen bien',
         'De noche, antes de dormir',
         'Cuando alguien me critica',
       ],
@@ -932,37 +971,37 @@ const critica: Ejercicio = {
     {
       tipo: 'escala',
       id: 'volumen',
-      titulo: 'Un día normal, ¿qué tan alto habla?',
-      etiquetas: ['Apenas se oye', 'No se oye otra cosa'],
+      titulo: 'En un día típico, ¿qué tan presente está esa voz?',
+      etiquetas: ['Casi no aparece', 'Está presente casi todo el tiempo'],
     },
     {
       tipo: 'texto',
       id: 'origen',
-      titulo: '¿A quién se parece esa voz? ¿De dónde la aprendiste?',
-      guia: 'A veces tiene el tono exacto de alguien. A veces es una mezcla.',
+      titulo: '¿A quién te recuerda esa voz? ¿Dónde crees que la aprendiste?',
+      guia: 'A veces se parece a una persona en particular; otras veces es una combinación de varias personas o experiencias.',
       min: 20,
       filas: 4,
     },
     {
       tipo: 'texto',
       id: 'protege',
-      titulo: 'Por dura que sea, esa voz cree que te protege de algo. ¿De qué?',
-      guia: 'De que te rechacen, de fallar delante de otros, de confiarte demasiado, de que te vuelvan a hacer daño…',
+      titulo: 'Aunque sea dura, esa voz suele intentar protegerte de algo. ¿De qué crees que te protege?',
+      guia: 'Por ejemplo: del rechazo, de equivocarte frente a otros, de confiarte demasiado o de volver a sufrir.',
       min: 20,
       filas: 4,
     },
     {
       tipo: 'nota',
       id: 'amigo',
-      titulo: 'Ahora imagina esto.',
+      titulo: 'Ahora imagina esta situación.',
       texto:
-        'Alguien a quien quieres mucho llega y te cuenta exactamente lo que tú te dices. Mismas palabras, misma situación. Está delante de ti, esperando que digas algo.',
+        'Una persona a quien quieres mucho se acerca y te cuenta que se dice a sí misma lo mismo que tú te dices, en una situación parecida. Te pide tu opinión.',
     },
     {
       tipo: 'texto',
       id: 'respuesta',
       titulo: '¿Qué le dirías?',
-      guia: 'Escríbelo tal cual se lo dirías. Con el tono con el que le hablarías.',
+      guia: 'Escríbelo como se lo dirías, con el tono que usarías con esa persona.',
       min: 60,
       filas: 6,
     },
@@ -970,29 +1009,32 @@ const critica: Ejercicio = {
       tipo: 'marcar',
       id: 'justa',
       de: 'respuesta',
-      titulo: 'Toca la frase que más te gustaría escuchar tú.',
+      titulo: 'Selecciona la frase que más te gustaría escuchar a ti.',
     },
   ],
   reflejo: (r) => {
     const dichas = l(r, 'frases');
     return [
-      { tipo: 'titulo', eyebrow: 'Tu reflejo', texto: 'La voz, y lo que tú le respondes.' },
+      { tipo: 'titulo', eyebrow: 'Tu resumen', texto: 'Tu voz crítica y tu respuesta compasiva' },
       { tipo: 'chips', etiqueta: 'Lo que te dice', items: dichas },
-      { tipo: 'medida', etiqueta: 'Volumen, un día normal', valor: n(r, 'volumen'), max: 10 },
-      { tipo: 'chips', etiqueta: 'Cuándo sube', items: l(r, 'cuando') },
-      { tipo: 'frase', etiqueta: 'De dónde la aprendiste', texto: t(r, 'origen') },
-      { tipo: 'frase', etiqueta: 'De qué cree que te protege', texto: t(r, 'protege') },
+      { tipo: 'medida', etiqueta: 'Presencia en un día típico', valor: n(r, 'volumen'), max: 10 },
+      { tipo: 'chips', etiqueta: 'Cuándo se hace más fuerte', items: l(r, 'cuando') },
+      { tipo: 'frase', etiqueta: 'Dónde la aprendiste', texto: t(r, 'origen') },
+      { tipo: 'frase', etiqueta: 'De qué intenta protegerte', texto: t(r, 'protege') },
       {
         tipo: 'columnas',
-        izquierda: { titulo: 'A ti te dices', texto: comillas(dichas[0] ?? '') },
-        derecha: { titulo: 'A alguien que quieres le dirías', texto: comillas(t(r, 'justa')) },
+        izquierda: { titulo: 'Lo que te dices', texto: comillas(dichas[0] ?? '') },
+        derecha: { titulo: 'Lo que le dirías a alguien que quieres', texto: comillas(t(r, 'justa')) },
       },
       {
         tipo: 'parrafo',
         texto:
-          'Es la misma situación y es la misma persona. Lo que cambia es el tono. La frase que marcaste no es más amable: es más justa.',
+          'La situación es la misma; lo que cambia es el tono. La frase que elegiste no niega las dificultades: las mira con más equilibrio y comprensión.',
       },
-      { tipo: 'cierre', texto: 'No tienes que callar esa voz. Tienes que dejar de ser la única que habla.' },
+      {
+        tipo: 'cierre',
+        texto: 'No se trata de silenciar la autocrítica, sino de que la compasión también tenga un lugar en tu diálogo interno.',
+      },
     ];
   },
   servicio: TERAPIA_INDIVIDUAL,
@@ -1000,122 +1042,128 @@ const critica: Ejercicio = {
 
 const evitar: Ejercicio = {
   id: 'evitar',
-  camino: 'Contigo',
-  titulo: 'Lo que llevas tiempo sin mirar',
-  subtitulo: 'Lo que evitas, lo que haces en su lugar y lo que te cuesta.',
+  camino: 'Tu relación contigo',
+  titulo: 'Lo que has ido posponiendo',
+  subtitulo: 'Identifica algo que has evitado, cómo te afecta y un primer paso posible.',
   descripcion:
-    'Hay algo que llevas semanas o meses sin mirar de frente. Aquí le pones nombre, ves qué haces en vez de mirarlo y cuánto te cuesta. Y eliges un paso ridículamente pequeño.',
-  teLlevas: 'El nombre de lo que evitas, lo que la evitación te cuesta y un primer paso con fecha.',
+    'A veces posponemos durante semanas o meses algo que nos genera malestar. En este ejercicio le pondrás nombre, observarás qué haces en su lugar y cómo te afecta, y elegirás un primer paso pequeño y alcanzable.',
+  teLlevas: 'Claridad sobre lo que estás posponiendo, su efecto en tu bienestar y un primer paso con fecha.',
   duracion: '10 minutos',
   intensidad: 'media',
   enfoque:
-    'Basado en el concepto de evitación experiencial de la terapia de aceptación y compromiso (ACT). Preguntas propias.',
+    'Basado en el concepto de evitación experiencial de la terapia de aceptación y compromiso (ACT). Preguntas propias de Growing Souls.',
   fuentes: [{ nombre: 'Hayes, S. C. et al. (1996), Experiential avoidance and behavioral disorders' }],
   intro: [
-    'Evitar funciona. Por eso lo hacemos. Dejas de mirar la cosa y el malestar baja, un rato. Lo que nadie te dijo es que funciona solo al principio, y que lo que evitas no se hace más pequeño: se hace más viejo.',
-    'Diez minutos para mirarlo de reojo. No para resolverlo hoy.',
+    'Evitar algo que nos incomoda suele traer alivio a corto plazo, y por eso es una reacción tan común. Sin embargo, con el tiempo, aquello que evitamos tiende a mantenerse y a generar más preocupación.',
+    'Este ejercicio no busca que lo resuelvas hoy. Te propone observarlo con calma durante unos minutos y definir un primer paso.',
   ],
-  antes: ['Elige una sola cosa. Si hay varias, la que más te pese.'],
+  antes: ['Elige una sola situación. Si hay varias, escoge la que más te preocupa.'],
   pasos: [
     {
       tipo: 'opciones',
       id: 'que',
-      titulo: 'Hay algo que llevas tiempo sin mirar de frente. ¿Qué es?',
+      titulo: '¿Qué has estado posponiendo?',
       otra: true,
       opciones: [
         'Una conversación pendiente',
-        'Una decisión que aplazo',
+        'Una decisión',
         'Una cita médica o un chequeo',
-        'Una deuda o un papel',
+        'Un asunto económico o un trámite',
         'Un duelo',
         'Lo que siento por alguien',
-        'Una relación que no funciona',
-        'Un sueño que sigo posponiendo',
-        'Mi cuerpo',
+        'Una relación que no está funcionando',
+        'Una meta personal',
+        'El cuidado de mi cuerpo',
         'Algo del pasado',
       ],
     },
     {
       tipo: 'texto',
       id: 'nombre',
-      titulo: 'Ponle nombre.',
-      guia: 'Una o dos frases, lo más concretas que puedas. Nadie va a leerlas.',
+      titulo: 'Descríbelo con tus palabras.',
+      guia: 'Una o dos frases, lo más concretas posible. Lo que escribas es solo para ti.',
       min: 20,
       filas: 3,
     },
     {
       tipo: 'opciones',
       id: 'en_vez',
-      titulo: '¿Qué haces en vez de mirarlo?',
+      titulo: '¿Qué sueles hacer en lugar de atenderlo?',
       multiple: true,
       max: 3,
       min: 1,
       opciones: [
-        'El teléfono',
+        'Usar el teléfono',
         'Trabajar más',
         'Dormir',
         'Comer',
-        'Limpiar, organizar, ocuparme',
-        'Pelear por otras cosas',
-        'Ayudar a todo el mundo',
-        'Series, juegos',
+        'Limpiar, organizar o mantenerme ocupado u ocupada',
+        'Discutir por otras cosas',
+        'Ayudar a los demás',
+        'Ver series o jugar',
         'Darle vueltas sin decidir',
         'Beber o fumar',
-        'Salir, no parar en casa',
+        'Salir y pasar poco tiempo en casa',
       ],
     },
     {
       tipo: 'texto',
       id: 'teme',
-      titulo: 'Si lo miraras de frente, ¿qué temes que pase, o que sientas?',
+      titulo: 'Si lo enfrentaras, ¿qué temes que pase o que sientas?',
       min: 20,
       filas: 4,
     },
     {
       tipo: 'escala',
       id: 'costo',
-      titulo: '¿Cuánto te está costando no mirarlo?',
-      guia: 'Sueño, paz, dinero, relaciones, salud.',
-      etiquetas: ['Casi nada', 'Muchísimo'],
+      titulo: '¿Cuánto te está afectando posponerlo?',
+      guia: 'En tu descanso, tu tranquilidad, tus finanzas, tus relaciones o tu salud.',
+      etiquetas: ['Muy poco', 'Mucho'],
     },
     {
       tipo: 'texto',
       id: 'paso',
-      titulo: 'El paso más pequeño posible hacia eso.',
-      guia: 'Tan pequeño que dé casi vergüenza: buscar el número, abrir la carta, escribir la primera línea. Con día y hora.',
+      titulo: '¿Cuál sería el primer paso más pequeño posible?',
+      guia: 'Algo sencillo y alcanzable, como buscar un número de teléfono, abrir una carta o escribir la primera línea. Incluye día y hora.',
       min: 10,
       filas: 3,
     },
     {
       tipo: 'opciones',
       id: 'quien',
-      titulo: '¿Quién podría saber que vas a darlo?',
+      titulo: '¿Con quién podrías compartir que vas a darlo?',
       otra: true,
-      opciones: ['Nadie, por ahora', 'Mi pareja', 'Una amiga o un amigo', 'Alguien de mi familia', 'Un profesional'],
+      opciones: [
+        'Prefiero no compartirlo por ahora',
+        'Con mi pareja',
+        'Con una amistad',
+        'Con alguien de mi familia',
+        'Con un profesional',
+      ],
     },
   ],
   reflejo: (r) => {
     const enVez = l(r, 'en_vez');
     const bloques: Bloque[] = [
-      { tipo: 'titulo', eyebrow: 'Tu reflejo', texto: 'Lo que no estabas mirando.' },
-      { tipo: 'frase', etiqueta: `Lo que evitas · ${t(r, 'que')}`, texto: t(r, 'nombre') },
-      { tipo: 'chips', etiqueta: 'Lo que ocupa su lugar', items: enVez },
-      { tipo: 'frase', etiqueta: 'Lo que temes encontrar', texto: t(r, 'teme') },
-      { tipo: 'medida', etiqueta: 'Lo que te cuesta no mirarlo', valor: n(r, 'costo'), max: 10 },
+      { tipo: 'titulo', eyebrow: 'Tu resumen', texto: 'Lo que has estado posponiendo' },
+      { tipo: 'frase', etiqueta: `Lo que pospones · ${t(r, 'que')}`, texto: t(r, 'nombre') },
+      { tipo: 'chips', etiqueta: 'Lo que haces en su lugar', items: enVez },
+      { tipo: 'frase', etiqueta: 'Lo que temes', texto: t(r, 'teme') },
+      { tipo: 'medida', etiqueta: 'Cuánto te afecta posponerlo', valor: n(r, 'costo'), max: 10 },
       { tipo: 'frase', etiqueta: 'Tu primer paso', texto: t(r, 'paso'), destacada: true },
-      { tipo: 'parrafo', texto: `Quién lo sabrá: ${t(r, 'quien').toLowerCase()}.` },
+      { tipo: 'frase', etiqueta: 'Con quién lo compartirás', texto: t(r, 'quien') },
     ];
     if (enVez.includes('Beber o fumar')) {
       bloques.push({
         tipo: 'aviso',
         texto:
-          'Si lo que usas para no mirar te está costando salud, dinero o relaciones, vale la pena hablarlo con alguien. No como juicio: como cuidado.',
+          'Si el alcohol, el tabaco u otras sustancias están afectando tu salud, tus finanzas o tus relaciones, puede ayudarte hablarlo con un profesional. Pedir apoyo es una forma de cuidarte.',
       });
     }
     bloques.push({
       tipo: 'cierre',
       texto:
-        'Lo que evitas no se hace más pequeño. Se hace más viejo. Hoy lo miraste de reojo; con eso basta para empezar.',
+        'Atender lo que hemos pospuesto suele resultar más llevadero cuando se hace paso a paso. Hoy diste el primero al reconocerlo.',
     });
     return bloques;
   },
@@ -1123,114 +1171,114 @@ const evitar: Ejercicio = {
 };
 
 /* =====================================================================================================
-   CON LOS DEMÁS
+   TUS RELACIONES
    ===================================================================================================== */
 
 const PASOS_PAREJA = [
-  'Reclamo, insisto, subo el tono',
+  'Reclamo, insisto o subo el tono',
   'Me callo y me alejo',
-  'Explico y me defiendo',
-  'Cedo para que pase rápido',
-  'Saco algo de antes',
-  'Me pongo frío o fría, como si nada',
+  'Me explico y me defiendo',
+  'Cedo para que termine pronto',
+  'Traigo temas del pasado',
+  'Me muestro distante, como si nada pasara',
 ];
 const PASOS_OTRO = [
-  'Reclama, insiste, sube el tono',
+  'Reclama, insiste o sube el tono',
   'Se calla y se aleja',
-  'Explica y se defiende',
-  'Cede para que pase rápido',
-  'Saca algo de antes',
-  'Se pone frío o fría, como si nada',
+  'Se explica y se defiende',
+  'Cede para que termine pronto',
+  'Trae temas del pasado',
+  'Se muestra distante, como si nada pasara',
 ];
 
 const ciclo: Ejercicio = {
   id: 'ciclo',
-  camino: 'Con los demás',
-  titulo: 'Tu paso en el baile',
-  subtitulo: 'El pleito que se repite en tu pareja, y tu parte en él.',
+  camino: 'Tus relaciones',
+  titulo: 'Los patrones de discusión en la pareja',
+  subtitulo: 'Identifica el ciclo que se repite en sus discusiones y tu parte en él.',
   descripcion:
-    'Casi todas las parejas tienen un mismo pleito con distintos disfraces. No es sobre el dinero ni los platos: es un ciclo. Aquí miras tu paso, el de tu pareja y lo que casi nunca dices en voz alta.',
-  teLlevas: 'Tu ciclo dibujado con tus palabras y la frase que cambiaría la conversación.',
+    'Muchas parejas repiten un mismo patrón de discusión, aunque el tema cambie. En este ejercicio identificarás cómo empieza, cómo reacciona cada persona y qué emociones suelen quedar sin expresarse.',
+  teLlevas: 'Una representación del ciclo con tus palabras y una frase que podría abrir una conversación diferente.',
   duracion: '12 a 15 minutos',
   intensidad: 'media',
   enfoque:
-    'Basado en la idea del ciclo negativo de la terapia focalizada en las emociones (EFT, Sue Johnson) y en la teoría del apego adulto. Preguntas propias.',
+    'Basado en el concepto de ciclo negativo de la terapia focalizada en las emociones (EFT, Sue Johnson) y en la teoría del apego adulto. Preguntas propias de Growing Souls.',
   fuentes: [
     { nombre: 'Johnson, S. M. (2004), The Practice of Emotionally Focused Couple Therapy, 2.ª ed.' },
     { nombre: 'Mikulincer, M. y Shaver, P. R. (2016), Attachment in Adulthood' },
   ],
   intro: [
-    'Cuando una pareja discute, casi nunca discute de lo que parece. Debajo del tono, de los reproches y de los silencios, hay dos personas haciendo cada una su paso de un baile que ya conocen: uno reclama, el otro se aleja; uno se aleja, el otro reclama más.',
-    'Este ejercicio no es para saber quién tiene razón. Es para ver el baile. Y para decir, aunque sea aquí, lo que se queda debajo.',
+    'En muchas discusiones de pareja, el tema visible (el dinero, las tareas, el tiempo) no es lo único que está en juego. Con frecuencia se repite un patrón: una persona reclama o insiste, la otra se distancia, y cada reacción intensifica la de la otra.',
+    'Este ejercicio no busca determinar quién tiene la razón. Su propósito es ayudarte a reconocer el patrón y las emociones que suelen quedar debajo de él.',
   ],
   antes: [
     'Hazlo a solas, pensando en la última discusión que se repitió.',
-    'Si en tu relación hay miedo físico, insultos constantes o control sobre tu dinero o tus salidas, esto no es un ciclo: es otra cosa, y mereces ayuda específica. Oficina de la Procuradora de las Mujeres, línea de 24 horas: 787-722-2977.',
+    'Si en tu relación hay miedo, agresiones físicas, insultos frecuentes o control sobre tu dinero o tus salidas, no se trata de un ciclo de pareja, sino de una situación que requiere ayuda especializada. Oficina de la Procuradora de las Mujeres, línea de orientación las 24 horas: 787-722-2977.',
   ],
   pasos: [
     {
       tipo: 'opciones',
       id: 'detonante',
-      titulo: 'Piensa en la última discusión que se repitió. ¿Qué la encendió?',
+      titulo: 'Piensa en la última discusión que se repitió. ¿Qué la provocó?',
       otra: true,
       opciones: [
         'Sentirme ignorado o ignorada',
         'Una crítica',
-        'Sentir que todo cae sobre mí',
-        'El teléfono',
+        'Sentir que todo recae en mí',
+        'El uso del teléfono',
         'El dinero',
-        'La familia del otro',
-        'La intimidad, o la falta de ella',
+        'La familia de mi pareja',
+        'La intimidad',
         'Una promesa que no se cumplió',
-        'Los hijos',
-        'El desorden, las tareas',
+        'La crianza de los hijos',
+        'Las tareas del hogar',
       ],
     },
     {
       tipo: 'opciones',
       id: 'mi_paso',
-      titulo: 'Cuando empieza, ¿qué haces tú primero?',
+      titulo: 'Cuando comienza, ¿cuál suele ser tu primera reacción?',
       opciones: PASOS_PAREJA,
     },
     {
       tipo: 'opciones',
       id: 'su_paso',
-      titulo: '¿Y qué hace tu pareja cuando tú haces eso?',
+      titulo: '¿Y cómo suele reaccionar tu pareja?',
       opciones: PASOS_OTRO,
     },
     {
       tipo: 'opciones',
       id: 'superficie',
-      titulo: 'Por fuera, en medio del ciclo, ¿qué se ve en ti?',
+      titulo: 'Durante la discusión, ¿qué se nota en ti?',
       multiple: true,
       max: 2,
       min: 1,
-      opciones: ['Rabia', 'Frialdad', 'Sarcasmo', 'Lágrimas', 'Silencio', 'Control', 'Cansancio', 'Indiferencia'],
+      opciones: ['Enojo', 'Frialdad', 'Sarcasmo', 'Llanto', 'Silencio', 'Control', 'Cansancio', 'Indiferencia'],
     },
     {
       tipo: 'opciones',
       id: 'fondo',
-      titulo: 'Y por debajo, ¿qué sientes de verdad?',
-      guia: 'Lo que casi nunca se ve.',
+      titulo: '¿Y qué sientes en el fondo?',
+      guia: 'Las emociones que suelen quedar sin expresarse.',
       multiple: true,
       max: 2,
       min: 1,
       opciones: [
-        'Miedo a no importarle',
+        'Miedo a no ser importante para mi pareja',
         'Soledad',
-        'Que nunca es suficiente',
+        'Sentir que nunca es suficiente',
         'Miedo a que se vaya',
-        'Que fallé',
-        'Que soy invisible',
-        'Que me controlan',
+        'Sentir que fallé',
+        'Sentirme invisible',
+        'Sentirme controlado o controlada',
         'Vergüenza',
-        'Miedo a que me hagan daño otra vez',
+        'Miedo a volver a salir lastimado o lastimada',
       ],
     },
     {
       tipo: 'texto',
       id: 'nunca_digo',
-      titulo: 'Lo que casi nunca dices en voz alta en medio del ciclo:',
+      titulo: '¿Qué te cuesta expresar en voz alta durante esas discusiones?',
       min: 20,
       filas: 4,
       ayudas: ['Lo que necesito de ti es…', 'Me da miedo que…', 'Cuando te alejas, yo…', 'Cuando me reclamas, yo…'],
@@ -1239,37 +1287,38 @@ const ciclo: Ejercicio = {
       tipo: 'texto',
       id: 'bien',
       titulo: 'Cuando están bien, ¿qué hace tu pareja que te hace sentir seguro o segura?',
-      guia: 'Algo concreto. Lo que ya funciona.',
+      guia: 'Algo concreto que ya funciona entre ustedes.',
       min: 15,
       filas: 3,
     },
   ],
   reflejo: (r) => [
-    { tipo: 'titulo', eyebrow: 'Tu reflejo', texto: 'El baile, visto desde fuera.' },
+    { tipo: 'titulo', eyebrow: 'Tu resumen', texto: 'El ciclo, visto con perspectiva' },
     {
       tipo: 'ciclo',
       pasos: [
-        { etiqueta: 'Se enciende con', texto: t(r, 'detonante') },
+        { etiqueta: 'Comienza con', texto: t(r, 'detonante') },
         { etiqueta: 'Tú', texto: t(r, 'mi_paso') },
         { etiqueta: 'Tu pareja', texto: t(r, 'su_paso') },
-        { etiqueta: 'Y tú sientes', texto: l(r, 'fondo').join(' y ').toLowerCase() },
+        { etiqueta: 'Lo que sientes', texto: l(r, 'fondo').join(' y ').toLowerCase() },
       ],
     },
     {
       tipo: 'columnas',
-      izquierda: { titulo: 'Por fuera se ve', texto: l(r, 'superficie').join(', ') },
-      derecha: { titulo: 'Por debajo sientes', texto: l(r, 'fondo').join(', ') },
+      izquierda: { titulo: 'Lo que se ve', texto: l(r, 'superficie').join(', ') },
+      derecha: { titulo: 'Lo que sientes en el fondo', texto: l(r, 'fondo').join(', ') },
     },
-    { tipo: 'frase', etiqueta: 'Lo que casi nunca dices', texto: t(r, 'nunca_digo'), destacada: true },
+    { tipo: 'frase', etiqueta: 'Lo que te cuesta expresar', texto: t(r, 'nunca_digo'), destacada: true },
     {
       tipo: 'parrafo',
       texto:
-        'Fíjate: lo de arriba es lo que tu pareja ve. Lo de abajo es lo que tú vives. El ciclo se interrumpe cuando uno de los dos dice lo de abajo en vez de actuar lo de arriba.',
+        'Lo que se ve es lo que tu pareja percibe; lo que sientes en el fondo es lo que tú vives. Con frecuencia, el ciclo empieza a cambiar cuando una de las dos personas logra expresar lo que siente en lugar de reaccionar.',
     },
     { tipo: 'frase', etiqueta: 'Lo que ya funciona', texto: t(r, 'bien') },
     {
       tipo: 'cierre',
-      texto: 'El enemigo no es tu pareja. Es el ciclo. Y a un ciclo se le puede poner nombre entre dos.',
+      texto:
+        'El problema no es tu pareja ni eres tú: es el patrón que se repite entre ustedes. Reconocerlo es un paso importante para transformarlo juntos.',
     },
   ],
   servicio: TERAPIA_PAREJA,
@@ -1277,28 +1326,28 @@ const ciclo: Ejercicio = {
 
 const carta: Ejercicio = {
   id: 'carta',
-  camino: 'Con los demás',
-  titulo: 'La carta que no vas a enviar',
-  subtitulo: 'Doce minutos de escritura sin filtro para alguien a quien no puedes decírselo.',
+  camino: 'Tus relaciones',
+  titulo: 'Carta no enviada',
+  subtitulo: 'Escritura expresiva para poner en palabras lo que no has podido decir.',
   descripcion:
-    'Elige a quién: alguien que ya no está, alguien con quien no puedes hablar, tu yo de niño o niña. Escribe doce minutos sin parar y sin corregir. Después, una sola frase.',
-  teLlevas: 'Lo que llevabas dentro, afuera. Y la frase que más te costó escribir.',
+    'Escribirás una carta que no se enviará, dirigida a alguien a quien no has podido expresarle lo que sientes. Durante doce minutos escribirás de forma continua y, al final, identificarás la frase más significativa.',
+  teLlevas: 'Un espacio para expresar lo que llevabas dentro y la frase que más te costó escribir.',
   duracion: '20 minutos',
   intensidad: 'honda',
   enfoque:
-    'Combina la carta no enviada de la terapia Gestalt con el protocolo de escritura expresiva de James Pennebaker, uno de los ejercicios con más investigación en psicología.',
+    'Combina la técnica de la carta no enviada con el protocolo de escritura expresiva de James Pennebaker, uno de los ejercicios con más investigación en psicología.',
   fuentes: [
     { nombre: 'Pennebaker, J. W. y Beall, S. K. (1986), Confronting a traumatic event' },
     { nombre: 'Frattaroli, J. (2006), Experimental disclosure and its moderators: a meta-analysis' },
   ],
   intro: [
-    'Hay cosas que no se pudieron decir. Porque la persona ya no está, porque no escucharía, porque eras muy pequeño o muy pequeña, porque todavía duele. Se quedan dentro, y lo que se queda dentro pesa.',
-    'Esta carta no se envía. Se escribe. Doce minutos seguidos, sin corregir, sin cuidar la ortografía, sin pensar si tiene sentido. En los estudios de escritura expresiva, eso (escribir lo más hondo sin filtro) es lo que alivia. No el resultado: el acto.',
+    'A veces hay cosas que no pudimos decir: porque la persona ya no está, porque no era posible hablar con ella, porque éramos muy pequeños o porque todavía nos afecta. Guardar esas emociones durante mucho tiempo puede resultar pesado.',
+    'Esta carta no se envía; su propósito es ayudarte a expresar. Escribirás durante doce minutos de forma continua, sin corregir ni cuidar la ortografía. Las investigaciones sobre escritura expresiva sugieren que el beneficio está en el proceso de escribir, más que en el resultado.',
   ],
   antes: [
-    'Busca un lugar donde nadie te interrumpa.',
-    'Puede dejarte movido o movida un rato. Es normal, y suele pasar en un día o dos. Si lo que sale es más de lo que puedes sostener, para y habla hoy con alguien.',
-    'No es para hacerlo si estás en crisis ahora mismo.',
+    'Busca un lugar tranquilo donde no tengas interrupciones.',
+    'Es normal sentir emociones intensas durante algunas horas después de escribir; suelen disminuir en uno o dos días. Si lo que surge es más de lo que puedes manejar, detente y habla hoy con alguien de confianza o con un profesional.',
+    'Si estás atravesando una crisis en este momento, te recomendamos no hacer este ejercicio hoy y buscar apoyo.',
   ],
   pasos: [
     {
@@ -1312,46 +1361,46 @@ const carta: Ejercicio = {
         'A mi yo de niño o de niña',
         'A mi yo de hace unos años',
         'A mi cuerpo',
-        'A alguien que me hizo daño',
-        'A alguien a quien hice daño',
-        'A alguien a quien nunca le di las gracias de verdad',
+        'A alguien que me lastimó',
+        'A alguien a quien lastimé',
+        'A alguien a quien nunca le agradecí lo suficiente',
       ],
     },
     {
       tipo: 'nota',
       id: 'reglas',
-      titulo: 'Las reglas son pocas.',
+      titulo: 'Algunas indicaciones antes de empezar.',
       texto:
-        'Doce minutos. No pares de escribir. No corrijas. No cuides la forma. Si te quedas en blanco, repite la última frase hasta que salga otra. Escribe lo que de verdad sientes y piensas sobre esa persona y sobre ti, lo más hondo que puedas ir. Nadie va a leerlo.',
+        'Escribe durante doce minutos sin detenerte. No corrijas ni te preocupes por la forma. Si te quedas en blanco, repite la última frase hasta que surja otra. Escribe lo que sientes y piensas sobre esa persona y sobre ti, con la profundidad que te resulte cómoda. Lo que escribas es solo para ti.',
     },
     {
       tipo: 'texto',
       id: 'carta',
       titulo: (r) => `${t(r, 'a_quien')}.`,
-      guia: 'Doce minutos. Sin parar.',
+      guia: 'Doce minutos de escritura continua.',
       min: 300,
       filas: 14,
       minutos: 12,
       ayudas: [
         'Lo que nunca te dije fue…',
-        'Lo que más me dolió…',
-        'Lo que necesitaba de ti…',
-        'Lo que quiero que sepas…',
-        'Lo que me llevo de ti…',
+        'Lo que más me dolió fue…',
+        'Lo que necesitaba de ti era…',
+        'Lo que quiero que sepas es…',
+        'Lo que me llevo de ti es…',
       ],
     },
     {
       tipo: 'pausa',
       id: 'respira',
-      titulo: 'Ya está afuera.',
-      texto: 'Suelta el teléfono o el teclado un momento. Respira tres veces antes de releer.',
+      titulo: 'Una pausa.',
+      texto: 'Deja el teléfono o el teclado por un momento. Respira con calma tres veces antes de releer.',
       respiracion: true,
     },
     {
       tipo: 'marcar',
       id: 'dificil',
       de: 'carta',
-      titulo: 'Lee tu carta despacio. Toca la frase que más te costó escribir.',
+      titulo: 'Lee tu carta con calma y selecciona la frase que más te costó escribir.',
     },
     {
       tipo: 'opciones',
@@ -1363,7 +1412,7 @@ const carta: Ejercicio = {
       opciones: [
         'Alivio',
         'Tristeza',
-        'Rabia',
+        'Enojo',
         'Culpa',
         'Ternura',
         'Miedo',
@@ -1378,25 +1427,25 @@ const carta: Ejercicio = {
     {
       tipo: 'texto',
       id: 'necesito',
-      titulo: 'Termina esta frase: lo que necesito ahora, de mí, es…',
+      titulo: 'Completa esta frase: lo que necesito ahora de mí es…',
       min: 10,
       filas: 3,
     },
   ],
   reflejo: (r) => [
-    { tipo: 'titulo', eyebrow: 'Tu reflejo', texto: 'Lo que llevabas dentro, afuera.' },
+    { tipo: 'titulo', eyebrow: 'Tu resumen', texto: 'Lo que pudiste expresar' },
     { tipo: 'frase', etiqueta: 'La frase que más te costó escribir', texto: t(r, 'dificil'), destacada: true },
     { tipo: 'chips', etiqueta: 'Lo que sentiste', items: l(r, 'emocion') },
-    { tipo: 'frase', etiqueta: 'Lo que necesitas ahora, de ti', texto: t(r, 'necesito') },
+    { tipo: 'frase', etiqueta: 'Lo que necesitas ahora de ti', texto: t(r, 'necesito') },
     { tipo: 'carta', titulo: `Tu carta · ${t(r, 'a_quien').toLowerCase()}`, texto: t(r, 'carta'), plegada: true },
     {
       tipo: 'aviso',
       texto:
-        'Escribir sobre lo que duele puede dejarte movido o movida unas horas. En la investigación sobre escritura expresiva, el alivio suele llegar después. Si lo que salió pesa más de lo que puedes sostener, habla hoy con alguien de confianza o con un profesional.',
+        'Escribir sobre experiencias dolorosas puede dejarte con emociones intensas durante algunas horas. Según la investigación sobre escritura expresiva, el alivio suele llegar después. Si lo que surgió es más de lo que puedes manejar, habla hoy con alguien de confianza o con un profesional.',
     },
     {
       tipo: 'cierre',
-      texto: 'La carta no era para esa persona. Era para que lo que llevabas dentro tuviera un lugar afuera.',
+      texto: 'Esta carta no necesitaba llegar a su destinatario. Su propósito era darle un lugar a lo que llevabas dentro.',
     },
   ],
   servicio: TERAPIA_INDIVIDUAL,
@@ -1404,29 +1453,31 @@ const carta: Ejercicio = {
 
 const gracias: Ejercicio = {
   id: 'gracias',
-  camino: 'Con los demás',
-  titulo: 'Gracias con nombre',
-  subtitulo: 'Una carta a alguien que cambió tu vida y nunca lo supo del todo.',
+  camino: 'Tus relaciones',
+  titulo: 'Carta de gratitud',
+  subtitulo: 'Reconoce a una persona que marcó tu vida para bien.',
   descripcion:
-    'Piensa en alguien que hizo algo por ti que te cambió, y a quien nunca se lo dijiste como merecía. Escríbele. Y decide qué hacer con la carta.',
-  teLlevas: 'Una carta de gratitud lista para leer en voz alta, y la decisión de hacerlo.',
+    'Piensa en alguien que hizo algo importante por ti y a quien no le has agradecido como te gustaría. Le escribirás una carta y decidirás qué hacer con ella.',
+  teLlevas: 'Una carta de gratitud lista para compartir y la decisión de cómo hacerlo.',
   duracion: '10 a 15 minutos',
   intensidad: 'suave',
   enfoque:
-    'La «visita de gratitud» de Martin Seligman, uno de los ejercicios de psicología positiva con efectos más duraderos en los estudios.',
+    'Basado en la «visita de gratitud» de Martin Seligman, uno de los ejercicios de psicología positiva con efectos más duraderos en los estudios.',
   fuentes: [
     { nombre: 'Seligman, M. E. P. et al. (2005), Positive psychology progress: empirical validation of interventions' },
   ],
   intro: [
-    'Hay personas que te cambiaron la vida con un gesto que para ellas quizá fue pequeño: una frase en el momento justo, una puerta abierta, quedarse cuando todos se fueron. Casi nunca se lo dijimos como merecía.',
-    'En los estudios sobre gratitud, escribir esa carta y leérsela a la persona en voz alta es lo que más mueve el bienestar, y durante más tiempo. También es lo que más miedo da. Van juntas.',
+    'Algunas personas influyen en nuestra vida con gestos que para ellas quizá fueron pequeños: una palabra en el momento oportuno, una oportunidad o su compañía en una etapa difícil. Muchas veces no llegamos a agradecérselo como quisiéramos.',
+    'Los estudios sobre gratitud muestran que escribir una carta de agradecimiento, y especialmente leérsela a la persona, se asocia con un aumento del bienestar que puede durar semanas. También es normal sentir algo de nervios al pensar en compartirla.',
   ],
-  antes: ['Elige a alguien vivo, si puedes. Si ya no está, la carta vale igual.'],
+  antes: [
+    'Si es posible, elige a una persona con quien puedas compartir la carta. Si ya no está, la carta conserva todo su valor.',
+  ],
   pasos: [
     {
       tipo: 'texto',
       id: 'quien',
-      titulo: 'Alguien que cambió tu vida para bien y nunca se lo dijiste del todo.',
+      titulo: 'Piensa en alguien que cambió tu vida para bien y a quien no le has agradecido del todo.',
       guia: 'Escribe su nombre.',
       min: 2,
       filas: 1,
@@ -1434,15 +1485,15 @@ const gracias: Ejercicio = {
     {
       tipo: 'texto',
       id: 'que_hizo',
-      titulo: (r) => `¿Qué hizo ${t(r, 'quien')}, concretamente?`,
-      guia: 'Un momento, con detalles: dónde estaban, qué dijo, qué hizo.',
+      titulo: (r) => `¿Qué hizo ${t(r, 'quien')}?`,
+      guia: 'Describe un momento concreto: dónde estaban, qué dijo o qué hizo.',
       min: 60,
       filas: 5,
     },
     {
       tipo: 'texto',
       id: 'sin',
-      titulo: '¿Qué sería distinto en ti si no lo hubiera hecho?',
+      titulo: '¿Qué sería diferente en tu vida si no lo hubiera hecho?',
       min: 30,
       filas: 4,
     },
@@ -1450,7 +1501,7 @@ const gracias: Ejercicio = {
       tipo: 'texto',
       id: 'carta',
       titulo: (r) => `Escríbele a ${t(r, 'quien')}.`,
-      guia: 'Empieza con su nombre. Cuéntale lo que hizo, lo que cambió en ti y lo que sigues llevando de aquello.',
+      guia: 'Comienza con su nombre. Cuéntale lo que hizo, cómo te impactó y lo que todavía conservas de aquello.',
       min: 150,
       filas: 10,
       minutos: 8,
@@ -1458,13 +1509,13 @@ const gracias: Ejercicio = {
     {
       tipo: 'opciones',
       id: 'entregar',
-      titulo: '¿Qué vas a hacer con la carta?',
+      titulo: '¿Qué harás con la carta?',
       opciones: [
         'Leérsela en persona',
         'Enviársela',
-        'Llamar y leérsela',
-        'Guardarla, por ahora',
-        'Ya no está: leérsela igual, en voz alta',
+        'Llamarle y leérsela',
+        'Guardarla por ahora',
+        'Ya no está: leerla en voz alta en su memoria',
       ],
     },
   ],
@@ -1472,23 +1523,23 @@ const gracias: Ejercicio = {
     const quien = t(r, 'quien');
     const entrega = t(r, 'entregar');
     const bloques: Bloque[] = [
-      { tipo: 'titulo', eyebrow: 'Tu reflejo', texto: `Lo que ${quien} cambió en ti.` },
+      { tipo: 'titulo', eyebrow: 'Tu resumen', texto: `Lo que ${quien} significó en tu vida` },
       { tipo: 'frase', etiqueta: 'Lo que hizo', texto: t(r, 'que_hizo') },
-      { tipo: 'frase', etiqueta: 'Lo que sería distinto sin eso', texto: t(r, 'sin') },
+      { tipo: 'frase', etiqueta: 'Lo que sería diferente sin eso', texto: t(r, 'sin') },
       { tipo: 'carta', titulo: `Para ${quien}`, texto: t(r, 'carta') },
-      { tipo: 'frase', etiqueta: 'Lo que vas a hacer con ella', texto: entrega, destacada: true },
+      { tipo: 'frase', etiqueta: 'Lo que harás con ella', texto: entrega, destacada: true },
     ];
-    if (entrega === 'Guardarla, por ahora') {
+    if (entrega === 'Guardarla por ahora') {
       bloques.push({
         tipo: 'parrafo',
         texto:
-          'Guardarla está bien. Pero fíjate: lo que más miedo da (leérsela) es también lo que más cambia. La carta puede esperar; la persona, a veces, no.',
+          'Guardarla también está bien. Si en algún momento te sientes con disposición, compartirla puede ser muy significativo para ambas personas.',
       });
     }
     bloques.push({
       tipo: 'cierre',
       texto:
-        'Decir gracias con nombre y con detalles es una de las pocas cosas que hacen bien a dos personas a la vez.',
+        'Agradecer de forma específica y personal es un gesto que suele hacer bien a quien lo recibe y también a quien lo expresa.',
     });
     return bloques;
   },
@@ -1508,7 +1559,7 @@ export const ejercicios: Ejercicio[] = [
   gracias,
 ];
 
-/** Orden sugerido si alguien quiere hacerlos todos (de menos a más hondo, con el de pareja al final). */
+/** Orden sugerido si alguien quiere hacerlos todos (de los más ligeros a los más profundos, con el de pareja al final). */
 export const caminoSugerido: string[] = [
   'brecha',
   'evitar',
@@ -1524,19 +1575,19 @@ export const caminoSugerido: string[] = [
 
 /** Para la guía «¿Por dónde empiezo?» del índice. */
 export const porDondeEmpezar: { si: string; id: string }[] = [
-  { si: 'Si tienes diez minutos y quieres algo claro', id: 'brecha' },
-  { si: 'Si llevas tiempo cargando algo que no dijiste', id: 'carta' },
-  { si: 'Si tu pareja y tú repiten el mismo pleito', id: 'ciclo' },
-  { si: 'Si te tratas peor de lo que tratarías a nadie', id: 'critica' },
-  { si: 'Si quieres saber para qué vives como vives', id: 'ochenta' },
-  { si: 'Si quieres algo que te deje bien', id: 'gracias' },
+  { si: 'Si tienes poco tiempo y prefieres un ejercicio breve', id: 'brecha' },
+  { si: 'Si hay algo que no has podido expresar', id: 'carta' },
+  { si: 'Si en tu relación de pareja se repiten las mismas discusiones', id: 'ciclo' },
+  { si: 'Si sueles ser muy exigente contigo', id: 'critica' },
+  { si: 'Si quieres aclarar tus valores y prioridades', id: 'ochenta' },
+  { si: 'Si buscas un ejercicio ligero y positivo', id: 'gracias' },
 ];
 
 export const textosEjercicios = {
   aviso:
-    'Los ejercicios son herramientas de reflexión personal, no terapia ni diagnóstico. Están pensados para personas adultas que están razonablemente bien y quieren mirar más hondo. Si estás en crisis, no son para hoy.',
+    'Los ejercicios son herramientas de reflexión personal; no constituyen terapia ni diagnóstico. Están diseñados para personas adultas que se sienten relativamente estables y desean conocerse mejor. Si estás atravesando una crisis, te recomendamos buscar apoyo profesional en lugar de realizarlos.',
   privacidad:
-    'Lo que escribes se queda en tu navegador, en este dispositivo, solo mientras la pestaña esté abierta: no se envía ni se guarda en ningún servidor. Si decides dejar tus datos para seguimiento, viaja únicamente tu nombre, tu contacto, el nombre del ejercicio y la fecha. Nunca lo que escribiste.',
+    'Lo que escribes se guarda únicamente en tu navegador, en este dispositivo y mientras la pestaña esté abierta; no se envía ni se almacena en ningún servidor. Si decides dejar tus datos para recibir seguimiento, solo se envían tu nombre, tu contacto, el nombre del ejercicio y la fecha, nunca lo que escribiste.',
   dispositivo:
-    'Si usas una computadora compartida, borra lo que escribiste al terminar (hay un botón al final) o cierra la pestaña.',
+    'Si usas una computadora compartida, borra lo que escribiste al terminar (encontrarás un botón al final) o cierra la pestaña.',
 } as const;

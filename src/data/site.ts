@@ -59,21 +59,50 @@ export const site = {
 /** Enlace de WhatsApp (click to chat) con el mensaje inicial ya escrito. */
 export const whatsappHref = `https://wa.me/${site.contact.whatsapp}?text=${encodeURIComponent(site.contact.whatsappText)}`;
 
-/** Navegación. `short` es la etiqueta compacta de la barra en desktop; el cajón móvil usa `label`. */
+/**
+ * Navegación. `short` es la etiqueta compacta de la barra en desktop; el cajón móvil usa `label`.
+ * `tambien`: otras rutas en las que la pestaña se marca como actual (Recursos agrupa Conócete mejor, crisis y Journal).
+ * Pestañas pedidas por la Dra. (2 oct 2026): Conóceme (antes "Melanie"), Misión y visión (antes "Cómo trabajo") y Recursos.
+ */
 export interface NavItem {
   label: string;
   href: string;
   short?: string;
+  tambien?: string[];
 }
 export const nav: readonly NavItem[] = [
-  { label: 'Conoce a Melanie', short: 'Melanie', href: '/melanie/' },
-  { label: 'Cómo trabajo', href: '/como-trabajo/' },
+  { label: 'Conóceme', href: '/melanie/' },
+  { label: 'Misión y visión', href: '/mision-y-vision/' },
   { label: 'Terapia individual', href: '/terapia-individual/' },
   { label: 'Parejas', href: '/parejas/' },
   { label: 'Talleres y conferencias', short: 'Talleres', href: '/talleres-y-conferencias/' },
-  { label: 'Conócete mejor', href: '/conocete-mejor/' },
-  { label: 'Journal', href: '/journal/' },
+  { label: 'Recursos', href: '/recursos/', tambien: ['/conocete-mejor/', '/crisis/', '/journal/'] },
 ];
+
+/** Líneas de ayuda para la página de Recursos (verificadas en las fuentes oficiales el 2 oct 2026). */
+export const lineasAyuda = [
+  {
+    nombre: 'Línea PAS (ASSMCA)',
+    numero: '1-800-981-0023',
+    href: 'tel:18009810023',
+    alterno: { numero: '988', href: 'tel:988' },
+    texto: 'Apoyo emocional e intervención en crisis, gratuita y confidencial, las 24 horas, los 7 días de la semana. También ofrece chat y video para personas sordas (787‑615‑4112).',
+    fuente: 'https://www.assmca.pr.gov/linea-pas',
+  },
+  {
+    nombre: 'Oficina de la Procuradora de las Mujeres',
+    numero: '787-722-2977',
+    href: 'tel:17877222977',
+    texto: 'Línea de orientación confidencial sobre violencia doméstica, las 24 horas, los 7 días de la semana.',
+    fuente: 'https://www.mujer.pr.gov/',
+  },
+  {
+    nombre: 'Emergencias',
+    numero: '911',
+    href: 'tel:911',
+    texto: 'Si tu vida o la de otra persona está en peligro inmediato.',
+  },
+] as const;
 
 export const cta = { label: 'Solicitar una cita', href: '/agenda/' } as const;
 

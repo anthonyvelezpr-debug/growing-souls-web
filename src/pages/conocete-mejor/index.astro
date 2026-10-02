@@ -3,28 +3,133 @@ import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
 import CtaBand from '../../components/CtaBand.astro';
+import Verify from '../../components/Verify.astro';
 import { evaluaciones, textos } from '../../data/evaluaciones';
+import { ejercicios, caminos, intensidades, porDondeEmpezar, caminoSugerido, textosEjercicios } from '../../data/ejercicios';
 import { site } from '../../data/site';
+
+const porId = (id: string) => ejercicios.find((e) => e.id === id)!;
+const hrefEj = (id: string) => `/conocete-mejor/ejercicios/${id}/`;
+const minutos = (d: string) => d.replace(' minutos', ' min');
 ---
 
 <Base
-  title="Conócete mejor · Autoevaluaciones de bienestar emocional · Growing Souls"
-  description="Herramientas breves y gratuitas de autoevaluación sobre bienestar, ánimo, ansiedad y estrés, basadas en instrumentos de uso libre. Orientación, no diagnóstico."
+  title="Conócete mejor · Ejercicios de profundidad y autoevaluaciones · Growing Souls"
+  description="Ejercicios guiados de reflexión, de los que se usan en terapia, y cuestionarios validados sobre bienestar, ánimo, ansiedad y estrés. Gratuitos, privados y sin diagnósticos."
 >
   <PageHero
     eyebrow="Conócete mejor"
-    title="¿Cómo te has estado sintiendo?"
-    subtitle="Herramientas breves para mirar con calma cómo estás, basadas en cuestionarios que usan profesionales de la salud mental. Gratuitas, privadas y sin diagnósticos."
+    title="Hay preguntas que nadie te hace. Aquí te las haces tú."
+    subtitle="Ejercicios de profundidad, de los que se usan en terapia, para descubrir lo que todavía no has puesto en palabras. Y cuestionarios validados para saber cómo estás. Gratis, privados y sin diagnósticos."
   />
 
   <section class="section section--tight">
+    <div class="container--narrow empieza" data-reveal>
+      <p class="eyebrow">¿Por dónde empiezo?</p>
+      <ul class="empieza__list" role="list">
+        {
+          porDondeEmpezar.map((p) => (
+            <li>
+              <span class="empieza__si">{p.si}</span>
+              <a class="empieza__a" href={hrefEj(p.id)}>
+                {porId(p.id).titulo} <span aria-hidden="true">→</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="ejercicios">
     <div class="container">
+      <SectionHeading eyebrow="Ejercicios de profundidad" title="Escribes. Y al final lees lo que no sabías que sabías.">
+        <p class="lead">
+          <Verify note="Aprobación Melanie · ejercicios de profundidad (textos y enfoque)">
+            Cada ejercicio te guía paso a paso y termina en un reflejo: tus propias palabras, ordenadas para que las veas
+            de frente. Son adaptaciones de ejercicios que se usan en terapia y en retiros; aquí los haces a solas, a tu
+            ritmo y sin que nada salga de tu dispositivo.
+          </Verify>
+        </p>
+      </SectionHeading>
+
+      {
+        caminos.map((c, ci) => {
+          const lista = ejercicios.filter((e) => e.camino === c.nombre);
+          return (
+            <div class="camino" data-reveal style={`--reveal-index: ${(ci % 2) + 1}`}>
+              <div class="camino__head">
+                <h3 class="camino__title">{c.nombre}</h3>
+                <p class="camino__text small muted">{c.texto}</p>
+              </div>
+              <ul class="ejs" role="list">
+                {lista.map((ej) => {
+                  const inten = intensidades[ej.intensidad];
+                  const escribe = ej.pasos.some((p) => p.tipo === 'texto');
+                  return (
+                    <li class="ejs__card">
+                      <p class="ejs__meta small muted" data-dotlist>
+                        <span>
+                          {inten.etiqueta}
+                          <span class="ejs__dots" aria-hidden="true">
+                            {[1, 2, 3].map((k) => (
+                              <span class={k <= inten.nivel ? 'is-on' : ''} />
+                            ))}
+                          </span>
+                        </span>
+                        <span>{minutos(ej.duracion)}</span>
+                        <span>{escribe ? 'Escribes' : 'Eliges'}</span>
+                      </p>
+                      <h4 class="ejs__title">{ej.titulo}</h4>
+                      <p class="ejs__sub">{ej.subtitulo}</p>
+                      <p class="ejs__text small">{ej.descripcion}</p>
+                      <p class="ejs__llevas small">
+                        <span class="ejs__k">Te llevas</span> {ej.teLlevas}
+                      </p>
+                      <a class="ejs__go" href={hrefEj(ej.id)}>
+                        Empezar <span aria-hidden="true">→</span>
+                        <span class="visually-hidden">: {ej.titulo}</span>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          );
+        })
+      }
+
+      <div class="orden" data-reveal>
+        <p class="eyebrow">Si quieres hacerlos todos</p>
+        <p class="orden__text small">Un orden que tiene sentido, de lo más ligero a lo más hondo. Uno por semana es un buen ritmo; el de pareja, solo si tienes pareja.</p>
+        <ol class="orden__list small" role="list">
+          {
+            caminoSugerido.map((id, i) => (
+              <li>
+                <span class="orden__n" aria-hidden="true">{i + 1}</span>
+                <a href={hrefEj(id)}>{porId(id).titulo}</a>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sand" id="cuestionarios">
+    <div class="container">
+      <SectionHeading eyebrow="Cuestionarios validados" title="Para saber cómo estás, con los mismos instrumentos que usan los profesionales.">
+        <p class="lead">
+          Cuatro cuestionarios breves, de uso libre y en su versión oficial en español, para mirar con calma tu
+          bienestar, tu ánimo, tu ansiedad y tu estrés. Orientación, no diagnóstico.
+        </p>
+      </SectionHeading>
       <ul class="colec" role="list">
         {
           evaluaciones.map((ev, i) => (
             <li class="colec__card" data-reveal style={`--reveal-index: ${i + 1}`}>
               <p class="eyebrow">{ev.area}</p>
-              <h2 class="colec__title">{ev.titulo}</h2>
+              <h3 class="colec__title">{ev.titulo}</h3>
               <p class="colec__text">{ev.descripcion}</p>
               <p class="colec__explora small">
                 <span class="colec__k">Explora</span> {ev.explora}
@@ -44,17 +149,19 @@ import { site } from '../../data/site';
     </div>
   </section>
 
-  <section class="section section--sand" id="aviso">
+  <section class="section" id="aviso">
     <div class="container--narrow aviso" data-reveal>
       <SectionHeading eyebrow="Antes de empezar" title="Lo que estas herramientas son, y lo que no." />
       <ul class="aviso__list" role="list">
         <li>
           <h3>Orientación, no diagnóstico</h3>
           <p>{textos.aviso}</p>
+          <p>{textosEjercicios.aviso}</p>
         </li>
         <li>
           <h3>Privadas de verdad</h3>
           <p>{textos.privacidad}</p>
+          <p>{textosEjercicios.privacidad} {textosEjercicios.dispositivo}</p>
         </li>
         <li>
           <h3>Si estás en crisis</h3>
@@ -73,35 +180,253 @@ import { site } from '../../data/site';
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section--sand">
     <div class="container pasos-wrap">
-      <SectionHeading eyebrow="Cómo funciona" title="Tres minutos, a tu ritmo." />
+      <SectionHeading eyebrow="Cómo funciona" title="A tu ritmo. Y a solas." />
       <ol class="pasos" role="list">
         <li data-reveal>
           <span class="pasos__n">1</span>
-          <p>Elige una herramienta. Cada una mira un área distinta de cómo estás.</p>
+          <p>Elige por dónde empezar: un cuestionario de tres minutos o un ejercicio de veinte.</p>
         </li>
         <li data-reveal style="--reveal-index: 1">
           <span class="pasos__n">2</span>
-          <p>Responde pregunta a pregunta, con calma. Puedes volver atrás en cualquier momento.</p>
+          <p>Responde o escribe paso a paso. Puedes volver atrás, y en los ejercicios el borrador se queda en tu pestaña si recargas.</p>
         </li>
         <li data-reveal style="--reveal-index: 2">
           <span class="pasos__n">3</span>
-          <p>Recibe tu resultado con una explicación clara, sus límites y algunas ideas para cuidarte.</p>
+          <p>Lee tu resultado o tu reflejo, con sus límites y sus ideas. Imprímelo si quieres traerlo a una primera sesión.</p>
         </li>
       </ol>
     </div>
   </section>
 
   <CtaBand
-    title="Un cuestionario abre una puerta. Hablar la cruza."
-    subtitle="Si quieres conversar sobre lo que viste aquí, o sobre lo que no cabe en una puntuación, aquí hay un espacio para escucharte."
-    tone="sand"
+    title="Un ejercicio abre una puerta. Hablar la cruza."
+    subtitle="Si quieres conversar sobre lo que viste aquí, o sobre lo que no cabe en una pantalla, aquí hay un espacio para escucharte."
+    tone="ivory"
   />
 </Base>
 
 <style>
-  /* Colección: una columna en móvil, dos en tablet y desktop. Tarjetas como las de Áreas. */
+  /* ¿Por dónde empiezo? */
+  .empieza {
+    display: grid;
+    gap: var(--space-3);
+    justify-items: center;
+    text-align: center;
+  }
+  .empieza__list {
+    display: grid;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0;
+  }
+  .empieza__list li {
+    display: grid;
+    gap: 0.15rem;
+    padding: var(--space-2) 0;
+    border-top: 1px solid var(--line);
+  }
+  .empieza__si {
+    font-size: var(--step-small);
+    color: var(--fg-soft);
+  }
+  .empieza__a {
+    font-family: var(--font-serif);
+    font-size: calc(var(--step-body) * 1.15);
+    color: var(--navy);
+    text-decoration: none;
+  }
+  .empieza__a:hover {
+    color: var(--olive-deep);
+  }
+  @media (min-width: 720px) {
+    .empieza__list li {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: baseline;
+      gap: var(--space-3);
+      text-align: left;
+    }
+    .empieza__a {
+      text-align: right;
+    }
+  }
+
+  /* Caminos y tarjetas de ejercicios */
+  .camino {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+  }
+  .camino__head {
+    display: grid;
+    gap: 0.25rem;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--navy);
+  }
+  .camino__title {
+    font-size: var(--step-h3);
+  }
+  .ejs {
+    display: grid;
+    gap: var(--space-3);
+    padding: 0;
+  }
+  .ejs__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-3);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--ivory);
+  }
+  .ejs__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0;
+  }
+  .ejs__meta span {
+    position: relative;
+    white-space: nowrap;
+    padding-right: 0.6em;
+  }
+  .ejs__meta > span:not(:first-child) {
+    padding-left: 0.6em;
+  }
+  .ejs__meta > span:not(:first-child)::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translateX(-50%);
+    color: var(--olive);
+  }
+  .ejs__meta > span.is-line-start::before {
+    display: none;
+  }
+  .ejs__dots {
+    display: inline-flex;
+    gap: 0.2rem;
+    margin-left: 0.35rem;
+    vertical-align: middle;
+    padding: 0 !important;
+  }
+  .ejs__dots span {
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 50%;
+    border: 1px solid var(--olive-deep);
+    padding: 0 !important;
+  }
+  .ejs__dots span::before {
+    display: none !important;
+  }
+  .ejs__dots span.is-on {
+    background: var(--olive-deep);
+  }
+  .ejs__title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: calc(var(--step-h3) * 0.98);
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+  .ejs__sub {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: calc(var(--step-body) * 1.05);
+    line-height: 1.4;
+  }
+  .ejs__text {
+    color: var(--fg);
+  }
+  .ejs__llevas {
+    color: var(--fg-soft);
+  }
+  .ejs__k {
+    font-family: var(--font-sans);
+    font-size: 0.74rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--olive-deep);
+    margin-right: 0.3em;
+  }
+  .ejs__go {
+    margin-top: auto;
+    padding-top: var(--space-2);
+    font-size: var(--step-small);
+    font-weight: 500;
+    color: var(--navy);
+    text-decoration: none;
+  }
+  .ejs__go:hover {
+    color: var(--olive-deep);
+  }
+  @media (min-width: 640px) {
+    .ejs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 960px) {
+    /* Cada camino llena su fila: dos tarjetas anchas o tres estrechas, sin huecos. */
+    .ejs {
+      grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+      gap: var(--space-4);
+    }
+    .ejs__card {
+      padding: var(--space-5) var(--space-4);
+    }
+    .camino__head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      align-items: baseline;
+      gap: var(--space-3);
+    }
+  }
+
+  /* Orden sugerido */
+  .orden {
+    display: grid;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--line);
+    text-align: center;
+    justify-items: center;
+  }
+  .orden__text {
+    max-width: 70ch;
+    color: var(--fg-soft);
+  }
+  .orden__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1.1rem;
+    padding: 0;
+    margin: 0;
+    max-width: 60rem;
+  }
+  .orden__list li {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35rem;
+  }
+  .orden__n {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--olive-deep);
+  }
+  .orden__list a {
+    color: var(--navy);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  /* Colección de cuestionarios: una columna en móvil, dos en tablet y desktop. */
   .colec {
     display: grid;
     gap: var(--space-3);
@@ -148,6 +473,7 @@ import { site } from '../../data/site';
     flex-wrap: wrap;
     justify-content: center;
     row-gap: 0.25rem;
+    margin-bottom: var(--space-2);
   }
   .colec__meta span {
     position: relative;
@@ -168,9 +494,6 @@ import { site } from '../../data/site';
   .colec__btn {
     margin-top: auto;
   }
-  .colec__meta {
-    margin-bottom: var(--space-2);
-  }
   @media (min-width: 640px) {
     .colec {
       grid-template-columns: repeat(2, 1fr);
@@ -181,8 +504,11 @@ import { site } from '../../data/site';
     }
   }
   @media (min-width: 960px) {
+    .colec {
+      grid-template-columns: repeat(4, 1fr);
+    }
     .colec__card {
-      padding: var(--space-8) var(--space-5);
+      padding: var(--space-6) var(--space-3);
     }
   }
 
@@ -194,6 +520,7 @@ import { site } from '../../data/site';
   }
   .aviso__list li {
     display: grid;
+    align-content: start;
     gap: var(--space-1);
     padding-top: var(--space-3);
     border-top: 1px solid var(--line);

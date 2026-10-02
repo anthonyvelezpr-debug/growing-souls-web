@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "build:strict": "astro build && node scripts/check-verify.mjs",
-    "build:preview": "PUBLIC_PREVIEW=1 astro build && node scripts/make-relative.mjs",
+    "build:preview": "PUBLIC_PREVIEW=1 PUBLIC_LEADS_ENDPOINT=demo astro build && node scripts/make-relative.mjs",
     "preview": "astro preview",
     "check": "astro check"
   },
@@ -16,5 +16,9 @@
     "@fontsource/cormorant-garamond": "^5.2.5",
     "astro": "^5.13.0",
     "sharp": "^0.34.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^5.9.3"
   }
 }

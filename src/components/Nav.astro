@@ -1,9 +1,14 @@
 ---
-import { nav, cta, site } from '../data/site';
+import { getCollection } from 'astro:content';
+import { nav, cta, site, isPreview } from '../data/site';
 import Button from './Button.astro';
 
 const path = Astro.url.pathname;
 const isCurrent = (href: string) => path === href || (href !== '/' && path.startsWith(href));
+
+/* El Journal solo se anuncia cuando hay artículos publicados (en vista previa, también borradores). */
+const hayJournal = (await getCollection('journal', ({ data }) => isPreview || !data.draft)).length > 0;
+const items = nav.filter((item) => item.href !== '/journal/' || hayJournal);
 ---
 
 <header class="nav" data-nav>
@@ -26,7 +31,7 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
     <nav class="nav__links" aria-label="Principal">
       <ul role="list">
         {
-          nav.map((item) => (
+          items.map((item) => (
             <li>
               <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined} title={item.short ? item.label : undefined}>
                 {item.short ?? item.label}
@@ -59,7 +64,7 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
     <div class="container nav__drawer-inner">
       <ul role="list" class="nav__drawer-links">
         {
-          nav.map((item) => (
+          items.map((item) => (
             <li>
               <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
                 {item.label}

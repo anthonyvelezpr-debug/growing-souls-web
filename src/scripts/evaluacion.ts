@@ -401,7 +401,7 @@ if (root && dataEl) {
           Instrumento: ${esc(ins.fuente.nombre)}. ${esc(ins.fuente.autores.replace(/\.$/, ""))}. ${esc(ins.fuente.version)}. ${esc(ins.fuente.licencia)}
         </p>
         <p class="ev__again small">
-          <a href="${esc(cfg.indiceHref)}">Ver otras autoevaluaciones</a> · <button type="button" class="ev__link" data-restart>Volver a empezar</button>
+          <a href="${esc(cfg.indiceHref)}">Ver otras autoevaluaciones</a> · <button type="button" class="ev__link" data-restart>Volver a empezar</button> · <button type="button" class="ev__link" data-print>Imprimir o guardar en PDF</button>
         </p>
       </article>
     `,
@@ -412,6 +412,8 @@ if (root && dataEl) {
           seguridadMostrada = false;
           pregunta(0);
         });
+        /* Para llevar el resultado a una primera sesión: imprime solo el resultado (ver @media print). */
+        stage.querySelector<HTMLButtonElement>('[data-print]')?.addEventListener('click', () => window.print());
       },
     );
   };

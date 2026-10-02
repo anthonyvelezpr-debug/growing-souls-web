@@ -3,7 +3,7 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import MobileBar from '../components/MobileBar.astro';
-import { site, isPreview } from '../data/site';
+import { site, isPreview, nombresRuta } from '../data/site';
 
 interface Props {
   title: string;
@@ -45,19 +45,33 @@ const graph: Record<string, unknown>[] = [
     '@type': ['MedicalBusiness', 'LocalBusiness'],
     '@id': `${site.url}/#org`,
     name: site.name,
+    alternateName: 'Growing Souls PR',
+    legalName: 'Growing Souls',
     url: `${site.url}/`,
+    logo: `${site.url}/images/brand/logo-circular-navy.png`,
     image: ogImageUrl,
     description: site.description,
+    slogan: site.tagline,
+    telephone: `+1-${site.contact.phone}`,
+    email: site.contact.email,
+    sameAs: [`https://www.instagram.com/${site.contact.instagram}/`],
+    inLanguage: 'es-PR',
     medicalSpecialty: 'Psychiatric',
     knowsAbout: [
-      'Psicoterapia',
+      'Psicología clínica',
+      'Psicoterapia individual para adultos',
       'Terapia de pareja',
       'Terapia cognitivo-conductual',
       'Método Gottman',
+      'Ansiedad',
+      'Depresión',
+      'Manejo del estrés',
+      'Bienestar emocional',
       'Psicoeducación',
-      'Talleres y conferencias',
+      'Talleres y conferencias de salud mental',
     ],
     founder: { '@id': `${site.url}/#person` },
+    employee: { '@id': `${site.url}/#person` },
     areaServed: { '@type': 'AdministrativeArea', name: site.location.areaServed },
     address: {
       '@type': 'PostalAddress',
@@ -66,18 +80,22 @@ const graph: Record<string, unknown>[] = [
       addressCountry: 'PR',
     },
     availableService: [
-      { '@type': 'Service', name: 'Terapia individual', url: `${site.url}/terapia-individual/` },
-      { '@type': 'Service', name: 'Terapia de pareja', url: `${site.url}/parejas/` },
-      { '@type': 'Service', name: 'Talleres y conferencias', url: `${site.url}/talleres-y-conferencias/` },
+      { '@type': 'Service', '@id': `${site.url}/terapia-individual/#service`, name: 'Psicoterapia individual para adultos', url: `${site.url}/terapia-individual/` },
+      { '@type': 'Service', '@id': `${site.url}/parejas/#service`, name: 'Terapia de pareja', url: `${site.url}/parejas/` },
+      { '@type': 'Service', '@id': `${site.url}/talleres-y-conferencias/#service`, name: 'Talleres y conferencias de psicoeducación', url: `${site.url}/talleres-y-conferencias/` },
     ],
   },
   {
     '@type': 'Person',
     '@id': `${site.url}/#person`,
     name: 'Melanie Acevedo Vélez',
+    alternateName: ['Dra. Melanie Acevedo Vélez', 'Dra. Melanie Acevedo', 'Melanie Acevedo Vélez, PsyD'],
     honorificPrefix: 'Dra.',
     honorificSuffix: site.person.degree,
     jobTitle: site.person.jobTitle,
+    description:
+      'Psicóloga clínica en Puerto Rico (PsyD, Universidad Albizu) y fundadora de Growing Souls. Psicoterapia individual para adultos, terapia de pareja y talleres de psicoeducación.',
+    hasOccupation: { '@type': 'Occupation', name: 'Psicóloga clínica', occupationLocation: { '@type': 'AdministrativeArea', name: 'Puerto Rico' } },
     worksFor: { '@id': `${site.url}/#org` },
     url: `${site.url}/melanie/`,
     image: ogImageUrl,
@@ -100,20 +118,35 @@ const graph: Record<string, unknown>[] = [
   ...jsonLd,
 ];
 
+/* Página actual: nombre, descripción y migas con nombres legibles (las migas usan el título de la página en el último tramo). */
+const pageTitle = title.split(' · ')[0];
+graph.push({
+  '@type': 'WebPage',
+  '@id': `${canonical}#webpage`,
+  url: canonical,
+  name: pageTitle,
+  description,
+  inLanguage: 'es-PR',
+  isPartOf: { '@id': `${site.url}/#website` },
+  about: { '@id': `${site.url}/#org` },
+  primaryImageOfPage: { '@type': 'ImageObject', url: ogImageUrl },
+  ...(isHome ? {} : { breadcrumb: { '@id': `${canonical}#breadcrumb` } }),
+});
 if (!isHome) {
   const segments = Astro.url.pathname.split('/').filter(Boolean);
   const items = [{ '@type': 'ListItem', position: 1, name: 'Inicio', item: `${site.url}/` }];
   let path = '';
   segments.forEach((seg, i) => {
     path += `/${seg}`;
+    const last = i === segments.length - 1;
     items.push({
       '@type': 'ListItem',
       position: i + 2,
-      name: seg.replace(/-/g, ' '),
+      name: last ? pageTitle : (nombresRuta[seg] ?? seg.replace(/-/g, ' ')),
       item: `${site.url}${path}/`,
     });
   });
-  graph.push({ '@type': 'BreadcrumbList', itemListElement: items });
+  graph.push({ '@type': 'BreadcrumbList', '@id': `${canonical}#breadcrumb`, itemListElement: items });
 }
 
 const structuredData = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
@@ -127,7 +160,18 @@ const structuredData = JSON.stringify({ '@context': 'https://schema.org', '@grap
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {
+      noindex ? (
+        <meta name="robots" content="noindex, nofollow" />
+      ) : (
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      )
+    }
+    <meta name="author" content={site.person.name} />
+    <meta name="geo.region" content="PR" />
+    <meta name="geo.placename" content="Puerto Rico" />
+    {site.verification.google && <meta name="google-site-verification" content={site.verification.google} />}
+    {site.verification.bing && <meta name="msvalidate.01" content={site.verification.bing} />}
     <meta name="theme-color" content="#fbfaea" />
     <meta name="color-scheme" content="light" />
 
@@ -144,6 +188,7 @@ const structuredData = JSON.stringify({ '@context': 'https://schema.org', '@grap
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name}, ${site.person.name}, psicóloga clínica en Puerto Rico`} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />

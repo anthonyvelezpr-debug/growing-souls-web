@@ -18,7 +18,10 @@ import Verify from '../components/Verify.astro';
 import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
 import { isPreview } from '../data/site';
-import { evaluaciones } from '../data/evaluaciones';
+import { ejercicios } from '../data/ejercicios';
+
+/* Tres ejercicios de profundidad en la portada, más la puerta a los cuestionarios validados. */
+const destacados = ['ochenta', 'frases', 'carta'].map((id) => ejercicios.find((e) => e.id === id)!);
 
 import fotoHero from '../assets/melanie/05-mirada-abajo-cerca.jpg';
 import fotoTaller from '../assets/talleres/talleres-06-portada-arco.jpg';
@@ -174,29 +177,38 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
 
   <section class="section conoce">
     <div class="container">
-      <SectionHeading eyebrow="Conócete mejor" title="¿Cómo te has estado sintiendo?">
+      <SectionHeading eyebrow="Conócete mejor" title="Hay preguntas que nadie te hace. Aquí te las haces tú.">
         <p class="lead">
-          Cuatro herramientas breves y gratuitas, basadas en cuestionarios de uso profesional, para mirar con calma tu
-          bienestar, tu ánimo, tu ansiedad y tu estrés. Orientación, no diagnóstico.
+          Ejercicios de profundidad, de los que se usan en terapia, para descubrir lo que todavía no has puesto en
+          palabras. Y cuatro cuestionarios validados para saber cómo estás. Gratis, privados y sin diagnósticos.
         </p>
       </SectionHeading>
       <ul class="conoce__grid" role="list">
         {
-          evaluaciones.map((ev, i) => (
+          destacados.map((ej, i) => (
             <li data-reveal style={`--reveal-index: ${i + 1}`}>
-              <a class="conoce__card" href={`/conocete-mejor/${ev.id}/`}>
-                <span class="conoce__area">{ev.area}</span>
-                <span class="conoce__meta small muted">
-                  {ev.items.length} preguntas · {ev.duracion.replace("minutos", "min")}
-                </span>
+              <a class="conoce__card" href={`/conocete-mejor/ejercicios/${ej.id}/`}>
+                <span class="conoce__eyebrow">{ej.camino}</span>
+                <span class="conoce__area">{ej.titulo}</span>
+                <span class="conoce__sub small">{ej.subtitulo}</span>
+                <span class="conoce__meta small muted">{ej.duracion.replace('minutos', 'min')} · escribes</span>
                 <span class="conoce__go" aria-hidden="true">→</span>
               </a>
             </li>
           ))
         }
+        <li data-reveal style="--reveal-index: 4">
+          <a class="conoce__card conoce__card--sand" href="/conocete-mejor/#cuestionarios">
+            <span class="conoce__eyebrow">Cuestionarios validados</span>
+            <span class="conoce__area">¿Cómo te has estado sintiendo?</span>
+            <span class="conoce__sub small">Bienestar, ánimo, ansiedad y estrés, con los instrumentos que usan los profesionales.</span>
+            <span class="conoce__meta small muted">4 cuestionarios · 3 min cada uno</span>
+            <span class="conoce__go" aria-hidden="true">→</span>
+          </a>
+        </li>
       </ul>
       <div class="conoce__cta" data-reveal>
-        <Button href="/conocete-mejor/" variant="link">Ver todas las autoevaluaciones</Button>
+        <Button href="/conocete-mejor/" variant="link">Ver los diez ejercicios y los cuestionarios</Button>
       </div>
     </div>
   </section>
@@ -388,40 +400,61 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
       max-width: var(--measure);
     }
   }
-  /* Conócete mejor: cuatro tarjetas pequeñas, 2×2 en móvil y una fila en desktop. */
+  /* Conócete mejor: tres ejercicios y la puerta a los cuestionarios; 1 columna en móvil, 2 en tablet, 4 en desktop. */
   .conoce__grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: var(--space-2);
     padding: 0;
   }
   .conoce__card {
-    display: grid;
-    gap: 0.35rem;
-    justify-items: center;
-    align-content: center;
-    min-height: 7.5rem;
-    padding: var(--space-3) var(--space-2);
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    height: 100%;
+    padding: var(--space-4) var(--space-3);
     border: 1px solid var(--line);
     border-radius: var(--radius);
     background: var(--ivory);
-    text-align: center;
+    text-align: left;
     text-decoration: none;
     color: var(--fg);
     transition:
       border-color var(--dur-fast) var(--ease),
       background-color var(--dur-fast) var(--ease);
   }
+  .conoce__card--sand {
+    background: var(--sand);
+  }
   .conoce__card:hover {
     border-color: var(--olive);
     background: var(--sand);
+  }
+  .conoce__eyebrow {
+    font-size: 0.74rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--olive-deep);
   }
   .conoce__area {
     font-family: var(--font-serif);
     font-size: calc(var(--step-h3) * 0.85);
     line-height: 1.15;
+    text-wrap: balance;
+  }
+  .conoce__sub {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: calc(var(--step-body) * 1.02);
+    line-height: 1.4;
+  }
+  .conoce__meta {
+    margin-top: 0.2rem;
   }
   .conoce__go {
+    margin-top: auto;
+    padding-top: 0.5rem;
     font-family: var(--font-serif);
     color: var(--olive-deep);
     transition: transform var(--dur-fast) var(--ease);
@@ -436,11 +469,13 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
   }
   @media (min-width: 640px) {
     .conoce__grid {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: var(--space-3);
     }
-    .conoce__card {
-      min-height: 9rem;
+  }
+  @media (min-width: 1100px) {
+    .conoce__grid {
+      grid-template-columns: repeat(4, 1fr);
     }
   }
   .areas-cta {

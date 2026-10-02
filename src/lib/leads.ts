@@ -2,8 +2,8 @@
  * Envío de contactos ("leads") de las autoevaluaciones a un endpoint externo (webhook de CRM, automatización, etc.).
  *
  * - Se usa en el navegador. No hay backend propio: el destino se configura con PUBLIC_LEADS_ENDPOINT en el build.
- * - Carga útil mínima: nombre, contacto, qué autoevaluación, fecha, puntuación total, rango y consentimientos.
- *   Nunca se envían las respuestas individuales.
+ * - Carga útil mínima: nombre, contacto, qué autoevaluación o ejercicio, fecha, puntuación total y rango (solo en
+ *   las autoevaluaciones) y consentimientos. Nunca se envían las respuestas individuales ni los textos escritos.
  * - 'demo' simula un envío correcto sin red (vista previa interna).
  * - Si el endpoint no acepta CORS, se reintenta como petición opaca (no-cors, text/plain): no se puede leer la
  *   respuesta, pero el servidor la recibe. Cualquier fallo devuelve 'error' y la página muestra el resultado igual.
@@ -42,11 +42,28 @@ export interface CitaPayload {
   idioma: string;
 }
 
+/** Ejercicio de profundidad terminado. Nunca viaja nada de lo que la persona escribió. */
+export interface EjercicioPayload {
+  source: 'ejercicio';
+  ejercicio_id: string;
+  ejercicio: string;
+  fecha: string;
+  nombre: string;
+  email: string;
+  telefono: string;
+  consentimiento_seguimiento: true;
+  consentimiento_comunicaciones: boolean;
+  pagina: string;
+  idioma: string;
+}
+
+export type Payload = LeadPayload | CitaPayload | EjercicioPayload;
+
 export type LeadResultado = 'ok' | 'demo' | 'error';
 
 const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
-export async function enviarLead(endpoint: string, payload: LeadPayload | CitaPayload): Promise<LeadResultado> {
+export async function enviarLead(endpoint: string, payload: Payload): Promise<LeadResultado> {
   if (!endpoint) return 'error';
   if (endpoint === 'demo') {
     await wait(600);

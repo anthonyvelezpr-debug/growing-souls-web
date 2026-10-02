@@ -20,8 +20,9 @@ import { getImage } from 'astro:assets';
 import { isPreview } from '../data/site';
 import { ejercicios } from '../data/ejercicios';
 
-/* Tres ejercicios de profundidad en la portada, más la puerta a los cuestionarios validados. */
-const destacados = ['ochenta', 'frases', 'carta'].map((id) => ejercicios.find((e) => e.id === id)!);
+/* Tres ejercicios guiados en la portada (uno de cada intensidad, empezando por los más llevaderos), más la puerta a
+   los cuestionarios validados. */
+const destacados = ['brecha', 'critica', 'gracias'].map((id) => ejercicios.find((e) => e.id === id)!);
 
 import fotoHero from '../assets/melanie/05-mirada-abajo-cerca.jpg';
 import fotoTaller from '../assets/talleres/talleres-06-portada-arco.jpg';
@@ -47,7 +48,7 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
     subtitle="Psicoterapia desde la evidencia, la empatía y nuestra humanidad."
     signature="Dra. Melanie Acevedo Vélez, PsyD · Psicóloga Clínica · Puerto Rico"
     primary={{ label: 'Comienza tu proceso', href: '/agenda/' }}
-    secondary={{ label: 'Conoce a Melanie', href: '/melanie/' }}
+    secondary={{ label: 'Conóceme', href: '/melanie/' }}
     image={fotoHero}
     alt="Melanie sonríe mirando hacia abajo, sentada en el piso entre hojas de olivo, con las manos sobre un modelo de cerebro"
     caption="Dra. Melanie Acevedo Vélez · Psicóloga Clínica"
@@ -99,7 +100,7 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
         />
       </div>
       <div class="about__text" data-reveal style="--reveal-index: 1">
-        <p class="eyebrow">Conoce a Melanie</p>
+        <p class="eyebrow">Conóceme</p>
         <h2>Antes de ser psicóloga, soy persona.</h2>
         <p>
           <Verify note="Aprobación Melanie">
@@ -170,17 +171,18 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
         ]}
       />
       <div class="areas-cta" data-reveal>
-        <Button href="/como-trabajo/" variant="link">Explora cómo trabajo</Button>
+        <Button href="/mision-y-vision/#como-trabajo" variant="link">Conoce cómo trabajo</Button>
       </div>
     </div>
   </section>
 
   <section class="section conoce">
     <div class="container">
-      <SectionHeading eyebrow="Conócete mejor" title="Hay preguntas que nadie te hace. Aquí te las haces tú.">
+      <SectionHeading eyebrow="Conócete mejor" title="Herramientas para conocerte mejor.">
         <p class="lead">
-          Ejercicios de profundidad, de los que se usan en terapia, para descubrir lo que todavía no has puesto en
-          palabras. Y cuatro cuestionarios validados para saber cómo estás. Gratis, privados y sin diagnósticos.
+          Ejercicios guiados de reflexión, inspirados en técnicas que se utilizan en psicoterapia, y cuatro
+          cuestionarios validados sobre bienestar, ánimo, ansiedad y estrés. Gratuitos, confidenciales y sin
+          diagnósticos.
         </p>
       </SectionHeading>
       <ul class="conoce__grid" role="list">
@@ -201,7 +203,7 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
           <a class="conoce__card conoce__card--sand" href="/conocete-mejor/#cuestionarios">
             <span class="conoce__eyebrow">Cuestionarios validados</span>
             <span class="conoce__area">¿Cómo te has estado sintiendo?</span>
-            <span class="conoce__sub small">Bienestar, ánimo, ansiedad y estrés, con los instrumentos que usan los profesionales.</span>
+            <span class="conoce__sub small">Bienestar, estado de ánimo, ansiedad y estrés, con instrumentos validados.</span>
             <span class="conoce__meta small muted">4 cuestionarios · 3 min cada uno</span>
             <span class="conoce__go" aria-hidden="true">→</span>
           </a>
@@ -215,7 +217,7 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
 
   <ProgressReveal />
 
-  <Manifesto eyebrow="Manifiesto" title="Un espacio seguro para sentir, comprender y crecer." cta={{ label: 'Conoce Growing Souls', href: '/melanie/#growing-souls' }}>
+  <Manifesto eyebrow="Manifiesto" title="Un espacio seguro para sentir, comprender y crecer." cta={{ label: 'Misión y visión', href: '/mision-y-vision/' }}>
     <p>
       <Verify note="Aprobación Melanie · origen del nombre pendiente de entrevista">
         Growing Souls nació de una convicción: la psicología puede ser rigurosa y profundamente humana al mismo
@@ -233,12 +235,13 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
     quoteCite="Mi manera de hacer terapia"
     eyebrow="Evidencia y humanidad"
     title="La evidencia da estructura. La humanidad da conexión."
-    cta={{ label: 'Explora cómo trabajo', href: '/como-trabajo/' }}
+    cta={{ label: 'Conoce los enfoques con los que trabajo', href: '/mision-y-vision/#enfoques' }}
     tone="ivory"
   >
     <p>
-      Trabajo con enfoques con respaldo científico (ACT, EFT y CBT), explicados primero como se viven y después por su
-      nombre. Y con algo que ningún manual incluye: alguien que te escucha con respeto, sin apurarte y sin decidir por ti.
+      Trabajo con enfoques con respaldo científico, como la terapia cognitivo-conductual y el Método Gottman para
+      parejas, explicados primero como se viven y después por su nombre. Y con una escucha respetuosa, sin prisas y
+      sin decidir por ti.
     </p>
   </Triptych>
 
@@ -258,9 +261,9 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
         <h2>Lo que se trabaja en sesión también se puede aprender en grupo.</h2>
         <p>
           <Verify note="Aprobación Melanie · temas, públicos y formatos de los talleres por confirmar">
-            Melanie ofrece talleres, conferencias y charlas de psicoeducación para empresas, organizaciones,
-            comunidades y grupos: bienestar emocional, manejo del estrés, comunicación, límites y amor propio, con
-            herramientas prácticas y el mismo rigor de la consulta. Presenciales o en línea.
+            Melanie ofrece talleres, conferencias y charlas de psicoeducación para empresas, iglesias, asociaciones
+            estudiantiles, organizaciones y comunidades: bienestar emocional, manejo del estrés, comunicación, límites
+            y amor propio, con herramientas prácticas y el mismo rigor de la consulta. Presenciales o en línea.
           </Verify>
         </p>
         <div class="talleres__cta">

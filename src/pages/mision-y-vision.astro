@@ -1,0 +1,262 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Offer from '../components/Offer.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Verify from '../components/Verify.astro';
+import Button from '../components/Button.astro';
+import ArchPhoto from '../components/ArchPhoto.astro';
+
+import fotoLaptop from '../assets/melanie/04-banquillo-laptop-cerca.jpg';
+
+/*
+ * Antes "Cómo trabajo" (/como-trabajo/ redirige aquí). La Dra. pidió llamarla "Misión y visión" (2 oct 2026).
+ * Enfoques: solo los que constan en su CV (TCC y Método Gottman, Nivel 1). ACT y EFT quedan fuera hasta que ella
+ * confirme su formación en esos enfoques.
+ */
+---
+
+<Base
+  title="Misión y visión · Growing Souls"
+  description="Misión, visión y valores de Growing Souls, y cómo es el proceso terapéutico con la Dra. Melanie Acevedo Vélez: psicoterapia basada en la evidencia, con empatía y humanidad."
+>
+  <PageHero
+    eyebrow="Misión y visión"
+    title="Psicología clínica con evidencia, empatía y humanidad."
+    subtitle="Lo que guía mi práctica, hacia dónde quiero llevar Growing Souls y cómo es el proceso terapéutico conmigo."
+  />
+
+  <section class="section section--tight" id="mision">
+    <div class="container mv">
+      <article class="mv__item" data-reveal>
+        <p class="eyebrow">Misión</p>
+        <p class="mv__text">
+          <Verify note="Aprobación Melanie · misión propuesta a partir de su CV y de los textos del sitio">
+            Ofrecer un espacio seguro y profesional donde personas adultas y parejas puedan sentir, comprender y crecer,
+            a través de una psicoterapia basada en la evidencia, la empatía y el respeto por la historia de cada persona.
+          </Verify>
+        </p>
+      </article>
+      <article class="mv__item" id="vision" data-reveal style="--reveal-index: 1">
+        <p class="eyebrow">Visión</p>
+        <p class="mv__text">
+          <Verify note="Aprobación Melanie · visión propuesta a partir de «Lo que todavía quiero construir»">
+            Que en Puerto Rico pedir ayuda psicológica se viva como un acto de cuidado y de crecimiento, y que Growing
+            Souls se consolide como un espacio de referencia en salud mental, con profesionales que compartan una
+            manera rigurosa y humana de acompañar.
+          </Verify>
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section section--sand" id="valores">
+    <div class="container">
+      <SectionHeading eyebrow="Valores" title="Lo que sostiene el proceso terapéutico." />
+      <Offer
+        items={[
+          {
+            title: 'Colaboración',
+            text: 'No trabajo desde “yo tengo todas las respuestas”. Trabajo contigo: te acompaño mientras comprendes tu historia, identificas patrones y desarrollas herramientas para tomar tus propias decisiones.',
+          },
+          {
+            title: 'Validación emocional',
+            text: 'Validar no es estar de acuerdo con todo. Es reconocer que lo que sientes tiene sentido dentro de tu historia y partir de ahí.',
+          },
+          {
+            title: 'Evidencia',
+            text: 'Las herramientas que trabajamos tienen respaldo científico, y te explico con claridad para qué sirve cada una.',
+          },
+          {
+            title: 'Espacio seguro',
+            text: 'Puedes hablar, hacer silencio, preguntar y mostrarte vulnerable a tu ritmo, en un ambiente de respeto y sin juicios.',
+          },
+        ]}
+      />
+    </div>
+  </section>
+
+  <section class="section" id="como-trabajo">
+    <div class="container--narrow prose" data-reveal>
+      <p class="eyebrow">Cómo trabajo</p>
+      <h2>Cómo se siente hablar conmigo</h2>
+      <p>
+        Se siente como una conversación con alguien que no te apura, no te juzga y no da por hecho lo que sientes.
+        Habrá silencios, y está bien. Habrá preguntas, y puedes decidir cuáles responder en cada momento.
+      </p>
+
+      <h2>Qué puedes esperar</h2>
+      <ul>
+        <li>Que te escuche antes de interpretar.</li>
+        <li>Que validemos lo que sientes antes de intentar cambiarlo.</li>
+        <li>Que comprendamos de dónde viene un patrón antes de trabajar en modificarlo.</li>
+        <li>Que las herramientas que utilicemos tengan respaldo científico.</li>
+        <li>Que las decisiones sigan siendo tuyas.</li>
+      </ul>
+
+      <h2 id="primera-sesion">La primera sesión</h2>
+      <p>
+        La primera sesión es para conocernos. Me cuentas lo que desees compartir, a tu ritmo, y conversamos sobre lo que
+        te trae y lo que esperas del proceso. No necesitas llegar con todo claro.
+        <Verify note="Duración, formato y evaluación inicial de la primera sesión" hide>
+          Más adelante aquí se describe la duración y el formato exacto de la primera sesión.
+        </Verify>
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--sand" id="enfoques">
+    <div class="container evidence">
+      <div class="evidence__figure">
+        <ArchPhoto
+          src={fotoLaptop}
+          alt="Melanie trabaja en su laptop, sentada en el piso junto a un banquillo y libros de psicología"
+          focus="50% 35%"
+          sizes="(min-width: 960px) 34vw, (min-width: 640px) 60vw, 100vw"
+        />
+      </div>
+      <div class="evidence__text">
+        <SectionHeading eyebrow="Enfoques" title="Primero te cuento cómo se vive; después, cómo se llama." align="left">
+          <p class="lead">Los enfoques en los que me he formado, explicados como se viven en una sesión.</p>
+        </SectionHeading>
+        <ol class="evidence__list" role="list">
+          <li data-reveal>
+            <p class="evidence__how">Reconocer cómo lo que piensas influye en lo que sientes y haces, y aprender a responder de otra manera.</p>
+            <p class="evidence__name">Terapia Cognitivo-Conductual (TCC).</p>
+          </li>
+          <li data-reveal style="--reveal-index: 1">
+            <p class="evidence__how">Fortalecer la amistad, la comunicación y el manejo del conflicto en la pareja, a partir de décadas de investigación sobre las relaciones.</p>
+            <p class="evidence__name">Método Gottman de terapia de pareja (formación Nivel 1).</p>
+          </li>
+          <li data-reveal style="--reveal-index: 2">
+            <p class="evidence__how">Comprender lo que te ocurre con explicaciones claras, para que puedas tomar decisiones informadas.</p>
+            <p class="evidence__name">Psicoeducación.</p>
+          </li>
+        </ol>
+        <Verify as="div" note="Formación documentada en su CV (2026): TCC y Método Gottman Nivel 1. ACT y EFT retirados del sitio hasta confirmar formación" hide>
+          <p class="muted small">Pendiente: confirmar si hay formación adicional (ACT, EFT u otras) para añadirla.</p>
+        </Verify>
+        <div class="evidence__cta">
+          <Button href="/melanie/#trayectoria" variant="link">Conoce mi formación y trayectoria</Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container--narrow prose" data-reveal>
+      <h2>Lo que la terapia no es</h2>
+      <ul>
+        <li>No es un consejo rápido ni una receta.</li>
+        <li>No es alguien diciéndote quién debes ser.</li>
+        <li>No sustituye la atención médica cuando esta hace falta.</li>
+        <li>No es un servicio de emergencias. Si estás en crisis, <a href="/crisis/">aquí tienes recursos</a>.</li>
+      </ul>
+      <div class="evidence__cta">
+        <Button href="/terapia-individual/" variant="link">Conoce la terapia individual</Button>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Tal vez llevas algún tiempo pensando en comenzar."
+    subtitle="Cuando sientas que es el momento de hablar, aquí hay un espacio para escucharte."
+    tone="sand"
+  />
+</Base>
+
+<style>
+  /* Misión y visión: dos piezas de lectura con el mismo peso; apiladas en móvil, lado a lado en desktop. */
+  .mv {
+    display: grid;
+    gap: var(--space-6);
+  }
+  .mv__item {
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+    justify-items: center;
+    text-align: center;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--olive);
+    scroll-margin-top: calc(var(--nav-height) + 1rem);
+  }
+  .mv__text {
+    font-family: var(--font-serif);
+    font-size: calc(var(--step-h3) * 0.92);
+    line-height: 1.35;
+    max-width: 34ch;
+    text-wrap: pretty;
+  }
+  #como-trabajo,
+  #enfoques,
+  #primera-sesion {
+    scroll-margin-top: calc(var(--nav-height) + 1rem);
+  }
+  @media (min-width: 960px) {
+    .mv {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-10);
+    }
+    .mv__item {
+      justify-items: start;
+      text-align: left;
+    }
+  }
+  .evidence {
+    display: grid;
+    gap: var(--space-6);
+    align-items: start;
+  }
+  .evidence__figure {
+    width: min(100%, 22rem);
+    margin-inline: auto;
+  }
+  .evidence__list {
+    display: grid;
+    gap: var(--space-4);
+    padding: 0;
+  }
+  .evidence__list li {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--line);
+    display: grid;
+    gap: 0.4rem;
+  }
+  .evidence__how {
+    font-family: var(--font-serif);
+    font-size: calc(var(--step-h3) * 0.92);
+    line-height: 1.25;
+    max-width: 30ch;
+  }
+  .evidence__name {
+    font-size: var(--step-small);
+    color: var(--olive-deep);
+  }
+  .evidence__cta {
+    margin-top: var(--space-4);
+  }
+  @media (max-width: 959px) {
+    .evidence__list li {
+      justify-items: center;
+      text-align: center;
+    }
+    .evidence__how {
+      margin-inline: auto;
+    }
+    .evidence__cta {
+      text-align: center;
+    }
+  }
+  @media (min-width: 960px) {
+    .evidence {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-10);
+      align-items: center;
+    }
+    .evidence__figure {
+      width: min(100%, 26rem);
+    }
+  }
+</style>

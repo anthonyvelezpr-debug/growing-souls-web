@@ -1,223 +1,92 @@
 ---
 import Base from '../layouts/Base.astro';
-import PageHero from '../components/PageHero.astro';
-import Chapter from '../components/Chapter.astro';
-import Quote from '../components/Quote.astro';
-import SectionHeading from '../components/SectionHeading.astro';
+import ArchPhoto from '../components/ArchPhoto.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Verify from '../components/Verify.astro';
-import { isPreview } from '../data/site';
-import { formacion, formacionDetalle, formacionClinica, experiencia, experienciaClinica } from '../data/perfil';
 
-import fotoHero from '../assets/melanie/01-libros-recorte.png';
-import fotoOlivo from '../assets/melanie/03-olivo-cerca.jpg';
-import fotoRetrato from '../assets/melanie/06-banquillo-recorte.png';
+import fotoPerfil from '../assets/melanie/01-libros-recorte.png';
+import fotoCerebro from '../assets/melanie/03-olivo-cerca.jpg';
 
-const roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
-const allChapters = [
-  { id: 'antes', title: 'Antes de la Dra. Acevedo', preview: true },
-  { id: 'acompanar', title: 'Aprender a acompañar', preview: false },
-  { id: 'puerto-rico', title: 'Cuando Puerto Rico también necesitaba ser escuchado', preview: false },
-  { id: 'escuchando', title: 'Lo que aprendí escuchando', preview: true },
-  { id: 'psicologia', title: 'Mi manera de entender la psicología', preview: false },
-  { id: 'growing-souls', title: 'Growing Souls', preview: true },
-  { id: 'construir', title: 'Lo que todavía quiero construir', preview: false },
-];
-/* Los capítulos pendientes de entrevista solo existen en vista previa; la numeración pública es siempre correlativa. */
-const chapters = allChapters.filter((c) => isPreview || !c.preview).map((c, i) => ({ ...c, numeral: roman[i] }));
-const num = Object.fromEntries(chapters.map((c) => [c.id, c.numeral])) as Record<string, string>;
+/*
+ * Conóceme, rehecha a pedido de la Dra. (5 oct 2026):
+ * - Cabecera: su foto de perfil, la cita de Carl Jung que ella eligió y su párrafo sobre la psicoterapia.
+ * - Una sola sección, con la foto del cerebro en la mano: "Formación académica, experiencia clínica y calidad humana",
+ *   con un resumen continuo que escribirá ella (ejemplo que dio: talaveraphd.com/about-me). Hasta entonces va un
+ *   texto provisional hecho solo con datos de su CV (src/data/perfil.ts).
+ * - Sin capítulos y sin planes a futuro: ella se los reserva.
+ * El ancla #trayectoria se mantiene porque la enlazan Misión y visión y las preguntas frecuentes.
+ */
 ---
 
 <Base
   title="Dra. Melanie Acevedo Vélez, PsyD · Psicóloga clínica en Puerto Rico · Growing Souls"
-  description="Dra. Melanie Acevedo Vélez, psicóloga clínica en Puerto Rico (PsyD, Universidad Albizu) y fundadora de Growing Souls: su historia, formación y trayectoria."
+  description="Conoce a la Dra. Melanie Acevedo Vélez, psicóloga clínica en Puerto Rico y fundadora de Growing Souls: formación académica, experiencia clínica y calidad humana."
 >
-  <PageHero
-    eyebrow="Conóceme"
-    title="Antes de ser psicóloga, soy persona."
-    subtitle="Mi historia, mi formación y la manera en que entiendo la psicología."
-    image={fotoHero}
-    alt="Melanie sostiene varios libros de psicología y sonríe"
-    focus="50% 0%"
-    ratio="2 / 3"
-    fill="sand"
-    caption="Dra. Melanie Acevedo Vélez · Psicóloga Clínica"
-  />
-
-  <section class="story">
-    <div class="container story__grid">
-      <aside class="story__index" aria-label="Capítulos">
-        <p class="eyebrow">Capítulos</p>
-        <ol role="list">
-          {
-            chapters.map((c) => (
-              <li>
-                <a href={`#${c.id}`}>
-                  <span class="story__num">{c.numeral}</span> {c.title}
-                </a>
-              </li>
-            ))
-          }
-          <li>
-            <a href="#trayectoria">
-              <span class="story__num" aria-hidden="true">·</span> Formación y trayectoria
-            </a>
-          </li>
-        </ol>
-      </aside>
-
-      <div class="story__chapters">
-        <Chapter id="antes" numeral={num['antes']} title="Antes de la Dra. Acevedo" pending="Infancia, familia, por qué psicología y el momento de decir: esto es lo mío. Se escribe con la entrevista." />
-
-        <Chapter id="acompanar" numeral={num['acompanar']} title="Aprender a acompañar" image={fotoRetrato} focus="50% 50%" fill="sand" alt="Melanie sentada en un banquillo, sonriendo hacia la cámara">
-          <p>
-            <Verify note="Aprobación Melanie">
-              La universidad me dio teoría, estructura y conocimiento. Hay algo que ningún libro sustituye: la
-              calidad humana de quien te escucha.
-            </Verify>
-          </p>
-          <p>
-            <Verify note="Aprobación Melanie · datos confirmados con su CV y su biografía de HBN Academy">
-              Estudié Psicología en la Universidad de Puerto Rico, Recinto de Mayagüez, y completé la maestría y el
-              doctorado en Psicología Clínica en la Universidad Albizu. Mi investigación doctoral se enfocó en la
-              comunicación asertiva en el matrimonio, y realicé mi internado en una clínica comunitaria en Indiana, una
-              experiencia que amplió mi mirada multicultural.
-            </Verify>
-          </p>
-        </Chapter>
-
-        <Chapter id="puerto-rico" numeral={num['puerto-rico']} title="Cuando Puerto Rico también necesitaba ser escuchado">
-          <p>
-            <Verify note="Aprobación Melanie · organizaciones, fechas y funciones por verificar">
-              No viví esas crisis solo desde el rol profesional. Las viví como puertorriqueña, mientras aprendía a
-              acompañar a otros.
-            </Verify>
-          </p>
-          <p>
-            <Verify note="Aprobación Melanie">
-              Cuando Puerto Rico atravesaba momentos de incertidumbre, yo también estaba creciendo como persona y como
-              profesional. Aprendí que escuchar, a veces, es lo primero que una comunidad necesita.
-            </Verify>
-          </p>
-        </Chapter>
-
-        {
-          isPreview && (
-            <Chapter id="escuchando" numeral={num['escuchando']} title="Lo que aprendí escuchando">
-              <p class="muted small">Reflexiones propuestas. Ninguna se publica sin la aprobación de Melanie.</p>
-              <ul class="story__lessons" role="list">
-                {[
-                  'He aprendido que muchas personas que parecen fuertes simplemente llevan demasiado tiempo sobreviviendo.',
-                  'He aprendido que poner límites también puede ser una forma de amar.',
-                  'He aprendido que sentir culpa no siempre significa que hicimos algo malo.',
-                  'He aprendido que perdonarnos puede ser más difícil que perdonar a otros.',
-                  'He aprendido que cambiar nuestra historia comienza muchas veces cambiando la manera en que nos la contamos.',
-                  'He aprendido que pedir ayuda no es rendirse; es decidir dejar de cargar con todo en silencio.',
-                  'He aprendido que el silencio en una sesión también dice algo, y que hay que respetarlo.',
-                ].map((line) => (
-                  <li>
-                    <Verify note="Aprobación Melanie (frase atribuida)" hide>
-                      {line}
-                    </Verify>
-                  </li>
-                ))}
-              </ul>
-            </Chapter>
-          )
-        }
-
-        <Chapter id="psicologia" numeral={num['psicologia']} title="Mi manera de entender la psicología" image={fotoOlivo} focus="50% 40%" alt="Melanie sentada junto a un olivo, con las manos sobre un modelo de cerebro, sonriendo">
-          <Quote align="left">
-            <Verify note="Aprobación Melanie">
-              No estoy aquí para decirte quién debes ser. Estoy aquí para acompañarte mientras descubres quién eres,
-              qué necesitas y hacia dónde quieres caminar.
-            </Verify>
-          </Quote>
-          <p>
-            <Verify note="Aprobación Melanie">
-              Creo en una terapia de colaboración, no de poder. Tu vida sigue siendo tuya; yo acompaño el proceso.
-              Creo en la evidencia, porque mereces herramientas que funcionan, y creo en la humanidad, porque ninguna
-              herramienta sirve sin alguien que te escuche con respeto.
-            </Verify>
-          </p>
-        </Chapter>
-
-        <Chapter id="growing-souls" numeral={num['growing-souls']} title="Growing Souls" pending="Por qué ese nombre, quién lo escogió, qué significa y cuándo nació. Se escribe con la entrevista." />
-
-        <Chapter id="construir" numeral={num['construir']} title="Lo que todavía quiero construir">
-          <p>
-            <Verify note="Aprobación Melanie">
-              Growing Souls no tiene que ser solo yo. Quiero que crezca con profesionales que compartan esta manera de
-              entender la psicología, y que en Puerto Rico pedir ayuda se entienda como lo que es: un acto de cuidado,
-              de conciencia y de crecimiento.
-            </Verify>
-          </p>
-          <p class="muted serif-italic story__note">Esta historia se sigue escribiendo.</p>
-        </Chapter>
+  <section class="mhero">
+    <div class="container mhero__grid">
+      <div class="mhero__text">
+        <h1 class="eyebrow" data-reveal>Conóceme</h1>
+        <figure class="mhero__quote" data-reveal style="--reveal-index: 1">
+          <blockquote>
+            <p>
+              <Verify note="Cita de Carl Jung en la forma en que se conoce en español («Conozca…, domine…, sea…»). La Dra. la envió como «Conozco…, dominé…»">
+                “Conozca todas las teorías, domine todas las técnicas, pero al tocar un alma humana, sea apenas otra alma
+                humana.”
+              </Verify>
+            </p>
+          </blockquote>
+          <figcaption>Carl Jung</figcaption>
+        </figure>
+        <p class="mhero__lead" data-reveal style="--reveal-index: 2">
+          La psicoterapia es, sin duda, un espacio que requiere preparación y herramientas clínicas. Sin embargo, también
+          es un encuentro profundamente humano. Detrás de cada historia, cada síntoma y cada dificultad existe una persona
+          que merece sentirse escuchada, comprendida y acompañada sin juicio.
+        </p>
+      </div>
+      <div class="mhero__photo">
+        <ArchPhoto
+          src={fotoPerfil}
+          alt="Melanie sostiene varios libros de psicología y sonríe"
+          focus="50% 0%"
+          ratio="2 / 3"
+          fill="sand"
+          caption="Dra. Melanie Acevedo Vélez · Psicóloga Clínica"
+          loading="eager"
+          sizes="(min-width: 960px) 26rem, (min-width: 640px) 22rem, 21rem"
+        />
       </div>
     </div>
   </section>
 
-  <section class="section section--sand trayectoria" id="trayectoria">
-    <div class="container">
-      <SectionHeading eyebrow="Formación y trayectoria" title="Mi preparación profesional.">
-        <p class="lead">Psicóloga clínica en Puerto Rico y fundadora de Growing Souls.</p>
-      </SectionHeading>
-      <Verify as="div" note="Datos del CV 2026 y de la biografía de HBN Academy · Melanie confirma qué experiencia nombrar públicamente">
-        <div class="tray">
-          <div class="tray__col" data-reveal>
-            <h3 class="tray__h">Formación académica</h3>
-            <ul class="tray__list" role="list">
-              {
-                formacion.map((g) => (
-                  <li>
-                    <p class="tray__titulo">{g.titulo}</p>
-                    <p class="tray__meta small">
-                      {g.institucion} · {g.anio}
-                      {g.honor && <span> · {g.honor}</span>}
-                    </p>
-                  </li>
-                ))
-              }
-            </ul>
-            <ul class="tray__notas small" role="list">
-              {formacionDetalle.map((t) => <li>{t}</li>)}
-            </ul>
-            <h3 class="tray__h tray__h--sep">Formación clínica</h3>
-            <ul class="tray__list" role="list">
-              {
-                formacionClinica.map((f) => (
-                  <li>
-                    <p class="tray__titulo">{f}</p>
-                  </li>
-                ))
-              }
-            </ul>
-          </div>
-          <div class="tray__col" data-reveal style="--reveal-index: 1">
-            <h3 class="tray__h">Experiencia profesional</h3>
-            <ul class="tray__list" role="list">
-              {
-                experiencia.map((e) => (
-                  <li>
-                    <p class="tray__titulo">{e.cargo}</p>
-                    <p class="tray__meta small">
-                      {e.lugar} · {e.periodo}
-                    </p>
-                    <p class="tray__texto small">{e.texto}</p>
-                  </li>
-                ))
-              }
-            </ul>
-          </div>
-        </div>
-        <div class="tray__areas" data-reveal>
-          <p class="eyebrow">Experiencia clínica con</p>
-          <ul class="tray__chips" role="list" data-dotlist>
-            {experienciaClinica.map((a) => <li>{a}</li>)}
-          </ul>
-        </div>
-      </Verify>
+  <section class="section section--sand perfil" id="trayectoria">
+    <div class="container perfil__grid">
+      <div class="perfil__photo">
+        <ArchPhoto
+          src={fotoCerebro}
+          alt="Melanie, sentada en el piso, sostiene un modelo de cerebro en las manos y sonríe"
+          focus="50% 40%"
+          sizes="(min-width: 960px) 26rem, 22rem"
+        />
+      </div>
+      <div class="perfil__text" data-reveal>
+        <h2 class="perfil__title">Formación académica, experiencia clínica y calidad humana</h2>
+        <p class="perfil__resumen">
+          <Verify note="Texto provisional, hecho solo con datos de su CV. La Dra. enviará su propio resumen para esta sección">
+            Soy psicóloga clínica y fundadora de Growing Souls. Completé mi bachillerato en Psicología, cum laude, en la
+            Universidad de Puerto Rico, Recinto de Mayagüez, y la maestría y el doctorado en Psicología Clínica (PsyD),
+            ambos con distinción, en la Universidad Albizu. Mi investigación doctoral se enfocó en la comunicación
+            asertiva en el matrimonio, y realicé mi internado en una clínica comunitaria en Indiana, una experiencia que
+            amplió mi mirada multicultural. Me he formado en Terapia Cognitivo-Conductual y en el Método Gottman de
+            terapia de pareja. A lo largo de mi trayectoria he acompañado a personas de distintas edades, a parejas y a
+            familias en procesos de ansiedad, depresión, estrés postraumático, duelo, adaptación y crianza, y en
+            dificultades de pareja. También he supervisado la práctica clínica de estudiantes de maestría, he creado
+            talleres abiertos a la comunidad para promover la salud mental y enseño psicología clínica y salud mental en
+            HBN Academy. Esa preparación es la base de mi trabajo. Lo que la completa es la calidad humana: escuchar con
+            atención, validar lo que cada persona siente y acompañarla sin juicio, con respeto por su historia y por su
+            ritmo.
+          </Verify>
+        </p>
+      </div>
     </div>
   </section>
 
@@ -230,179 +99,130 @@ const num = Object.fromEntries(chapters.map((c) => [c.id, c.numeral])) as Record
 </Base>
 
 <style>
-  .story {
-    padding-block: var(--space-6) 0;
+  /* Cabecera: texto y arco lado a lado en desktop; en móvil y tablet, primero la foto de perfil y todo centrado. */
+  .mhero {
+    padding-block: clamp(2.5rem, 1.5rem + 5vw, 7rem) clamp(3rem, 2rem + 3vw, 5rem);
   }
-  .story__grid {
+  .mhero__grid {
     display: grid;
-    gap: var(--space-6);
-    align-items: start;
+    gap: var(--space-5);
+    align-items: center;
   }
-  .story__index ol {
-    margin-top: var(--space-2);
+  .mhero__text {
     display: grid;
-    gap: 0.6rem;
-    padding: 0;
-  }
-  .story__index a {
-    display: flex;
-    gap: 0.6rem;
-    font-size: var(--step-small);
-    text-decoration: none;
-    color: var(--fg);
-  }
-  .story__index a:hover {
-    text-decoration: underline;
-  }
-  .story__num {
-    font-family: var(--font-serif);
-    font-style: italic;
-    color: var(--olive-deep);
-    min-width: 1.6rem;
-  }
-  .story__lessons {
-    display: grid;
-    gap: var(--space-2);
-    padding: 0;
-  }
-  .story__lessons li {
-    font-family: var(--font-serif);
-    font-size: calc(var(--step-h3) * 0.85);
-    line-height: 1.3;
-    padding-left: 1rem;
-    border-left: 1px solid var(--olive);
-  }
-  .story__note {
-    margin-top: var(--space-4);
-  }
-  /* Formación y trayectoria: dos columnas en desktop (formación | experiencia); una en móvil, centrada. */
-  .trayectoria {
-    scroll-margin-top: var(--nav-height);
-  }
-  .tray {
-    display: grid;
-    gap: var(--space-6);
-  }
-  .tray__h {
-    font-size: calc(var(--step-h3) * 0.8);
-    padding-bottom: var(--space-2);
-    border-bottom: 1px solid var(--olive);
-  }
-  .tray__h--sep {
-    margin-top: var(--space-5);
-  }
-  .tray__list {
-    display: grid;
-    gap: 0;
-    padding: 0;
-  }
-  .tray__list li {
-    display: grid;
-    gap: 0.2rem;
-    padding: var(--space-2) 0;
-    border-bottom: 1px solid var(--line);
-  }
-  .tray__titulo {
-    font-family: var(--font-serif);
-    font-variant-numeric: lining-nums;
-    font-size: calc(var(--step-body) * 1.12);
-    line-height: 1.3;
-    color: var(--navy);
-  }
-  .tray__meta {
-    color: var(--olive-deep);
-  }
-  .tray__texto {
-    color: var(--fg-soft);
-    max-width: 52ch;
-  }
-  .tray__notas {
-    display: grid;
-    gap: 0.35rem;
-    margin-top: var(--space-2);
-    padding: 0;
-    color: var(--fg-soft);
-  }
-  .tray__areas {
-    display: grid;
-    gap: var(--space-2);
+    gap: var(--space-4);
     justify-items: center;
     text-align: center;
-    margin-top: var(--space-6);
-    padding-top: var(--space-4);
-    border-top: 1px solid var(--line);
   }
-  /* Lista corrida con punto medio (misma pieza que en Terapia individual). */
-  .tray__chips {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    row-gap: 0.35rem;
-    padding: 0;
-    max-width: 44rem;
+  .mhero__quote {
+    margin: 0;
+    display: grid;
+    gap: var(--space-2);
+    justify-items: inherit;
+  }
+  .mhero__quote blockquote {
+    margin: 0;
+  }
+  .mhero__quote p {
     font-family: var(--font-serif);
-    font-size: calc(var(--step-body) * 1.1);
-    line-height: 1.35;
+    font-weight: 500;
+    font-size: clamp(1.75rem, 1.2rem + 2vw, 2.85rem);
+    line-height: 1.16;
+    letter-spacing: -0.005em;
+    text-wrap: balance;
+    max-width: 21ch;
+    color: var(--fg);
   }
-  .tray__chips li {
-    position: relative;
-    white-space: nowrap;
-    padding-inline: 0.6em;
+  .mhero__quote figcaption {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: var(--step-small);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--olive-deep);
   }
-  .tray__chips li:not(:first-child)::before {
-    content: '·';
-    position: absolute;
-    left: 0;
-    top: 0;
-    transform: translateX(-50%);
-    color: var(--olive);
+  .mhero__quote figcaption::before,
+  .mhero__quote figcaption::after {
+    content: '';
+    width: 2rem;
+    border-top: 1px solid var(--olive);
   }
-  .tray__chips li.is-line-start::before {
-    display: none;
+  .mhero__lead {
+    font-size: calc(var(--step-body) * 1.06);
+    line-height: 1.65;
+    max-width: 44ch;
+    text-wrap: pretty;
   }
-  @media (max-width: 959px) {
-    .tray__col {
-      text-align: center;
-    }
-    .tray__texto {
-      margin-inline: auto;
-    }
+  .mhero__photo {
+    order: -1;
+    width: min(100%, 21rem);
+    margin-inline: auto;
   }
-  @media (min-width: 960px) {
-    .tray {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
-      gap: var(--space-10);
-    }
-  }
-  @media (max-width: 959px) {
-    .story__index {
-      text-align: center;
-    }
-    .story__index a {
-      display: inline;
-    }
-    .story__index li {
-      max-width: 30ch;
-      margin-inline: auto;
-    }
-    .story__num {
-      min-width: 0;
-      margin-right: 0.5ch;
-    }
-    .story__lessons li {
-      padding-left: 0;
-      border-left: 0;
-      text-align: center;
+  @media (min-width: 640px) {
+    .mhero__photo {
+      width: min(100%, 22rem);
     }
   }
   @media (min-width: 960px) {
-    .story__grid {
-      grid-template-columns: 16rem 1fr;
-      gap: var(--space-10);
+    .mhero__grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: clamp(3rem, 6vw, 6rem);
     }
-    .story__index {
-      position: sticky;
-      top: calc(var(--nav-height) + 2rem);
+    .mhero__text {
+      justify-items: start;
+      text-align: left;
+    }
+    .mhero__quote figcaption::after {
+      display: none;
+    }
+    .mhero__photo {
+      order: 0;
+      width: min(100%, 26rem);
+      justify-self: center;
+    }
+  }
+
+  /* Formación académica, experiencia clínica y calidad humana: foto a la izquierda y un resumen continuo. */
+  .perfil {
+    scroll-margin-top: var(--nav-height);
+  }
+  .perfil__grid {
+    display: grid;
+    gap: var(--space-6);
+    align-items: center;
+  }
+  .perfil__photo {
+    width: min(100%, 22rem);
+    margin-inline: auto;
+  }
+  .perfil__text {
+    display: grid;
+    gap: var(--space-4);
+    justify-items: center;
+    text-align: center;
+  }
+  .perfil__title {
+    font-size: calc(var(--step-h2) * 0.86);
+    max-width: 21ch;
+  }
+  .perfil__resumen {
+    max-width: 62ch;
+    line-height: 1.7;
+    text-wrap: pretty;
+  }
+  @media (min-width: 960px) {
+    .perfil__grid {
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      gap: clamp(3rem, 6vw, 6rem);
+    }
+    .perfil__photo {
+      width: min(100%, 26rem);
+    }
+    .perfil__text {
+      justify-items: start;
+      text-align: left;
     }
   }
 </style>

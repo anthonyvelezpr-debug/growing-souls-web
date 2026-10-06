@@ -121,14 +121,19 @@ const mode = endpoint ? 'endpoint' : webhook ? 'webhook' : email ? 'mailto' : 'p
     border-radius: var(--radius);
     background: var(--ivory);
     color: var(--fg);
-    transition: border-color var(--dur-fast) var(--ease);
+    /* El anillo de foco aparece con un fundido, no de golpe. */
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    transition:
+      border-color var(--dur-fast) var(--ease),
+      outline-color var(--dur-fast) var(--ease),
+      background-color var(--dur-fast) var(--ease);
   }
   .form input:focus,
   .form select:focus,
   .form textarea:focus {
     border-color: var(--olive);
-    outline: 2px solid var(--olive);
-    outline-offset: 2px;
+    outline-color: var(--olive);
   }
   .form textarea {
     resize: vertical;
@@ -189,6 +194,7 @@ const mode = endpoint ? 'endpoint' : webhook ? 'webhook' : email ? 'mailto' : 'p
 
 <script>
   import { enviarLead, normalizarTelefono, type CitaPayload } from '../lib/leads';
+  import { alternar, alturaSuave, aparecer, mostrar } from '../scripts/motion';
 
   const form = document.querySelector<HTMLFormElement>('[data-form]');
   if (form) {
@@ -205,15 +211,24 @@ const mode = endpoint ? 'endpoint' : webhook ? 'webhook' : email ? 'mailto' : 'p
     const showError = (id: string, show: boolean) => {
       const el = form.querySelector<HTMLElement>(`#${id}-error`);
       const input = form.querySelector<HTMLInputElement>(`#${id}`);
-      if (el) el.hidden = !show;
+      /* Los mensajes abren su espacio con suavidad, sin empujar el formulario de golpe. */
+      if (el) alternar(el, show);
       if (input) input.setAttribute('aria-invalid', String(show));
     };
 
     const say = (html: string, tone: 'ok' | 'warn' = 'ok') => {
       if (!status) return;
-      status.innerHTML = html;
-      status.dataset.tone = tone;
-      status.hidden = false;
+      const escribir = () => {
+        status.innerHTML = html;
+        status.dataset.tone = tone;
+      };
+      if (status.hidden) {
+        escribir();
+        mostrar(status);
+      } else {
+        alturaSuave(status, escribir);
+        aparecer(status);
+      }
       status.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     };
 

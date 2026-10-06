@@ -52,7 +52,7 @@ const items = nav;
       data-nav-toggle
     >
       <span class="nav__toggle-label" data-label-open>Menú</span>
-      <span class="nav__toggle-label" data-label-close hidden>Cerrar</span>
+      <span class="nav__toggle-label" data-label-close aria-hidden="true">Cerrar</span>
     </button>
   </div>
 </header>
@@ -62,8 +62,8 @@ const items = nav;
     <div class="container nav__drawer-inner">
       <ul role="list" class="nav__drawer-links">
         {
-          items.map((item) => (
-            <li>
+          items.map((item, i) => (
+            <li style={`--i: ${i}`}>
               <a href={item.href} aria-current={isCurrent(item) ? 'page' : undefined}>
                 {item.label}
               </a>
@@ -71,10 +71,10 @@ const items = nav;
           ))
         }
       </ul>
-      <div class="nav__drawer-cta">
+      <div class="nav__drawer-cta" style={`--i: ${items.length}`}>
         <Button href={cta.href} variant="primary">{cta.label}</Button>
       </div>
-      <p class="nav__drawer-note small">
+      <p class="nav__drawer-note small" style={`--i: ${items.length + 1}`}>
         Esta web no es un servicio de emergencias. <a href="/crisis/">Recursos en crisis</a>
       </p>
     </div>
@@ -89,7 +89,9 @@ const items = nav;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid transparent;
-    transition: border-color var(--dur-fast) var(--ease);
+    transition: border-color var(--dur-base) var(--ease);
+    /* Al cambiar de página, la cabecera se queda quieta y solo la pestaña marcada cambia en fundido (global.css). */
+    view-transition-name: gs-cabecera;
   }
   .nav.is-scrolled {
     border-bottom-color: var(--line);
@@ -145,7 +147,7 @@ const items = nav;
     text-decoration: none;
     padding: 0.5rem 0;
     background: linear-gradient(var(--olive), var(--olive)) no-repeat left bottom / 0 1px;
-    transition: background-size var(--dur-fast) var(--ease);
+    transition: background-size var(--dur-base) var(--ease-in-out);
   }
   .nav__links a:hover,
   .nav__links a[aria-current='page'] {
@@ -156,9 +158,11 @@ const items = nav;
     display: none;
     white-space: nowrap;
   }
+  /* "Menú" y "Cerrar" ocupan la misma celda: el botón no cambia de ancho y las palabras se cruzan en fundido. */
   .nav__toggle {
-    display: inline-flex;
+    display: inline-grid;
     align-items: center;
+    justify-items: center;
     min-height: 2.75rem;
     padding: 0.5rem 0.9rem;
     border: 1px solid var(--navy);
@@ -167,7 +171,30 @@ const items = nav;
     font-size: var(--step-small);
     font-weight: 500;
     cursor: pointer;
+    transition:
+      background-color var(--dur-fast) var(--ease),
+      transform var(--dur-fast) var(--ease),
+      outline-color var(--dur-fast) var(--ease);
   }
+  .nav__toggle:hover {
+    background: var(--sand);
+  }
+  .nav__toggle:active {
+    transform: scale(0.985);
+  }
+  .nav__toggle-label {
+    grid-area: 1 / 1;
+    transition:
+      opacity var(--dur-fast) var(--ease),
+      transform var(--dur-base) var(--ease);
+  }
+  .nav__toggle-label[aria-hidden='true'] {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+
+  /* Cajón del menú: entra con un fundido y un deslizamiento corto, y sus enlaces llegan escalonados;
+     al cerrar, todo se desvanece a la vez, algo más rápido. */
   .nav__drawer {
     position: fixed;
     inset: var(--nav-height) 0 0 0;
@@ -176,6 +203,37 @@ const items = nav;
     background: var(--ivory);
     overflow-y: auto;
     overscroll-behavior: contain;
+    opacity: 0;
+    transform: translateY(calc(var(--nudge) * -1.5));
+    transition:
+      opacity var(--dur-exit) var(--ease-exit),
+      transform var(--dur-exit) var(--ease-exit);
+  }
+  .nav__drawer.is-open {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity var(--dur-base) var(--ease),
+      transform var(--dur-slow) var(--ease);
+  }
+  .nav__drawer-links li,
+  .nav__drawer-cta,
+  .nav__drawer-note {
+    opacity: 0;
+    transform: translateY(var(--nudge));
+    transition:
+      opacity var(--dur-exit) var(--ease-exit),
+      transform var(--dur-exit) var(--ease-exit);
+  }
+  .nav__drawer.is-open .nav__drawer-links li,
+  .nav__drawer.is-open .nav__drawer-cta,
+  .nav__drawer.is-open .nav__drawer-note {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity var(--dur-base) var(--ease),
+      transform var(--dur-slow) var(--ease);
+    transition-delay: calc(80ms + var(--i, 0) * 45ms);
   }
   /* Con el menú abierto, la página no se desplaza por detrás. */
   :global(html.menu-open) {
@@ -229,6 +287,8 @@ const items = nav;
 </style>
 
 <script>
+  import { reducido, tiempos } from '../scripts/motion';
+
   const header = document.querySelector<HTMLElement>('[data-nav]');
   const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
   const drawer = document.querySelector<HTMLElement>('[data-nav-drawer]');
@@ -239,15 +299,31 @@ const items = nav;
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
+  /* El cajón existe en el DOM solo mientras se ve: se muestra, entra con su transición y, al cerrar, se oculta
+     cuando ya terminó de desvanecerse. */
+  let cierre = 0;
   const setOpen = (open: boolean) => {
     if (!toggle || !drawer) return;
     toggle.setAttribute('aria-expanded', String(open));
-    drawer.hidden = !open;
     document.documentElement.classList.toggle('menu-open', open);
-    if (labelOpen) labelOpen.hidden = open;
-    if (labelClose) labelClose.hidden = !open;
-    if (open) drawer.querySelector<HTMLElement>('a')?.focus({ preventScroll: true });
-    else toggle.focus({ preventScroll: true });
+    labelOpen?.setAttribute('aria-hidden', String(open));
+    labelClose?.setAttribute('aria-hidden', String(!open));
+    window.clearTimeout(cierre);
+    if (open) {
+      drawer.hidden = false;
+      drawer.getBoundingClientRect();
+      drawer.classList.add('is-open');
+      drawer.querySelector<HTMLElement>('a')?.focus({ preventScroll: true });
+    } else {
+      drawer.classList.remove('is-open');
+      cierre = window.setTimeout(
+        () => {
+          if (!drawer.classList.contains('is-open')) drawer.hidden = true;
+        },
+        reducido() ? 0 : tiempos().salida + 60,
+      );
+      toggle.focus({ preventScroll: true });
+    }
   };
 
   toggle?.addEventListener('click', () => {

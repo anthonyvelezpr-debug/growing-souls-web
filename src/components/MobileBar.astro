@@ -33,14 +33,30 @@ import { site, cta, whatsappHref } from '../data/site';
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-top: 1px solid var(--line);
+    /* Sube desde el borde con un fundido; se retira igual de suave. */
+    opacity: 0;
     transform: translateY(105%);
-    transition: transform var(--dur-fast) var(--ease);
+    transition:
+      transform var(--dur-slow) var(--ease-in-out),
+      opacity var(--dur-base) var(--ease);
   }
   .mbar.is-on {
+    opacity: 1;
     transform: none;
   }
   :global(html.menu-open) .mbar {
+    opacity: 0;
     transform: translateY(105%);
+  }
+  .mbar__cta,
+  .mbar__call {
+    transition:
+      background-color var(--dur-fast) var(--ease),
+      transform var(--dur-fast) var(--ease);
+  }
+  .mbar__cta:active,
+  .mbar__call:active {
+    transform: scale(0.985);
   }
   .mbar__cta {
     flex: 1;

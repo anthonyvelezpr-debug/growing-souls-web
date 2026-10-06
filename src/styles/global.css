@@ -88,6 +88,9 @@ html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
   scroll-padding-top: var(--nav-height);
+  /* Sin el destello gris o azul del navegador al tocar en el celular: cada elemento responde con su propio estado
+     suave (:active, :hover). El foco con teclado sigue visible. */
+  -webkit-tap-highlight-color: transparent;
 }
 body {
   min-height: 100dvh;
@@ -241,10 +244,42 @@ a {
   text-decoration-thickness: 1px;
   text-decoration-color: var(--olive);
   text-underline-offset: 0.18em;
-  transition: opacity var(--dur-fast) var(--ease);
+  transition:
+    opacity var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    text-decoration-color var(--dur-fast) var(--ease),
+    outline-color var(--dur-fast) var(--ease);
 }
 a:hover {
   opacity: 0.85;
+}
+
+/* Elegant Soft Motion · capa base. Con :where() no pesa nada: cualquier regla de un componente la sustituye.
+   Todo lo que cambia de color, fondo o borde lo hace con la misma duración y la misma curva, y el anillo de foco
+   aparece con un fundido (parte de un contorno transparente). */
+:where(a, button, summary, [role='button']) {
+  outline: 2px solid transparent;
+  outline-offset: 3px;
+}
+:where(a) :where(*),
+:where(button, summary, label, [role='button']) {
+  transition:
+    color var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    opacity var(--dur-fast) var(--ease),
+    text-decoration-color var(--dur-fast) var(--ease),
+    outline-color var(--dur-fast) var(--ease);
+}
+:where(input, select, textarea) {
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    opacity var(--dur-fast) var(--ease);
 }
 :focus-visible {
   outline: 2px solid var(--olive);
@@ -336,11 +371,14 @@ a:hover {
 .skip-link:focus {
   top: var(--space-2);
 }
+.skip-link {
+  transition: top var(--dur-base) var(--ease);
+}
 
-/* Aparición al hacer scroll (respiración, no espectáculo) */
+/* Aparición al hacer scroll (respiración, no espectáculo): un fundido con una subida mínima. */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(var(--rise));
   transition:
     opacity var(--dur-reveal) var(--ease),
     transform var(--dur-reveal) var(--ease);
@@ -366,19 +404,54 @@ html[data-show-verify] [data-verify] {
   border-radius: var(--radius);
 }
 
+/* Cambio de página (las pestañas del menú): la página que se va se desvanece y la nueva entra con un fundido y una
+   subida mínima. La cabecera no se mueve; solo cambia, en fundido, la pestaña marcada. Funciona en los navegadores con
+   View Transitions entre documentos; en el resto, la navegación es la de siempre. */
+@view-transition {
+  navigation: auto;
+}
+::view-transition-old(root) {
+  animation: 260ms cubic-bezier(0.4, 0, 0.6, 1) both gs-vt-salida;
+}
+::view-transition-new(root) {
+  animation: 460ms cubic-bezier(0.33, 0, 0.2, 1) 60ms both gs-vt-entrada;
+}
+::view-transition-old(gs-cabecera),
+::view-transition-new(gs-cabecera) {
+  animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.33, 0, 0.2, 1);
+}
+@keyframes gs-vt-salida {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes gs-vt-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* Movimiento reducido: los cambios ocurren al instante, sin desplazamientos. Solo lo que entra al hacer scroll
+   conserva un fundido corto, sin subida. */
 @media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
   html {
     scroll-behavior: auto;
-  }
-  [data-reveal] {
-    transform: none;
-    transition: opacity 250ms linear;
-    transition-delay: 0s;
   }
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+  [data-reveal] {
+    transform: none;
+    transition: opacity 250ms linear !important;
   }
 }

@@ -135,11 +135,15 @@ const phrases = [
     align-content: center;
     justify-items: center;
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(var(--rise));
     transition:
-      opacity 600ms var(--ease),
-      transform 600ms var(--ease);
+      opacity var(--dur-reveal) var(--ease),
+      transform var(--dur-reveal) var(--ease);
     pointer-events: none;
+  }
+  /* La frase que ya pasó se retira hacia arriba, en el mismo sentido del scroll. */
+  .progress.is-staged .progress__phrase.is-past {
+    transform: translateY(calc(var(--rise) * -1));
   }
   .progress.is-staged .progress__phrase {
     font-size: clamp(2.1rem, 1.5rem + 2.4vw, 3.4rem);
@@ -220,7 +224,10 @@ const phrases = [
     root.classList.add('is-staged');
 
     const activate = (i: number) => {
-      phrases.forEach((p, k) => p.classList.toggle('is-active', k === i));
+      phrases.forEach((p, k) => {
+        p.classList.toggle('is-active', k === i);
+        p.classList.toggle('is-past', k < i);
+      });
       final?.classList.toggle('is-active', i === phrases.length);
       dots.forEach((d, k) => d.classList.toggle('is-active', k <= i));
     };

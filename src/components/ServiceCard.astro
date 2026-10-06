@@ -71,11 +71,13 @@ const { services } = Astro.props;
     color: var(--olive-deep);
     text-decoration: none;
     border-bottom: 1px solid currentColor;
-    transition: letter-spacing var(--dur-fast) var(--ease);
+    transition:
+      color var(--dur-fast) var(--ease),
+      border-color var(--dur-fast) var(--ease);
   }
   .services__link span {
     display: inline-block;
-    transition: transform var(--dur-fast) var(--ease);
+    transition: transform var(--dur-base) var(--ease);
   }
   .services__card:hover .services__link span {
     transform: translateX(4px);

@@ -49,12 +49,25 @@
   --container: 80rem;
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
 
-  /* Forma y movimiento */
+  /* Forma */
   --radius: 2px;
-  --dur-fast: 300ms;
-  --dur-reveal: 700ms;
-  --stagger: 80ms;
-  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* Movimiento · "Elegant Soft Motion" (5 oct 2026).
+     Un solo sistema para todo lo que cambia: fundidos sutiles, deslizamientos cortos y alturas que se abren poco a
+     poco. Curvas sin rebote; las salidas son algo más breves que las entradas. src/scripts/motion.ts lee estos mismos
+     valores, así que se ajustan aquí. Con prefers-reduced-motion no hay desplazamientos (ver global.css). */
+  --dur-fast: 300ms; /* estados: hover, color, borde, selección */
+  --dur-base: 400ms; /* fundidos, paneles, menú, mensajes */
+  --dur-slow: 480ms; /* alturas: acordeones, pasos, campos que aparecen */
+  --dur-exit: 280ms; /* lo que se va */
+  --dur-reveal: 640ms; /* entrada discreta al hacer scroll */
+  --dur-photo: 1400ms; /* la foto se asienta en su arco */
+  --stagger: 70ms;
+  --rise: 10px; /* subida de las entradas al hacer scroll */
+  --nudge: 6px; /* desplazamiento de paneles y mensajes */
+  --ease: cubic-bezier(0.33, 0, 0.2, 1); /* entradas y estados: arranque suave, final largo */
+  --ease-in-out: cubic-bezier(0.42, 0, 0.25, 1); /* abrir y cerrar alturas */
+  --ease-exit: cubic-bezier(0.4, 0, 0.6, 1); /* salidas */
 
   --nav-height: 4.5rem;
 }

@@ -71,19 +71,11 @@
 }
 
 /* ----- Escenario de preguntas ----- */
+/* Las pantallas entran y salen con el sistema de movimiento (src/scripts/ui.ts → crearRender). */
 .ev__stage {
   display: grid;
   gap: var(--space-4);
   min-height: 24rem;
-  opacity: 1;
-  transform: none;
-  transition:
-    opacity 180ms var(--ease),
-    transform 180ms var(--ease);
-}
-.ev__stage.is-leaving {
-  opacity: 0;
-  transform: translateY(6px);
 }
 .ev__progress {
   height: 2px;
@@ -95,7 +87,7 @@
   display: block;
   height: 100%;
   background: var(--olive);
-  transition: width 300ms var(--ease);
+  transition: width var(--dur-slow) var(--ease-in-out) 120ms;
 }
 .ev__count {
   text-align: center;
@@ -155,11 +147,17 @@
   transition:
     border-color var(--dur-fast) var(--ease),
     background-color var(--dur-fast) var(--ease),
-    color var(--dur-fast) var(--ease);
+    color var(--dur-fast) var(--ease),
+    opacity var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
 }
 .ev__opcion:hover {
   border-color: var(--olive);
   background: var(--sand);
+}
+/* Al tocar una opción, cede apenas: confirma el gesto sin brusquedad. */
+.ev__opcion:active {
+  transform: scale(0.99);
 }
 .ev__radio:checked + .ev__opcion {
   border-color: var(--navy);

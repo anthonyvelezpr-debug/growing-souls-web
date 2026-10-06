@@ -8,6 +8,7 @@ import type { Instrumento } from '../data/evaluaciones';
 import type { LeadPayload } from '../lib/leads';
 import { pasoDatos, type Enviado } from './datos-paso';
 import { crearAnunciar, crearRender, crisisHtml, esc, type LineaCrisis } from './ui';
+import { desvanecer, reducido as movimientoReducido, tiempos } from './motion';
 
 interface Config {
   instrumento: Instrumento;
@@ -109,7 +110,8 @@ if (root && dataEl) {
                 () => {
                   if (respuestas[i] === Number(r.value) && stage.contains(r)) avanzar();
                 },
-                reduced ? 0 : 260,
+                /* La pausa deja ver la opción elegida antes de pasar a la siguiente pregunta. */
+                reduced ? 0 : 340,
               );
             }
           });
@@ -284,6 +286,17 @@ if (root && dataEl) {
     `,
       () => {
         anunciar(`Resultado: ${b.titulo}`);
+        /* El marcador se desliza con calma hasta su lugar en la escala, cuando el resultado ya está entrando. */
+        const marcador = stage.querySelector<HTMLElement>('.ev__marker');
+        if (marcador && !movimientoReducido()) {
+          const t = tiempos();
+          marcador.animate([{ left: '0%', opacity: 0 }, { left: `${pct}%`, opacity: 1 }], {
+            duration: t.lento * 1.6,
+            delay: t.base,
+            easing: t.curvaAltura,
+            fill: 'backwards',
+          });
+        }
         stage.querySelector<HTMLButtonElement>('[data-restart]')?.addEventListener('click', () => {
           respuestas.fill(null);
           seguridadMostrada = false;
@@ -296,9 +309,17 @@ if (root && dataEl) {
   };
 
   /* ---------- Inicio ---------- */
-  root.querySelector<HTMLButtonElement>('[data-start-wrap] .btn')?.addEventListener('click', () => {
+  /* La introducción se desvanece y el cuestionario ocupa su lugar sin saltos de altura. */
+  let iniciado = false;
+  root.querySelector<HTMLButtonElement>('[data-start-wrap] .btn')?.addEventListener('click', async () => {
+    if (iniciado) return;
+    iniciado = true;
+    const altura = intro.getBoundingClientRect().height;
+    await desvanecer(intro);
     intro.hidden = true;
+    intro.getAnimations().forEach((a) => a.cancel());
     stage.hidden = false;
+    render.desde(altura);
     pregunta(0);
   });
 }

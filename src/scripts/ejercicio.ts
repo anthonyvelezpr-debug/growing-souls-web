@@ -12,6 +12,7 @@ import { ejercicios, intensidades, type Bloque, type Paso, type Respuestas } fro
 import type { EjercicioPayload } from '../lib/leads';
 import { pasoDatos, type Enviado } from './datos-paso';
 import { crearAnunciar, crearRender, crisisHtml, esc, escMultilinea, type LineaCrisis } from './ui';
+import { alturaSuave, alternar, aparecer, cambiarTexto, desvanecer, ocultar, reducido as movimientoReducido } from './motion';
 
 interface Config {
   crisis: LineaCrisis[];
@@ -398,7 +399,7 @@ if (root && dataEl && ej) {
           const conOtra = marcadas.map((v) => (v === OTRA ? (otraInput?.value.trim() ?? '') : v)).filter(Boolean);
           if (multiple) r[p.id] = conOtra;
           else r[p.id] = conOtra[0] ?? '';
-          if (otraWrap) otraWrap.hidden = !marcadas.includes(OTRA);
+          if (otraWrap) alternar(otraWrap, marcadas.includes(OTRA));
           if (multiple && p.max) {
             const llenas = marcadas.length >= p.max;
             inputs.forEach((x) => (x.disabled = llenas && !x.checked));
@@ -424,7 +425,8 @@ if (root && dataEl && ej) {
                 () => {
                   if (x.checked && stage.contains(x)) avanzar(i);
                 },
-                reduced ? 0 : 260,
+                /* La pausa deja ver la opción elegida antes de pasar al siguiente paso. */
+                reduced ? 0 : 340,
               );
             }
           });
@@ -475,7 +477,7 @@ if (root && dataEl && ej) {
                 () => {
                   if (x.checked && stage.contains(x)) avanzar(i);
                 },
-                reduced ? 0 : 320,
+                reduced ? 0 : 340,
               );
             }
           });
@@ -767,24 +769,36 @@ if (root && dataEl && ej) {
         });
         const borrarBtn = stage.querySelector<HTMLButtonElement>('[data-borrar]');
         let confirmando = false;
-        borrarBtn?.addEventListener('click', () => {
+        borrarBtn?.addEventListener('click', async () => {
           if (!confirmando) {
             confirmando = true;
-            borrarBtn.textContent = '¿Seguro? Sí, borrar';
+            cambiarTexto(borrarBtn, '¿Seguro? Sí, borrar');
             return;
           }
+          if (borrarBtn.disabled) return;
+          borrarBtn.disabled = true;
           borrar();
           r = {};
           actual = 0;
-          stage
-            .querySelectorAll<HTMLElement>(
-              '.ej__frase, .ej__citas, .ej__cols, .ej__chips, .ej__medida, .ej__barras, .ej__ciclo, .ej__carta, .ej__details, .ej__saludo',
-            )
-            .forEach((el) => el.remove());
-          borrarBtn.remove();
-          const aviso = stage.querySelector<HTMLElement>('[data-borrado]');
-          if (aviso) aviso.hidden = false;
           anunciar('Borrado. Nada de lo que escribiste queda en este dispositivo.');
+          /* Lo escrito se desvanece, su espacio se recoge con suavidad y aparece la confirmación. */
+          const quitar = [
+            ...stage.querySelectorAll<HTMLElement>(
+              '.ej__frase, .ej__citas, .ej__cols, .ej__chips, .ej__medida, .ej__barras, .ej__ciclo, .ej__carta, .ej__details, .ej__saludo',
+            ),
+            borrarBtn,
+          ];
+          const aviso = stage.querySelector<HTMLElement>('[data-borrado]');
+          await Promise.all(quitar.map((el) => desvanecer(el)));
+          const altura = alturaSuave(stage, () => {
+            quitar.forEach((el) => el.remove());
+            if (aviso) aviso.hidden = false;
+          });
+          if (aviso) {
+            aparecer(aviso);
+            aviso.scrollIntoView({ block: 'nearest', behavior: movimientoReducido() ? 'auto' : 'smooth' });
+          }
+          await altura;
         });
       },
     );
@@ -795,15 +809,23 @@ if (root && dataEl && ej) {
   const avisoBorrador = root.querySelector<HTMLElement>('[data-borrador]');
   if (avisoBorrador && hayBorrador) avisoBorrador.hidden = false;
 
-  root.querySelector<HTMLButtonElement>('[data-start-wrap] .btn')?.addEventListener('click', () => {
+  /* La introducción se desvanece y el ejercicio ocupa su lugar sin saltos de altura. */
+  let iniciado = false;
+  root.querySelector<HTMLButtonElement>('[data-start-wrap] .btn')?.addEventListener('click', async () => {
+    if (iniciado) return;
+    iniciado = true;
+    const altura = intro.getBoundingClientRect().height;
+    await desvanecer(intro);
     intro.hidden = true;
+    intro.getAnimations().forEach((a) => a.cancel());
     stage.hidden = false;
+    render.desde(altura);
     paso(hayBorrador ? actual : 0);
   });
   root.querySelector<HTMLButtonElement>('[data-reiniciar]')?.addEventListener('click', () => {
     borrar();
     r = {};
     actual = 0;
-    if (avisoBorrador) avisoBorrador.hidden = true;
+    if (avisoBorrador) ocultar(avisoBorrador);
   });
 }

@@ -6,6 +6,7 @@
  */
 import { enviarLead, normalizarTelefono, validar, type Payload } from '../lib/leads';
 import { esc } from './ui';
+import { alternar } from './motion';
 
 export type Enviado = 'ok' | 'demo' | 'error' | null;
 
@@ -85,7 +86,8 @@ export function pasoDatos(o: DatosOpciones) {
       const showError = (id: string, show: boolean) => {
         const el = form.querySelector<HTMLElement>(`#${id}-error`);
         const input = form.querySelector<HTMLInputElement>(`#${id}`);
-        if (el) el.hidden = !show;
+        /* El mensaje abre su espacio con suavidad, sin empujar el formulario de golpe. */
+        if (el) alternar(el, show);
         input?.setAttribute('aria-invalid', String(show));
       };
       form

@@ -217,6 +217,11 @@ const structuredData = JSON.stringify({ '@context': 'https://schema.org', '@grap
     {mobileBar && <MobileBar />}
 
     <script>
+      import { iniciarDetalles } from '../scripts/motion';
+
+      /* Elegant Soft Motion: los acordeones de todo el sitio abren y cierran con altura y fundido. */
+      iniciarDetalles();
+
       const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
       if ('IntersectionObserver' in window) {
         const io = new IntersectionObserver(

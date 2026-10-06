@@ -105,7 +105,7 @@ const captionLines = caption ? caption.split(' · ') : [];
     object-position: var(--focus);
     transform-origin: var(--focus);
     transform: scale(calc(var(--zoom) * 1.04));
-    transition: transform 1400ms var(--ease);
+    transition: transform var(--dur-photo) var(--ease);
   }
   .arch.is-visible .arch__mask img {
     transform: scale(var(--zoom));

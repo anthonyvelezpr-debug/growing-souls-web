@@ -29,8 +29,14 @@ const { items } = Astro.props;
   .accordion {
     border-top: 1px solid var(--line);
   }
+  /* La apertura y el cierre los anima src/scripts/motion.ts (altura y fundido); aquí, el estado visual. */
   .accordion__item {
     border-bottom: 1px solid var(--line);
+    transition: border-color var(--dur-base) var(--ease);
+  }
+  .accordion__item:hover,
+  .accordion__item.is-open {
+    border-bottom-color: color-mix(in srgb, var(--olive) 45%, var(--line));
   }
   .accordion__summary {
     display: flex;
@@ -43,6 +49,10 @@ const { items } = Astro.props;
     font-family: var(--font-serif);
     font-size: calc(var(--step-h3) * 0.85);
     line-height: 1.25;
+    transition: color var(--dur-fast) var(--ease);
+  }
+  .accordion__summary:hover {
+    color: var(--olive-deep);
   }
   .accordion__summary::-webkit-details-marker {
     display: none;
@@ -60,12 +70,14 @@ const { items } = Astro.props;
     inset: 50% 0 auto 0;
     height: 1px;
     background: var(--olive-deep);
-    transition: transform var(--dur-fast) var(--ease);
+    transition: transform var(--dur-slow) var(--ease-in-out);
   }
   .accordion__icon::after {
     transform: rotate(90deg);
   }
-  details[open] .accordion__icon::after {
+  /* El signo + se convierte en − al mismo tiempo que el contenido se abre (y vuelve mientras se cierra). */
+  .accordion__item.is-open .accordion__icon::after,
+  :global(html.no-js) details[open] .accordion__icon::after {
     transform: rotate(0deg);
   }
   .accordion__body {

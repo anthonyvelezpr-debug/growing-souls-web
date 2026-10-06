@@ -39,19 +39,36 @@ const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ');
     line-height: 1.2;
     text-decoration: none;
     cursor: pointer;
+    /* Estados suaves: color, fondo y borde cambian a la vez; al presionar, el botón cede apenas. */
     transition:
       opacity var(--dur-fast) var(--ease),
       background-color var(--dur-fast) var(--ease),
-      color var(--dur-fast) var(--ease);
+      border-color var(--dur-fast) var(--ease),
+      color var(--dur-fast) var(--ease),
+      box-shadow var(--dur-base) var(--ease),
+      transform var(--dur-fast) var(--ease),
+      text-underline-offset var(--dur-fast) var(--ease),
+      outline-color var(--dur-fast) var(--ease);
+  }
+  .btn:active:not(:disabled) {
+    transform: scale(0.985);
   }
   .btn--primary {
     background: var(--navy);
     color: var(--ivory);
     border-color: var(--navy);
   }
+  /* Los botones sólidos no se vuelven translúcidos al pasar el cursor (eso queda para los enlaces): cambian de tono
+     con suavidad y el principal gana una sombra muy leve. */
+  .btn--primary:hover,
+  .btn--secondary:hover,
+  .btn--ghost:hover {
+    opacity: 1;
+  }
   .btn--primary:hover {
     background: color-mix(in srgb, var(--navy) 88%, var(--olive));
     border-color: color-mix(in srgb, var(--navy) 88%, var(--olive));
+    box-shadow: 0 12px 26px -18px color-mix(in srgb, var(--navy) 70%, transparent);
   }
   .btn--secondary {
     background: transparent;
@@ -92,6 +109,12 @@ const classes = ['btn', `btn--${variant}`, className].filter(Boolean).join(' ');
   }
   .btn--link:hover::after {
     transform: translateX(3px);
+  }
+  .btn--link:hover {
+    text-underline-offset: 0.3em;
+  }
+  .btn--link:active:not(:disabled) {
+    transform: none;
   }
   .btn:disabled {
     opacity: 0.5;

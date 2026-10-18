@@ -10,9 +10,9 @@ import fotoCerebro from '../assets/melanie/03-olivo-cerca.jpg';
 /*
  * Conóceme, rehecha a pedido de la Dra. (5 oct 2026):
  * - Cabecera: su foto de perfil, la cita de Carl Jung que ella eligió y su párrafo sobre la psicoterapia.
- * - Una sola sección, con la foto del cerebro en la mano: "Formación académica, experiencia clínica y calidad humana",
- *   con un resumen continuo que escribirá ella (ejemplo que dio: talaveraphd.com/about-me). Hasta entonces va un
- *   texto provisional hecho solo con datos de su CV (src/data/perfil.ts).
+ * - Una sola sección, con la foto del cerebro en la mano: "Formación académica, experiencia clínica y calidad humana".
+ *   El texto es el que ella escribió completo el 15 oct 2026 (ocho párrafos, en primera persona); se publica tal cual,
+ *   solo con un espacio corregido tras un punto. En escritorio la foto acompaña la lectura (sticky).
  * - Sin capítulos y sin planes a futuro: ella se los reserva.
  * El ancla #trayectoria se mantiene porque la enlazan Misión y visión y las preguntas frecuentes.
  */
@@ -70,22 +70,55 @@ import fotoCerebro from '../assets/melanie/03-olivo-cerca.jpg';
       </div>
       <div class="perfil__text" data-reveal>
         <h2 class="perfil__title">Formación académica, experiencia clínica y calidad humana</h2>
-        <p class="perfil__resumen">
-          <Verify note="Texto provisional, hecho solo con datos de su CV. La Dra. enviará su propio resumen para esta sección">
-            Soy psicóloga clínica y fundadora de Growing Souls. Completé mi bachillerato en Psicología, cum laude, en la
-            Universidad de Puerto Rico, Recinto de Mayagüez, y la maestría y el doctorado en Psicología Clínica (PsyD),
-            ambos con distinción, en la Universidad Albizu. Mi investigación doctoral se enfocó en la comunicación
-            asertiva en el matrimonio, y realicé mi internado en una clínica comunitaria en Indiana, una experiencia que
-            amplió mi mirada multicultural. Me he formado en Terapia Cognitivo-Conductual y en el Método Gottman de
-            terapia de pareja. A lo largo de mi trayectoria he acompañado a personas de distintas edades, a parejas y a
-            familias en procesos de ansiedad, depresión, estrés postraumático, duelo, adaptación y crianza, y en
-            dificultades de pareja. También he supervisado la práctica clínica de estudiantes de maestría, he creado
-            talleres abiertos a la comunidad para promover la salud mental y enseño psicología clínica y salud mental en
-            HBN Academy. Esa preparación es la base de mi trabajo. Lo que la completa es la calidad humana: escuchar con
-            atención, validar lo que cada persona siente y acompañarla sin juicio, con respeto por su historia y por su
-            ritmo.
-          </Verify>
-        </p>
+        <div class="perfil__resumen">
+          <p class="perfil__lead">
+            Bienvenidos a este espacio. Soy la Dra. Melanie Acevedo, psicóloga clínica y fundadora de Growing Souls.
+          </p>
+          <p>
+            Me gustaría compartirles un poco de mi recorrido profesional, las experiencias que han contribuido a mi
+            formación y, sobre todo, los valores que dan sentido a mi manera de ejercer la psicología.
+          </p>
+          <p>
+            Completé mi bachillerato en Psicología en la Universidad de Puerto Rico, Recinto de Mayagüez, y
+            posteriormente obtuve mi maestría y doctorado en Psicología Clínica (PsyD) en la Universidad Albizu, Centro
+            de Mayagüez. Mi disertación doctoral se centró en la comunicación asertiva en el matrimonio, mientras que mi
+            internado en una clínica comunitaria en Indiana amplió mi perspectiva sobre la diversidad cultural y las
+            distintas realidades que atraviesan la experiencia humana.
+          </p>
+          <p>
+            A lo largo de mi formación, me he preparado en Terapia Cognitivo-Conductual y en el Método Gottman (Nivel 1)
+            para la terapia de pareja. Mi experiencia clínica me ha permitido acompañar a niños, adolescentes, adultos y
+            parejas en procesos relacionados con la ansiedad, la depresión, el estrés postraumático, el duelo, las
+            dificultades en las relaciones, la infidelidad, la adaptación a los cambios, el manejo de conflictos, entre
+            otros.
+          </p>
+          <p>
+            También he tenido la oportunidad de supervisar la práctica clínica de estudiantes de maestría, contribuyendo
+            a la formación de futuros profesionales y acompañándolos en el desarrollo de sus competencias clínicas y su
+            responsabilidad ética.
+          </p>
+          <p>
+            Mi interés por la salud mental trasciende el espacio de la psicoterapia. Disfruto crear talleres y
+            experiencias educativas abiertas a la comunidad que permitan aprender, reflexionar y llevar las herramientas
+            de la salud mental a la vida cotidiana. Asimismo, colaboro con Little Tree Foundation, una organización sin
+            fines de lucro desde la cual participo en la creación de material educativo y el manejo de casos, con el
+            propósito de contribuir a la prevención de la soledad y el aislamiento social en Puerto Rico.
+          </p>
+          <p>
+            Sin embargo, más allá de los títulos, las experiencias y el conocimiento adquirido, hay algo que ocupa un
+            lugar central en mi manera de trabajar: el valor de lo humano. Creo firmemente que el conocimiento y la
+            preparación son esenciales en la práctica de la psicología, pero también que la manera en que ponemos
+            nuestros valores y principios al servicio de los demás marca una diferencia significativa. La ética, la
+            responsabilidad, la empatía, la comunicación asertiva y la escucha activa son pilares que procuro integrar
+            en cada espacio profesional que construyo.
+          </p>
+          <p>
+            Desde esa visión nace Growing Souls: un espacio que busca reconocer a cada persona más allá de sus
+            dificultades, respetar su historia y acompañarla con sensibilidad, compromiso y calidad humana. Para mí, es
+            un privilegio acompañar a quienes eligen abrir las puertas a sus procesos personales. Cada historia merece
+            ser escuchada con respeto, y cada encuentro representa una oportunidad para construir, comprender y crecer.
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -184,14 +217,15 @@ import fotoCerebro from '../assets/melanie/03-olivo-cerca.jpg';
     }
   }
 
-  /* Formación académica, experiencia clínica y calidad humana: foto a la izquierda y un resumen continuo. */
+  /* Formación académica, experiencia clínica y calidad humana: foto a la izquierda y el texto completo de la Dra. en
+     párrafos. En escritorio la foto se queda a la vista mientras se lee (sticky); en móvil va primero y todo se centra. */
   .perfil {
     scroll-margin-top: var(--nav-height);
   }
   .perfil__grid {
     display: grid;
     gap: var(--space-6);
-    align-items: center;
+    align-items: start;
   }
   .perfil__photo {
     width: min(100%, 22rem);
@@ -208,9 +242,25 @@ import fotoCerebro from '../assets/melanie/03-olivo-cerca.jpg';
     max-width: 21ch;
   }
   .perfil__resumen {
+    display: grid;
+    gap: var(--space-3);
     max-width: 62ch;
     line-height: 1.7;
     text-wrap: pretty;
+  }
+  .perfil__lead {
+    font-family: var(--font-serif);
+    font-size: calc(var(--step-h3) * 0.9);
+    line-height: 1.3;
+    color: var(--navy);
+    text-wrap: balance;
+  }
+  /* En móvil y tableta, el título y la bienvenida van centrados como el resto del sitio; los párrafos largos se
+     alinean a la izquierda para que la lectura no canse. */
+  @media (max-width: 959px) {
+    .perfil__resumen p:not(.perfil__lead) {
+      text-align: left;
+    }
   }
   @media (min-width: 960px) {
     .perfil__grid {
@@ -219,6 +269,8 @@ import fotoCerebro from '../assets/melanie/03-olivo-cerca.jpg';
     }
     .perfil__photo {
       width: min(100%, 26rem);
+      position: sticky;
+      top: calc(var(--nav-height) + 2rem);
     }
     .perfil__text {
       justify-items: start;

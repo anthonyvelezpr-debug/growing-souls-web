@@ -7,6 +7,19 @@ const path = Astro.url.pathname;
 const empieza = (href: string) => path === href || (href !== '/' && path.startsWith(href));
 const isCurrent = (item: NavItem) => empieza(item.href) || (item.tambien ?? []).some(empieza);
 const items = nav;
+
+/*
+ * Marca en la cabecera (pedido de la Dra., 15 oct 2026): las letras originales del logotipo en lugar de texto.
+ * "Growing Souls" (The Seasons) y "Dra. Melanie Acevedo" salen del archivo de su diseñadora (Growing Souls - 8.png),
+ * recortados por línea y exportados a 1x, 2x y 3x. El nombre va algo más grande que en el logotipo completo para que
+ * se lea a este tamaño. El isotipo a color (oliva y rosa) es el del logotipo principal del manual de marca; con
+ * `isotipo="navy"` se usa la versión monocroma.
+ */
+const isotipo: 'color' | 'navy' = 'color';
+const marca = {
+  color: { src: '/images/brand/isotipo-color-160.png', srcset: '/images/brand/isotipo-color-160.png 160w, /images/brand/isotipo-color-320.png 320w', width: 160, height: 181 },
+  navy: { src: '/images/brand/isotipo-navy-160.png', srcset: undefined, width: 160, height: 180 },
+}[isotipo];
 ---
 
 <header class="nav" data-nav>
@@ -14,15 +27,33 @@ const items = nav;
     <a class="nav__brand" href="/" aria-label={`Growing Souls, ${site.person.shortName}. Inicio`}>
       <img
         class="nav__mark"
-        src="/images/brand/isotipo-navy-160.png"
+        src={marca.src}
+        srcset={marca.srcset}
+        sizes="34px"
         alt=""
-        width="36"
-        height="41"
+        width={marca.width}
+        height={marca.height}
         decoding="async"
       />
       <span class="nav__name">
-        <span class="nav__wordmark">Growing Souls</span>
-        <span class="nav__sub">{site.person.shortName}</span>
+        <img
+          class="nav__wordmark"
+          src="/images/brand/wordmark-growing-souls-1x.png"
+          srcset="/images/brand/wordmark-growing-souls-1x.png 1x, /images/brand/wordmark-growing-souls-2x.png 2x, /images/brand/wordmark-growing-souls-3x.png 3x"
+          alt=""
+          width="152"
+          height="26"
+          decoding="async"
+        />
+        <img
+          class="nav__sub"
+          src="/images/brand/wordmark-dra-melanie-acevedo-1x.png"
+          srcset="/images/brand/wordmark-dra-melanie-acevedo-1x.png 1x, /images/brand/wordmark-dra-melanie-acevedo-2x.png 2x, /images/brand/wordmark-dra-melanie-acevedo-3x.png 3x"
+          alt=""
+          width="120"
+          height="12"
+          decoding="async"
+        />
       </span>
     </a>
 
@@ -110,29 +141,30 @@ const items = nav;
     flex-shrink: 0;
     white-space: nowrap;
     text-decoration: none;
+    transition: opacity var(--dur-fast) var(--ease);
+  }
+  .nav__brand:hover {
+    opacity: 0.85;
   }
   .nav__mark {
     width: 34px;
     height: auto;
   }
+  /* Las letras originales del logotipo, centradas como en el lockup: la línea con el nombre va un poco más grande
+     que en el logotipo completo para que se lea a este tamaño. */
   .nav__name {
     display: flex;
     flex-direction: column;
-    line-height: 1.05;
+    align-items: center;
+    gap: 0.2rem;
   }
   .nav__wordmark {
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-weight: 500;
-    font-size: 1.45rem;
-    letter-spacing: 0.01em;
+    height: 26px;
+    width: auto;
   }
   .nav__sub {
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--fg-soft);
-    margin-top: 0.15rem;
+    height: 12px;
+    width: auto;
   }
   .nav__links {
     display: none;

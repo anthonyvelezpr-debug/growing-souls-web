@@ -18,7 +18,7 @@ const { services } = Astro.props;
         <h3 class="services__title">
           <a href={s.href}>{s.title}</a>
         </h3>
-        <p class="services__text serif-italic">{s.text}</p>
+        <p class="services__text">{s.text}</p>
         <a class="services__link" href={s.href}>
           {s.label} <span aria-hidden="true">→</span>
         </a>
@@ -58,9 +58,13 @@ const { services } = Astro.props;
     position: absolute;
     inset: 0;
   }
+  /* Descripciones de la Dra. (18 oct 2026): párrafos completos, en sans y con una medida de lectura. */
   .services__text {
-    font-size: calc(var(--step-body) * 1.12);
-    max-width: 26ch;
+    font-size: var(--step-small);
+    line-height: 1.65;
+    max-width: 38ch;
+    color: var(--fg);
+    text-wrap: pretty;
   }
   .services__link {
     position: relative;

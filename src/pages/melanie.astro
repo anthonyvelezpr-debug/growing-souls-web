@@ -12,7 +12,8 @@ import fotoCerebro from '../assets/melanie/03-olivo-cerca.jpg';
  * - Cabecera: su foto de perfil, la cita de Carl Jung que ella eligió y su párrafo sobre la psicoterapia.
  * - Una sola sección, con la foto del cerebro en la mano: "Formación académica, experiencia clínica y calidad humana".
  *   El texto es el que ella escribió completo el 15 oct 2026 (ocho párrafos, en primera persona); se publica tal cual,
- *   solo con un espacio corregido tras un punto. En escritorio la foto acompaña la lectura (sticky).
+ *   solo con un espacio corregido tras un punto, todo en la misma letra (ella no quiso una entrada en serif). En
+ *   escritorio la foto acompaña la lectura (sticky).
  * - Sin capítulos y sin planes a futuro: ella se los reserva.
  * El ancla #trayectoria se mantiene porque la enlazan Misión y visión y las preguntas frecuentes.
  */
@@ -71,9 +72,7 @@ import fotoCerebro from '../assets/melanie/03-olivo-cerca.jpg';
       <div class="perfil__text" data-reveal>
         <h2 class="perfil__title">Formación académica, experiencia clínica y calidad humana</h2>
         <div class="perfil__resumen">
-          <p class="perfil__lead">
-            Bienvenidos a este espacio. Soy la Dra. Melanie Acevedo, psicóloga clínica y fundadora de Growing Souls.
-          </p>
+          <p>Bienvenidos a este espacio. Soy la Dra. Melanie Acevedo, psicóloga clínica y fundadora de Growing Souls.</p>
           <p>
             Me gustaría compartirles un poco de mi recorrido profesional, las experiencias que han contribuido a mi
             formación y, sobre todo, los valores que dan sentido a mi manera de ejercer la psicología.
@@ -241,6 +240,7 @@ import fotoCerebro from '../assets/melanie/03-olivo-cerca.jpg';
     font-size: calc(var(--step-h2) * 0.86);
     max-width: 21ch;
   }
+  /* Todos los párrafos con la misma letra (pedido de la Dra., 18 oct): sin entrada en serif. */
   .perfil__resumen {
     display: grid;
     gap: var(--space-3);
@@ -248,17 +248,10 @@ import fotoCerebro from '../assets/melanie/03-olivo-cerca.jpg';
     line-height: 1.7;
     text-wrap: pretty;
   }
-  .perfil__lead {
-    font-family: var(--font-serif);
-    font-size: calc(var(--step-h3) * 0.9);
-    line-height: 1.3;
-    color: var(--navy);
-    text-wrap: balance;
-  }
-  /* En móvil y tableta, el título y la bienvenida van centrados como el resto del sitio; los párrafos largos se
-     alinean a la izquierda para que la lectura no canse. */
+  /* En móvil y tableta, el título va centrado como el resto del sitio; los párrafos se alinean a la izquierda
+     para que la lectura no canse. */
   @media (max-width: 959px) {
-    .perfil__resumen p:not(.perfil__lead) {
+    .perfil__resumen p {
       text-align: left;
     }
   }

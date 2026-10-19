@@ -60,7 +60,7 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
 
   <Statement
     title="No tienes que llegar a terapia teniendo todas las respuestas."
-    subtitle="A veces, llegar es el primer acto de valentía."
+    subtitle="Llegar puede ser la primera decisión hacia el bienestar que mereces."
   />
 
   <section class="section section--tight">
@@ -71,7 +71,7 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
         services={[
           {
             title: 'Terapia individual',
-            text: 'Un proceso de evaluación e intervención psicológica dirigido a comprender las necesidades emocionales y conductuales de cada persona, identificar patrones de pensamiento y comportamiento, y desarrollar estrategias basadas en evidencia que favorezcan su bienestar psicológico y funcionamiento cotidiano. El acompañamiento se adapta a las necesidades, objetivos y ritmo de cada paciente.',
+            text: 'Proceso de evaluación e intervención para comprender las necesidades emocionales y conductuales, identificar patrones de pensamiento y comportamiento, y desarrollar estrategias basadas en evidencia que favorezcan su bienestar psicológico y su funcionamiento.',
             href: '/terapia-individual/',
             label: 'Conoce la terapia individual',
           },
@@ -106,12 +106,12 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
       <div class="about__text" data-reveal style="--reveal-index: 1">
         <p class="eyebrow">Conóceme</p>
         <h2>La psicoterapia es un encuentro profundamente humano.</h2>
+        <!-- Texto de la Dra. (su carta de Conóceme, acortada como ella pidió el 18 oct). -->
         <p>
-          <Verify note="Aprobación Melanie">
-            Mi manera de hacer terapia no salió solo de los libros. Salió también de lo que he vivido: de ser
-            puertorriqueña, de las personas que me han enseñado a escuchar y de mis propias preguntas. La universidad
-            me dio estructura, teoría y evidencia. Lo que pongo en cada sesión, además de eso, es humanidad.
-          </Verify>
+          Más allá de los títulos, las experiencias y el conocimiento adquirido, hay algo que ocupa un lugar central
+          en mi manera de trabajar: el valor de lo humano. Desde esa visión nace Growing Souls: un espacio que busca
+          reconocer a cada persona más allá de sus dificultades, respetar su historia y acompañarla con sensibilidad,
+          compromiso y calidad humana.
         </p>
         <div class="about__cta">
           <Button href="/melanie/" variant="link">Conóceme</Button>
@@ -122,10 +122,11 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
 
   <section class="section">
     <div class="container">
-      <SectionHeading eyebrow="Mi enfoque" title="Crecer no siempre significa convertirte en otra persona.">
+      <!-- Frase de la Dra. en Instagram (pedido del 18 oct). -->
+      <SectionHeading eyebrow="Mi enfoque" title="Hablar libera, sanar transforma.">
         <p class="lead">
-          Muchas veces significa comprender quién eres, reconciliarte con partes de tu historia, soltar lo que ya no
-          te sirve y volver a ti con más conciencia. Ese proceso tiene su propio orden, y no hay que apurarlo.
+          Sanar muchas veces significa comprender quién eres, reconciliarte con partes de tu historia, soltar lo que ya
+          no te sirve y volver a ti con más conciencia. Ese proceso tiene su propio orden, y no hay que apurarlo.
         </p>
       </SectionHeading>
       <Process />

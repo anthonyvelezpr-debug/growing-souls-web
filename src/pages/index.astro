@@ -105,13 +105,14 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
       </div>
       <div class="about__text" data-reveal style="--reveal-index: 1">
         <p class="eyebrow">Conóceme</p>
-        <h2>La psicoterapia es un encuentro profundamente humano.</h2>
-        <!-- Texto de la Dra. (su carta de Conóceme, acortada como ella pidió el 18 oct). -->
+        <!--
+          Texto de la Dra. (18 oct): su párrafo sobre el valor de lo humano va "como titular", acortado como ella
+          permitió; debajo, su frase sobre de dónde nace Growing Souls. Las dos salen de su carta de Conóceme.
+        -->
+        <h2>Más allá de los títulos y las experiencias: el&nbsp;valor de lo humano.</h2>
         <p>
-          Más allá de los títulos, las experiencias y el conocimiento adquirido, hay algo que ocupa un lugar central
-          en mi manera de trabajar: el valor de lo humano. Desde esa visión nace Growing Souls: un espacio que busca
-          reconocer a cada persona más allá de sus dificultades, respetar su historia y acompañarla con sensibilidad,
-          compromiso y calidad humana.
+          Desde esa visión nace Growing Souls: un espacio que busca reconocer a cada persona más allá de sus
+          dificultades, respetar su historia y acompañarla con sensibilidad, compromiso y calidad humana.
         </p>
         <div class="about__cta">
           <Button href="/melanie/" variant="link">Conóceme</Button>
@@ -341,8 +342,9 @@ const posts = (await getCollection('journal', ({ data }) => isPreview || !data.d
     justify-items: center;
     text-align: center;
   }
+  /* El titular es una frase de la Dra. algo más larga que los demás: tres líneas, no cinco. */
   .about__text h2 {
-    max-width: 16ch;
+    max-width: 22ch;
   }
   .about__text p:not(.eyebrow) {
     max-width: 44ch;
